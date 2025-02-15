@@ -9,9 +9,12 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.Remark;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Remark;
 
+/**
+ * Adds or removes a remark to a person in the address book.
+ */
 public class RemarkCommand extends Command {
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Remark: %2$s";
