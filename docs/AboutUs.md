@@ -11,7 +11,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Jun Sen
 
 <img src="images/junngithub.png" width="200px">
 
