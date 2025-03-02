@@ -11,9 +11,27 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
+### Jun Sen
+
+<img src="images/junngithub.png" width="200px">
+
+[[github](https://github.com/junngithub)]
+[[portfolio](team/johndoe.md)]
+
+* Role: Developer
+
+### Nguyen Nhat Minh
+
+<img src="images/nhatminh0208.png" width="200px">
+
+[[github](https://github.com/nhatminh0208)]
+[[portfolio](team/johndoe.md)]
+
+* Role: Developer
+
 ### Kevin Limantoro
 
-<img src="images/kevinlimantoro123.png.png" width="200px">
+<img src="images/kevinlimantoro123.png" width="200px">
 
 [[homepage](http://www.comp.nus.edu.sg/~damithch)]
 [[github](https://github.com/kevinlimantoro123)]
@@ -21,7 +39,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: UI
-* I am year 2 CS undergraduate student in NUS, currently taking CS2103T.
 
 ### Duong Minh Duc
 
