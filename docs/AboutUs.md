@@ -11,6 +11,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
+### Nguyen Nhat Minh
+
+<img src="images/nhatminh0208.png" width="200px">
+
+[[github](https://github.com/nhatminh0208)]
+[[portfolio](team/johndoe.md)]
+
+* Role: Developer
+
 ### Kevin Limantoro
 
 <img src="images/kevinlimantoro123.png.png" width="200px">
