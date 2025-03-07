@@ -308,8 +308,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1.  User requests to list persons.
 2.  CraftConnect displays a list of contacts.
-3.  User requests to delete a specific contact by inputting the contact’s attribute (`Name`, `Email`, `Index`).
-4.  CraftConnect deletes the contact with the specified attribute.
+3.  User requests to delete a contact by inputting the contact’s attribute (`Name`, `Email`, `Index`).
+4.  CraftConnect deletes the specified contact.
 
     Use case ends.
 
@@ -324,6 +324,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
 
       Use case resumes at step 3.
+  
+* 3b. The inputted common attribute is a name and has multiple contacts with the same name
+
+    * 3b1. CraftConnect shows the full detailed list of contacts with same name and prompts user to select which user to delete
+
+      Use case resumes at step 4.
 
 **Use case: Search a contact by common attribute (e.g., `Name`, `Category`)**
 
