@@ -346,11 +346,77 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The list is empty.
 
-  Use case ends.
+    * 2a1. CraftConnect informs user that the list is empty
+
+      Use case ends.
 
 * 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
 
     * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+
+      Use case resumes at step 3.
+
+* 3b. The inputted common attribute is a name and has multiple contacts with the same name
+
+    * 3b1. CraftConnect shows the full detailed list of contacts with same name and prompts user to select which user to delete
+
+      Use case resumes at step 4.
+
+
+**Use case: Search a contact by common attribute (e.g., `Name`, `Category`)**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User request to view all contacts with the corresponding common attribute (`Name`, `Category`).
+4.  CraftConnect displays all contacts that match the inputted attribute.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+    * 2a1. CraftConnect informs user that the list is empty
+
+      Use case ends.
+
+* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
+
+    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+
+      Use case resumes at step 3.
+
+
+**Use case: Editing a contact**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User requests to edit a contact by specifying the index of the contact, the attributes to be changed and the changed attributes.
+4.  CraftConnect edits the specified contact accordingly.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+    * 2a1. CraftConnect informs user that the list is empty
+
+      Use case ends.
+
+* 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
+
+    * 3a1. CraftConnect shows an error message and informs the user of the valid indices.
+
+      Use case resumes at step 3.
+
+* 3b. The inputted attributes is invalid as it does not correspond to a valid attribute within CraftConnect.
+
+    * 3b1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
 
       Use case resumes at step 3.
 
