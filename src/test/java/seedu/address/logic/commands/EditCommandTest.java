@@ -104,7 +104,7 @@ public class EditCommandTest {
     @Test
     public void execute_duplicatePhoneUnfilteredList_failure() {
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person editedPerson = new PersonBuilder(firstPerson).withEmail(VALID_EMAIL_BOB).build();
+        Person editedPerson = new PersonBuilder(firstPerson).withEmail(VALID_EMAIL_AMY).build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
         EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
 
