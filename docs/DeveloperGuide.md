@@ -423,9 +423,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The list is empty.
 
-    * 2a1. CraftConnect informs user that the list is empty
-
-      Use case ends.
+  Use case ends.
 
 * 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
 
@@ -473,9 +471,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The list is empty.
 
-    * 2a1. CraftConnect informs user that the list is empty
-
-      Use case ends.
+  Use case ends.
 
 * 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
 
@@ -549,7 +545,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * Storage (HDD/SDD): 100MB free disk space
     * Graphics: Integrated GPU (Intel HD Graphics 300 or equivalent)
     * Disk Speed: HDD (5400 RPM) or SSD if available.
-
+  
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
