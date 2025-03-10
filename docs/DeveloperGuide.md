@@ -10,6 +10,39 @@
 <page-nav-print />
 
 --------------------------------------------------------------------------------------------------------------------
+## Contents
+[Acknowledgements](#acknowledgements)
+
+[Setting up, getting started](#setting-up-getting-started)
+
+[Design](#design)
+- [Architecture](#architecture)
+- [UI components](#ui-component)
+- [Logic component](#logic-component)
+- [Model component](#model-component)
+- [Storage component](#storage-component)
+- [Common classes](#common-classes)
+
+[Implementation](#implementation)
+- [\[Proposed\] Undo/redo feature](#proposed-undoredo-feature)
+  - [Proposed implementation](#proposed-implementation)
+  - [Design considerations](#design-considerations)
+- [\[Proposed\] Data archiving](#proposed-data-archiving)
+
+[Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+
+[Appendix: Requirements](#appendix-requirements)
+- [Product scope](#product-scope)
+- [User stories](#user-stories)
+- [Use cases](#use-cases)
+- [Non-Functional Requirements](#non-functional-requirements)
+- [Glossary](#glossary)
+
+[Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+- [Launch and shutdown](#launch-and-shutdown)
+- [Deleting a person](#deleting-a-person)
+- [Saving data](#saving-data)
+--------------------------------------------------------------------------------------------------------------------
 
 ## **Acknowledgements**
 
@@ -274,42 +307,85 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
+* is a business owner, preferably in arts and crafts
 * has a need to manage a significant number of contacts
 * prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
+* can type fast and/or prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**:
 
+CraftConnect app will keep track of the many different suppliers and 
+customers easily and organise them into groups. Since small business owners usually have 
+a lack of manpower, CraftConnect will provide an efficient solution for handling of vendor and 
+customer orders. On top of that, business owners can manage contacts faster than a typical 
+mouse/GUI driven app.
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …​                                    | I want to …​                         | So that I can…​                                                                              |
+|----------|--------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------------|
+| `* * *`  | new user                                   | see usage instructions               | refer to instructions when I forget how to use the App                                       |
+| `* * *`  | user                                       | add a new person                     |                                                                                              |
+| `* * *`  | user                                       | delete a person by unique attributes | remove entries that I no longer need quickly                                                 |
+| `* * *`  | user                                       | edit a person's contact              | update the person's information quickly without having to delete and re-add the person       |
+| `* * *`  | user                                       | search a person by attribute         | locate details of persons without having to go through the entire list                       |
+| `* *`    | user                                       | delete a person by name              | remove entries that I no longer need if I cannot remember the person's email or phone number |
 
 *{More to be added}*
 
 ### Use cases
 
 (For all use cases below, the **System** is `CraftConnect` and the **Actor** is the `user`, unless specified otherwise)
+<br><br><br>
+**Use case: See the usage instruction**
 
-**Use case: Delete a contact by common attribute (e.g., `Name`, `Email`, `Index`)**
+**MSS**
+
+1. User requests to see the usage instructions.
+2. CraftConnect displays the usage instructions.
+<br><br><br>
+
+**Use case: Add a new contact**
+
+**MSS**
+
+1.  User specifies the new contact information (`Name`, `Email`, `Phone Number`, `Address`, `Category`)
+2.  CraftConnect adds the new contact and informs the user of the successful addition.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The email (if specified) is not in the correct email format.
+
+    * 1a1. CraftConnect shows an error message and informs the user that the email is not in the correct format, and shows the user how an email should look like.
+
+      Use case resumes at step 1.
+
+* 1b. The email (if specified) is duplicated.
+
+    * 1b1. CraftConnect shows an error message and informs the user that the email is already used for an existing contact, and shows the said contact.
+
+      Use case resumes at step 1.
+
+* 1c. The phone number (if specified) is duplicated.
+
+    * 1c1. CraftConnect shows an error message and informs the user that the phone number is already used for an existing contact, and shows the said contact.
+
+      Use case resumes at step 1.
+<br><br><br>
+
+**Use case: Delete a contact by unique attributes (`Email`, `Index`, `Phone Number`)**
 
 **MSS**
 
 1.  User requests to list persons.
 2.  CraftConnect displays a list of contacts.
-3.  User requests to delete a contact by inputting the contact’s attribute (`Name`, `Email`, `Index`).
-4.  CraftConnect deletes the specified contact.
+3.  User requests to delete a contact by inputting the contact’s attribute (`Email`, `Index`, `Phone Number`).
+4.  CraftConnect deletes the specified contact and informs the user of the successful deletion.
 
     Use case ends.
 
@@ -324,79 +400,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
 
       Use case resumes at step 3.
+
+* 3b. No contacts matching the user's supported value.
+
+    * 3b1. CraftConnect shows an error message and informs the user that no contact matches their value.
   
-* 3b. The inputted common attribute is a name and has multiple contacts with the same name
-
-    * 3b1. CraftConnect shows the full detailed list of contacts with same name and prompts user to select which user to delete
-
-      Use case resumes at step 4.
-
-**Use case: Search a contact by common attribute (e.g., `Name`, `Category`)**
-
-**MSS**
-
-1.  User requests to list persons.
-2.  CraftConnect displays a list of contacts.
-3.  User request to view all contacts with the corresponding common attribute (`Name`, `Category`).
-4.  CraftConnect displays all contacts that match the inputted attribute.
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. The list is empty.
-
-    * 2a1. CraftConnect informs user that the list is empty
-
-      Use case ends.
-
-* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
-
-    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
-
       Use case resumes at step 3.
+<br><br><br>
 
-* 3b. The inputted common attribute is a name and has multiple contacts with the same name
-
-    * 3b1. CraftConnect shows the full detailed list of contacts with same name and prompts user to select which user to delete
-
-      Use case resumes at step 4.
-
-
-**Use case: Search a contact by common attribute (e.g., `Name`, `Category`)**
-
-**MSS**
-
-1.  User requests to list persons.
-2.  CraftConnect displays a list of contacts.
-3.  User request to view all contacts with the corresponding common attribute (`Name`, `Category`).
-4.  CraftConnect displays all contacts that match the inputted attribute.
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. The list is empty.
-
-    * 2a1. CraftConnect informs user that the list is empty
-
-      Use case ends.
-
-* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
-
-    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
-
-      Use case resumes at step 3.
-
-
-**Use case: Editing a contact**
+**Use case: Edit an existing contact**
 
 **MSS**
 
 1.  User requests to list persons.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to edit a contact by specifying the index of the contact, the attributes to be changed and the changed attributes.
-4.  CraftConnect edits the specified contact accordingly.
+4.  CraftConnect edits the specified contact accordingly and informs the user of the successful edit.
 
     Use case ends.
 
@@ -420,20 +439,116 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 3.
 
+* 3c. The email (if specified) is not in the correct email format.
+
+    * 3c1. CraftConnect shows an error message and informs the user that the email is not in the correct format, and shows the user how an email should look like.
+  
+      Use case resumes at step 3.
+
+* 3d. The email (if specified) is duplicated.
+
+    * 3d1. CraftConnect shows an error message and informs the user that the email is already used for an existing contact, and shows the said contact.
+
+      Use case resumes at step 3.
+
+* 3e. The phone number (if specified) is duplicated.
+
+    * 3e1. CraftConnect shows an error message and informs the user that the phone number is already used for an existing contact, and shows the said contact.
+
+      Use case resumes at step 3.
+<br><br><br>
+
+**Use case: Search a contact by common attribute (e.g., `Name`, `Category`)**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User request to view all contacts with the corresponding common attribute (`Name`, `Category`).
+4.  CraftConnect displays all contacts that match the inputted attribute.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+    * 2a1. CraftConnect informs user that the list is empty
+
+      Use case ends.
+
+* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
+
+    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+
+      Use case resumes at step 3.
+<br><br><br>
+
+**Use case: Delete a contact by `Name`**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User requests to delete a contact by inputting the contact’s `Name`.
+4.  CraftConnect displays the list of contacts with matching names.
+5.  User chooses the desired contact to delete.
+6.  CraftConnect deletes the specified contact and informs the user of the successful deletion.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
+
+    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+
+      Use case resumes at step 3.
+
+* 6a. User cancels the deletion action.
+
+    * CraftConnect informs the user that the deletion has been cancelled.
+
+      Use case ends.
+<br><br><br>
+
 *{More to be added}*
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1. **Performance**
+   - CraftConnect should initialize within 2 seconds on a mid-tier computer.
+   - CraftConnect should be able to hold up to 1000 contacts while keeping all operations under 100ms.
+   - CraftConnect should not exceed 200MB RAM during peak operations.
+
+2. **Reliability and Security**
+   - In case of crashing, no data should be lost beyond the last data-modifying operation.
+   - CraftConnect should save backup files every 24 hours.
+   - CraftConnect should check for corrupted or missing data files and restore automatically.
+
+3. **Usability and Accessibility**
+   - All errors should be clear and actionable (e.g. if wrong email format, tells the user how a correct email should look like).
+   - A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+
+4. **Portability**
+   - CraftConnect should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+   - Any user should be able to run CraftConnect without needing to install any other applications/dependencies (except Java 17)
 
 *{More to be added}*
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Mid-tier computer**: A computer that is typically used for office operations and software development, but not strong enough to handle moderate gaming. For minimum-spec reference,
+    * Processor (CPU): Intel Core i3 (2nd Gen)/AMD Athion 64 X2
+    * Memory (RAM): 2GB RAM
+    * Storage (HDD/SDD): 100MB free disk space
+    * Graphics: Integrated GPU (Intel HD Graphics 300 or equivalent)
+    * Disk Speed: HDD (5400 RPM) or SSD if available.
 
 --------------------------------------------------------------------------------------------------------------------
 
