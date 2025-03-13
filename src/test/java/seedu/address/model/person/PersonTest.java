@@ -25,6 +25,44 @@ public class PersonTest {
     }
 
     @Test
+    public void hasSameEmail() {
+        // same object -> returns true
+        assertTrue(ALICE.hasSameEmail(ALICE));
+
+        // null -> returns false
+        assertFalse(ALICE.hasSameEmail(null));
+
+        // same email, all other attributes different -> returns true
+        Person editedAlice = new PersonBuilder(ALICE)
+                .withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
+                .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND).build();
+        assertTrue(ALICE.hasSameEmail(editedAlice));
+
+        // different email, all other attributes same -> returns false
+        editedAlice = new PersonBuilder(ALICE).withEmail(VALID_EMAIL_BOB).build();
+        assertFalse(ALICE.hasSameEmail(editedAlice));
+    }
+
+    @Test
+    public void hasSamePhoneNumber() {
+        // same object -> returns true
+        assertTrue(ALICE.hasSamePhoneNumber(ALICE));
+
+        // null -> returns false
+        assertFalse(ALICE.hasSamePhoneNumber(null));
+
+        // same phone, all other attributes different -> returns true
+        Person editedAlice = new PersonBuilder(ALICE)
+                .withName(VALID_NAME_BOB).withEmail(VALID_EMAIL_BOB)
+                .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND).build();
+        assertTrue(ALICE.hasSamePhoneNumber(editedAlice));
+
+        // different phone, all other attributes same -> returns false
+        editedAlice = new PersonBuilder(ALICE).withPhone(VALID_PHONE_BOB).build();
+        assertFalse(ALICE.hasSamePhoneNumber(editedAlice));
+    }
+
+    @Test
     public void isSamePerson() {
         // same object -> returns true
         assertTrue(ALICE.isSamePerson(ALICE));
