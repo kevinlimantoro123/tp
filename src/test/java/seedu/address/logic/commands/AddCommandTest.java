@@ -26,6 +26,10 @@ import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
+    public static final String ALTERNATE_NAME = "Bob Oger";
+    public static final String ALTERNATE_PHONE = "89125674";
+    public static final String ALTERNATE_EMAIL = "bob@yahoo.com";
+    public static final String ALTERNATE_ADDRESS = "234, Clementi Ave 7, #08-111";
 
     @Test
     public void constructor_nullPerson_throwsNullPointerException() {
@@ -50,7 +54,45 @@ public class AddCommandTest {
         AddCommand addCommand = new AddCommand(validPerson);
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+        assertThrows(CommandException.class,
+                AddCommand.MESSAGE_DUPLICATE_PHONE, ()
+                -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_duplicateEmail_throwsCommandException() {
+        Person validPerson = new PersonBuilder().build();
+        Person alternatePerson = new PersonBuilder()
+                .withName(ALTERNATE_NAME)
+                .withAddress(ALTERNATE_ADDRESS)
+                .withPhone(ALTERNATE_PHONE)
+                // .withEmail(ALTERNATE_EMAIL)
+                .build();
+
+        AddCommand addCommand = new AddCommand(alternatePerson);
+        ModelStub modelStub = new ModelStubWithPerson(validPerson);
+
+        assertThrows(CommandException.class,
+                AddCommand.MESSAGE_DUPLICATE_EMAIL, ()
+                -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_duplicatePhone_throwsCommandException() {
+        Person validPerson = new PersonBuilder().build();
+        Person alternatePerson = new PersonBuilder()
+                .withName(ALTERNATE_NAME)
+                .withAddress(ALTERNATE_ADDRESS)
+                // .withPhone(ALTERNATE_PHONE)
+                .withEmail(ALTERNATE_EMAIL)
+                .build();
+
+        AddCommand addCommand = new AddCommand(alternatePerson);
+        ModelStub modelStub = new ModelStubWithPerson(validPerson);
+
+        assertThrows(CommandException.class,
+                AddCommand.MESSAGE_DUPLICATE_PHONE, ()
+                -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -139,6 +181,16 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasPhoneNumber(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasEmail(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void deletePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
@@ -175,6 +227,18 @@ public class AddCommandTest {
             requireNonNull(person);
             return this.person.isSamePerson(person);
         }
+
+        @Override
+        public boolean hasPhoneNumber(Person person) {
+            requireNonNull(person);
+            return this.person.hasSamePhoneNumber(person);
+        }
+
+        @Override
+        public boolean hasEmail(Person person) {
+            requireNonNull(person);
+            return this.person.hasSameEmail(person);
+        }
     }
 
     /**
@@ -187,6 +251,18 @@ public class AddCommandTest {
         public boolean hasPerson(Person person) {
             requireNonNull(person);
             return personsAdded.stream().anyMatch(person::isSamePerson);
+        }
+
+        @Override
+        public boolean hasPhoneNumber(Person person) {
+            requireNonNull(person);
+            return personsAdded.stream().anyMatch(person::hasSamePhoneNumber);
+        }
+
+        @Override
+        public boolean hasEmail(Person person) {
+            requireNonNull(person);
+            return personsAdded.stream().anyMatch(person::hasSameEmail);
         }
 
         @Override
