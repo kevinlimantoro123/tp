@@ -75,4 +75,11 @@ public class ArgumentMultimap {
             throw new ParseException(Messages.getErrorMessageForDuplicatePrefixes(duplicatedPrefixes));
         }
     }
+
+    /**
+     * Returns the number of detected prefixes in the argument multimap.
+     */
+    public int getNumberOfPrefixes() {
+        return argMultimap.size();
+    }
 }
