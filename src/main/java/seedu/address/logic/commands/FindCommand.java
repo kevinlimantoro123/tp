@@ -28,13 +28,17 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds a person based on his/her unique identifier "
             + "and displays the person's full information.\n"
-            + "Unique identifiers are email address and phone number.\n"
+            + "Unique identifiers currently contain email address and phone number.\n"
             + "Because this looks for the exact person, the exact phone number or email must be specified.\n"
-            + "Only supply exactly ONE attribute for finding.\n"
+            + "NOTE: Only supply exactly ONE attribute for finding.\n"
             + "Parameters: [" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL]\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_PHONE + "91234578\n"
             + "or: " + COMMAND_WORD + " " + PREFIX_EMAIL + "ilovecraftconnect@gmail.com";
+
+    public static final String TOO_MANY_IDENTIFIERS_SPECIFIED = "Too many attributes specified!\n%1$s";
+    public static final String NOT_UNIQUE_ATTRIBUTE_DETECTED = "A non-unique attribute detected!\n"
+            + "For non-unique attributes, use 'filter'.\n%1$s";
 
     private final Predicate<Person> predicate;
 
