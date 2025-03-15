@@ -1,9 +1,7 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.ALICE;
@@ -25,7 +23,6 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.EmailIsKeywordPredicate;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PhoneIsKeywordPredicate;
 
@@ -37,10 +34,10 @@ public class FindCommandTest {
     private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     // stub for unit test
-    Predicate<Person> alwaysTruePersonPredicateStub = person -> true;
+    private final Predicate<Person> alwaysTruePersonPredicateStub = person -> true;
 
     // stub for unit test
-    Predicate<Person> alwaysFalsePersonPredicateStub = person -> false;
+    private final Predicate<Person> alwaysFalsePersonPredicateStub = person -> false;
 
     @Test
     public void equals() {
