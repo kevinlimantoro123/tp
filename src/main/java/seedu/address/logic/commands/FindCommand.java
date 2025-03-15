@@ -1,28 +1,44 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
+import seedu.address.model.person.EmailIsKeywordPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.PhoneIsKeywordPredicate;
+
+import java.util.function.Predicate;
 
 /**
- * Finds and lists all persons in address book whose name contains any of the argument keywords.
- * Keyword matching is case insensitive.
+ * Finds and displays the person whose unique identifier is exactly the same as the specified keyword.<br>
+ * Currently, the unique identifiers supported are:
+ * <ul>
+ *     <li>Email</li>
+ *     <li>Phone number</li>
+ * </ul>
  */
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " alice bob charlie";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds a person based on his/her unique identifier "
+            + "and displays the person's full information.\n"
+            + "Unique identifiers are email address and phone number.\n"
+            + "Because this looks for the exact person, the exact phone number or email must be specified.\n"
+            + "Only supply exactly ONE attribute for finding.\n"
+            + "Parameters: [" + PREFIX_PHONE + "PHONE] "
+            + "[" + PREFIX_EMAIL + "EMAIL]\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_PHONE + "91234578\n"
+            + "or: " + COMMAND_WORD + " " + PREFIX_EMAIL + "ilovecraftconnect@gmail.com";
 
-    private final NameContainsKeywordsPredicate predicate;
+    private final Predicate<Person> predicate;
 
-    public FindCommand(NameContainsKeywordsPredicate predicate) {
+    public FindCommand(Predicate<Person> predicate) {
         this.predicate = predicate;
     }
 
