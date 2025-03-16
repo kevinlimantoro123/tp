@@ -9,7 +9,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Email;
 import seedu.address.model.person.EmailIsKeywordPredicate;
+import seedu.address.model.person.Phone;
 import seedu.address.model.person.PhoneIsKeywordPredicate;
 
 /**
@@ -23,19 +25,17 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-
-        if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
 
-        if (argMultimap.getNumberOfPrefixes() > 2) {
+        if (argMultimap.getNumberOfPrefixes() > 1) {
             throw new ParseException(
                     String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
+        }
+
+        if (!argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
         if (argMultimap.getValue(PREFIX_NAME).isPresent()
@@ -46,11 +46,13 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
-            return new FindCommand(new PhoneIsKeywordPredicate(argMultimap.getValue(PREFIX_PHONE).get()));
+            Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
+            return new FindCommand(new PhoneIsKeywordPredicate(phone.value));
         }
 
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
-            return new FindCommand(new EmailIsKeywordPredicate(argMultimap.getValue(PREFIX_EMAIL).get()));
+            Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
+            return new FindCommand(new EmailIsKeywordPredicate(email.value));
         }
 
         throw new ParseException(
