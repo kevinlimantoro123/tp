@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
@@ -16,7 +17,7 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         Set<Tag> tags = person.getTags();
-        return tags.contains(new Tag(tagKeyword));
+        return tags.stream().anyMatch(tag -> StringUtil.containsWordIgnoreCase(tagKeyword, tag.tagName));
     }
 
     @Override

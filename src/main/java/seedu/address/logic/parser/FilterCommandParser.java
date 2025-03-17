@@ -9,8 +9,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.AddressContainsKeywordPredicate;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.TagContainsKeywordsPredicate;
 
 public class FilterCommandParser implements Parser<FilterCommand> {
@@ -37,15 +35,8 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         }
 
         if (argMultimap.getValue(PREFIX_TAG).isPresent()) {
-            return new FilterCommand(new TagContainsKeywordsPredicate(argMultimap.getValue(PREFIX_TAG).get()));
-        }
-
-        if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
-            return new FilterCommand(new AddressContainsKeywordPredicate(argMultimap.getValue(PREFIX_ADDRESS).get()));
-        }
-
-        if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
-            return new FilterCommand(new NameContainsKeywordsPredicate(argMultimap.getValue(PREFIX_NAME).get()));
+            String tags = argMultimap.getValue(PREFIX_TAG).get();
+            return new FilterCommand(new TagContainsKeywordsPredicate(tags));
         }
 
         throw new ParseException(
