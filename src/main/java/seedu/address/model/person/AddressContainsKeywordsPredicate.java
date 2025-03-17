@@ -4,10 +4,10 @@ import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 
-public class AddressContainsKeywordPredicate implements Predicate<Person> {
+public class AddressContainsKeywordsPredicate implements Predicate<Person> {
     private final String addressKeyword;
 
-    public AddressContainsKeywordPredicate(String addressKeyword) {
+    public AddressContainsKeywordsPredicate(String addressKeyword) {
         this.addressKeyword = addressKeyword;
     }
 
@@ -23,16 +23,16 @@ public class AddressContainsKeywordPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof AddressContainsKeywordPredicate)) {
+        if (!(other instanceof AddressContainsKeywordsPredicate)) {
             return false;
         }
 
-        AddressContainsKeywordPredicate otherTagContainsKeywordsPredicate = (AddressContainsKeywordPredicate) other;
+        AddressContainsKeywordsPredicate otherTagContainsKeywordsPredicate = (AddressContainsKeywordsPredicate) other;
         return addressKeyword.equals(otherTagContainsKeywordsPredicate.addressKeyword);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("tags", addressKeyword).toString();
+        return new ToStringBuilder(this).add("address", addressKeyword).toString();
     }
 }

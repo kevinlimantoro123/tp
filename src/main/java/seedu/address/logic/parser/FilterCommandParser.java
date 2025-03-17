@@ -9,7 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.AddressContainsKeywordPredicate;
+import seedu.address.model.person.AddressContainsKeywordsPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.TagContainsKeywordsPredicate;
 
@@ -41,7 +41,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         }
 
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
-            return new FilterCommand(new AddressContainsKeywordPredicate(argMultimap.getValue(PREFIX_ADDRESS).get()));
+            return new FilterCommand(new AddressContainsKeywordsPredicate(argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
 
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {

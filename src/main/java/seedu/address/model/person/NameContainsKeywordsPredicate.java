@@ -36,6 +36,6 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("nameKeyword", nameKeyword).toString();
+        return new ToStringBuilder(this).add("name", nameKeyword).toString();
     }
 }
