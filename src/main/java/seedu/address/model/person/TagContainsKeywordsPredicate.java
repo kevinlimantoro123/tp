@@ -8,16 +8,17 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 public class TagContainsKeywordsPredicate implements Predicate<Person> {
-    private final String tagKeyword;
+    private final String tagKeywords;
 
-    public TagContainsKeywordsPredicate(String tagKeyword) {
-        this.tagKeyword = tagKeyword;
+    public TagContainsKeywordsPredicate(String tagKeywords) {
+        this.tagKeywords = tagKeywords;
     }
 
     @Override
     public boolean test(Person person) {
         Set<Tag> tags = person.getTags();
-        return tags.stream().anyMatch(tag -> StringUtil.containsWordIgnoreCase(tagKeyword, tag.tagName));
+        // takes tagKeywords, which could be multiple different tags and check if any tags in person matches
+        return tags.stream().anyMatch(tag -> StringUtil.containsWordIgnoreCase(tagKeywords, tag.tagName));
     }
 
     @Override
@@ -32,12 +33,12 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         TagContainsKeywordsPredicate otherTagContainsKeywordsPredicate = (TagContainsKeywordsPredicate) other;
-        return tagKeyword.equals(otherTagContainsKeywordsPredicate.tagKeyword);
+        return tagKeywords.equals(otherTagContainsKeywordsPredicate.tagKeywords);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("tags", tagKeyword).toString();
+        return new ToStringBuilder(this).add("tags", tagKeywords).toString();
     }
 
 }

@@ -13,9 +13,9 @@ import seedu.address.model.person.Person;
 public class FilterCommand extends Command{
     public static final String COMMAND_WORD = "filter";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters all persons whose tags contain "
-            + "any of the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters all persons based on their "
+            + "non-unique identifiers and displays the person's full information.\n"
+            + "Currently users can "
             + "Example: " + COMMAND_WORD + " t/friends";
 
     public static final String TOO_MANY_IDENTIFIERS_SPECIFIED = "Too many attributes specified!\n%1$s";
