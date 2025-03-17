@@ -6,31 +6,30 @@ import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 
-/**
- * Finds and lists all persons in address book whose name contains any of the argument keywords.
- * Keyword matching is case insensitive.
- */
-public class FindCommand extends Command {
+public class FilterCommand extends Command{
+    public static final String COMMAND_WORD = "filter";
 
-    public static final String COMMAND_WORD = "find";
-
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters all persons whose names and addresses contain "
+            + "any of the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " alice bob charlie";
+            + "Example: " + COMMAND_WORD + " n/alice";
+
+    public static final String TOO_MANY_IDENTIFIERS_SPECIFIED = "Too many attributes specified!\n%1$s";
+    public static final String UNIQUE_ATTRIBUTE_DETECTED = "A unique attribute detected!\n"
+            + "For unique attributes, use 'find'.\n%1$s";
 
     private final Predicate<Person> predicate;
 
-    public FindCommand(Predicate<Person> predicate) {
+    public FilterCommand(Predicate<Person> predicate) {
         this.predicate = predicate;
     }
 
     @Override
-    public CommandResult execute(Model model) {
+    public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
         return new CommandResult(
@@ -44,12 +43,12 @@ public class FindCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof FindCommand)) {
+        if (!(other instanceof FilterCommand)) {
             return false;
         }
 
-        FindCommand otherFindCommand = (FindCommand) other;
-        return predicate.equals(otherFindCommand.predicate);
+        FilterCommand otherFilterCommand = (FilterCommand) other;
+        return predicate.equals(otherFilterCommand.predicate);
     }
 
     @Override
