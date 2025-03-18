@@ -142,7 +142,7 @@ Format: `find UNIQUE_IDENTIFIER`
 Examples:
 * `find p/123` returns the contact with the phone number `123`
 * `find e/johnd@example.com` returns the contact with the email `johnd@example.com`
-  ![result for 'find alex david'](images/findp:123.png)
+  ![result for 'find alex david'](images/findp123.png)
 
 ### Filtering persons by common identifier: `filter`
 
