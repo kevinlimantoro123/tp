@@ -27,25 +27,18 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_onlyFindArg_throwsParseException() {
-        assertParseFailure(parser,
-                "find ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
-
-    @Test
     public void parse_argMoreThanOneAttribute_throwsParseException() {
         assertParseFailure(parser,
-                String.format("find %s91237483 %silovecraftconnect@gmail.com", PREFIX_PHONE, PREFIX_EMAIL),
+                String.format(" %s91237483 %silovecraftconnect@gmail.com", PREFIX_PHONE, PREFIX_EMAIL),
                 String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
 
         assertParseFailure(parser,
-                String.format("find %sneil deGrease Tyson %sastrophysicist@nasa.gov %steacher",
+                String.format(" %sneil deGrease Tyson %sastrophysicist@nasa.gov %steacher",
                         PREFIX_NAME, PREFIX_EMAIL, PREFIX_TAG),
                 String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
 
         assertParseFailure(parser,
-                String.format("find %scolleagues %s59 Dummy Street, Gotham %s83582957 %sfriend",
+                String.format(" %scolleagues %s59 Dummy Street, Gotham %s83582957 %sfriend",
                         PREFIX_TAG, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_TAG),
                 String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
     }
@@ -53,14 +46,14 @@ public class FindCommandParserTest {
     @Test
     public void parse_argContainsName_throwsParseExceptionForNonUniqueAttribute() {
         assertParseFailure(parser,
-                "find " + PREFIX_NAME + "alex yeoh",
+                " " + PREFIX_NAME + "alex yeoh",
                 String.format(FindCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_argContainsAddress_throwsParseExceptionForNonUniqueAttribute() {
         assertParseFailure(parser,
-                "find " + PREFIX_ADDRESS + "420 Craft Avenue, Singapore 572847",
+                " " + PREFIX_ADDRESS + "420 Craft Avenue, Singapore 572847",
                 String.format(FindCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
     }
 
@@ -70,12 +63,12 @@ public class FindCommandParserTest {
         // no whitespace
         FindCommand expectedFindCommand =
                 new FindCommand(new EmailIsKeywordPredicate("ilovecraftconnect@gmail.com"));
-        assertParseSuccess(parser, "find " + PREFIX_EMAIL + "ilovecraftconnect@gmail.com", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_EMAIL + "ilovecraftconnect@gmail.com", expectedFindCommand);
 
         // trailing whitespace
         expectedFindCommand =
                 new FindCommand(new EmailIsKeywordPredicate("ilovecraftconnect@gmail.com"));
-        assertParseSuccess(parser, "  find    " + PREFIX_EMAIL + "ilovecraftconnect@gmail.com", expectedFindCommand);
+        assertParseSuccess(parser, "      " + PREFIX_EMAIL + "ilovecraftconnect@gmail.com", expectedFindCommand);
     }
 
     @Test
@@ -83,12 +76,12 @@ public class FindCommandParserTest {
         // no whitespace
         FindCommand expectedFindCommand =
                 new FindCommand(new PhoneIsKeywordPredicate("93424353"));
-        assertParseSuccess(parser, "find " + PREFIX_PHONE + "93424353", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_PHONE + "93424353", expectedFindCommand);
 
 
         // trailing whitespace
         expectedFindCommand =
                 new FindCommand(new PhoneIsKeywordPredicate("93424353"));
-        assertParseSuccess(parser, " find  " + PREFIX_PHONE + "93424353", expectedFindCommand);
+        assertParseSuccess(parser, "   " + PREFIX_PHONE + "93424353", expectedFindCommand);
     }
 }

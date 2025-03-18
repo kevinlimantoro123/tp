@@ -29,7 +29,7 @@ public class FilterCommand extends Command {
             + "non-unique identifiers and displays the person's full information.\n"
             + "Non-unique identifiers include name, address and tags.\n"
             + "Exact name, tags and address must be provided.\n"
-            + "Users can provide multiple tags at once"
+            + "Users can provide multiple tags at once.\n"
             + "Parameters: [" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_TAG + "TAGS]\n"
