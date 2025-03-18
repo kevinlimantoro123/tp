@@ -184,8 +184,8 @@ Format: `delete UNIQUE_IDENTIFIER`
     * `INDEX` 
     * `p/PHONE_NUMBER`
     * `e/EMAIL`
-* Deletion using phone number or email will always succeed even if person is not shown in the current list.
-* For deletion using index, the index refers to the index number shown in the displayed person list.
+* When using filter or find, the current list will be updated to a filtered list. When deletion by index is used, the index refers to the index number shown in the filtered persons list.
+* A valid email or phone number will delete the corresponding contact regardless of any applied filters.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
