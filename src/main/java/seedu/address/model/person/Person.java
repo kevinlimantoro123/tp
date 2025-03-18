@@ -62,7 +62,7 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns true if both persons have the same email or phone number.
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -70,8 +70,38 @@ public class Person {
             return true;
         }
 
-        return otherPerson != null
-                && otherPerson.getName().equals(getName());
+        if (otherPerson == null) {
+            return false;
+        }
+        return otherPerson.getPhone().equals(getPhone()) || otherPerson.getEmail().equals(getEmail());
+    }
+
+    /**
+     * Returns true if both persons have the same phone number.
+     */
+    public boolean hasSamePhoneNumber(Person otherPerson) {
+        if (otherPerson == this) {
+            return true;
+        }
+
+        if (otherPerson == null) {
+            return false;
+        }
+        return otherPerson.getPhone().equals(getPhone());
+    }
+
+    /**
+     * Returns true if both persons have the same email.
+     */
+    public boolean hasSameEmail(Person otherPerson) {
+        if (otherPerson == this) {
+            return true;
+        }
+
+        if (otherPerson == null) {
+            return false;
+        }
+        return otherPerson.getEmail().equals(getEmail());
     }
 
     /**

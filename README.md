@@ -4,7 +4,7 @@
 
 ![Ui](docs/images/Ui.png)
 
-**CraftConnect is a desktop tool empowering small arts & crafts hoobyists and businesses.** With CraftConnect, you can keep track of many different suppliers and customers easily, using just your keyboard.
+**CraftConnect is a desktop tool empowering small arts & crafts hobbyists and businesses.** With CraftConnect, you can keep track of many different suppliers and customers easily, using just your keyboard.
 
 For the detailed documentation of this project, see the **[CraftConnect Product Website](https://ay2425s2-cs2103t-w13-4.github.io/tp/)**.
 
