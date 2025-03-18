@@ -80,6 +80,6 @@ public class ArgumentMultimap {
      * Returns the number of detected prefixes in the argument multimap.
      */
     public int getNumberOfPrefixes() {
-        return argMultimap.size();
+        return argMultimap.size() - 1;
     }
 }

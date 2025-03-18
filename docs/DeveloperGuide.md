@@ -434,7 +434,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
 
-    * 3a1. CraftConnect shows an error message and informs the user of the valid indices.
+    * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
 
       Use case resumes at step 3.
 
@@ -450,15 +450,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   
       Use case resumes at step 3.
 
-* 3d. The email (if specified) is duplicated.
+* 3d. The email provided (if specified) is a duplicate.
 
-    * 3d1. CraftConnect shows an error message and informs the user that the email is already used for an existing contact, and shows the said contact.
+    * 3d1. CraftConnect shows an error message, informing the user of the contact which is already using the email.
 
       Use case resumes at step 3.
 
-* 3e. The phone number (if specified) is duplicated.
+* 3e. The phone number provided (if specified) is a duplicate.
 
-    * 3e1. CraftConnect shows an error message and informs the user that the phone number is already used for an existing contact, and shows the said contact.
+    * 3e1. CraftConnect shows an error message, informing the user of the contact which is already using the phone number.
 
       Use case resumes at step 3.
 <br><br><br>
@@ -587,6 +587,7 @@ also suggesting the user to use the filter functionality if he/she wants to sear
     * Storage (HDD/SDD): 100MB of free disk space
     * Graphics: Integrated GPU (Intel HD Graphics 300 or equivalent)
     * Disk Speed: HDD (5400 RPM) or SSD if available.
+* **Contacts**: Contacts are considered to be unique if and only if they have a unique email and phone number. Thus, two contacts can still have the same names
   
 --------------------------------------------------------------------------------------------------------------------
 
