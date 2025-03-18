@@ -184,13 +184,14 @@ Format: `delete UNIQUE_IDENTIFIER`
     * `INDEX` 
     * `p/PHONE_NUMBER`
     * `e/EMAIL`
-* Deletes the specified person from the address book.
-* The index refers to the index number shown in the displayed person list.
+* Deletion using phone number or email will always succeed even if person is not shown in the current list.
+* For deletion using index, the index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `filter n/Betsy` followed by `delete 1` deletes the 1st person in the results of the `filter` command.
+* `delete p/1234567` deletes the person with the phone number `1234567` (even if not shown in current list).
 
 ### Clearing all entries : `clear`
 
