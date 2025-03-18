@@ -23,14 +23,37 @@ public class FindCommandParser implements Parser<FindCommand> {
      */
     public FindCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
+
         if (trimmedArgs.isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
+        ArgumentMultimap argMultimap =
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
 
-        return new FindCommand(new NameContainsKeywordsPredicate(argMultimap.getValue(PREFIX_NAME).get()));
+        if (argMultimap.getNumberOfPrefixes() > 2) {
+            throw new ParseException(
+                    String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
+        }
+
+        if (argMultimap.getValue(PREFIX_NAME).isPresent()
+                || argMultimap.getValue(PREFIX_ADDRESS).isPresent()
+                || argMultimap.getValue(PREFIX_TAG).isPresent()) {
+            throw new ParseException(
+                    String.format(FindCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
+        }
+
+        if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
+            return new FindCommand(new PhoneIsKeywordPredicate(argMultimap.getValue(PREFIX_PHONE).get()));
+        }
+
+        if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
+            return new FindCommand(new EmailIsKeywordPredicate(argMultimap.getValue(PREFIX_EMAIL).get()));
+        }
+
+        throw new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
-
 }
