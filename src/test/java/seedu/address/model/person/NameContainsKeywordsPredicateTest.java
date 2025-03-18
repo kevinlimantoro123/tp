@@ -61,7 +61,7 @@ public class NameContainsKeywordsPredicateTest {
 
     @Test
     public void toStringMethod() {
-        String keyword ="keyword";
+        String keyword = "keyword";
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(keyword);
 
         String expected = NameContainsKeywordsPredicate.class.getCanonicalName() + "{name=" + keyword + "}";

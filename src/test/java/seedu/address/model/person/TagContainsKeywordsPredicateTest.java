@@ -10,10 +10,10 @@ import seedu.address.testutil.PersonBuilder;
 
 
 public class TagContainsKeywordsPredicateTest {
-    String oneTag = "friends";
-    String multipleTags = "friends family colleagues";
-    TagContainsKeywordsPredicate oneTagPredicate = new TagContainsKeywordsPredicate(oneTag);
-    TagContainsKeywordsPredicate multipleTagsPredicate = new TagContainsKeywordsPredicate(multipleTags);
+    private String oneTag = "friends";
+    private String multipleTags = "friends family colleagues";
+    private TagContainsKeywordsPredicate oneTagPredicate = new TagContainsKeywordsPredicate(oneTag);
+    private TagContainsKeywordsPredicate multipleTagsPredicate = new TagContainsKeywordsPredicate(multipleTags);
 
     @Test
     public void equals() {
@@ -52,7 +52,7 @@ public class TagContainsKeywordsPredicateTest {
 
     @Test
     public void toStringMethod() {
-        String keyword ="keyword";
+        String keyword = "keyword";
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(keyword);
 
         String expected = TagContainsKeywordsPredicate.class.getCanonicalName() + "{tags=" + keyword + "}";
