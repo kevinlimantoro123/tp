@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ * Tests that a {@code Person}'s {@code Name} <b>exactly</b> matches the name given (case-insensitive).
  */
 public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private final String nameKeyword;

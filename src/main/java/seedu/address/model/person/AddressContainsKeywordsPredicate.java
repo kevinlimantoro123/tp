@@ -4,6 +4,9 @@ import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 
+/**
+ * Tests that a {@code Person}'s {@code Address} <b>exactly</b> matches the address given.
+ */
 public class AddressContainsKeywordsPredicate implements Predicate<Person> {
     private final String addressKeyword;
 

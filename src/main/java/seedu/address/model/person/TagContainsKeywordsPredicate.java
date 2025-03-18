@@ -7,6 +7,9 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
+/**
+ * Tests that at least one of the {@code Person}'s {@code Tag} <b>exactly</b> matches any of the tags given.
+ */
 public class TagContainsKeywordsPredicate implements Predicate<Person> {
     private final String tagKeywords;
 
@@ -17,7 +20,6 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         Set<Tag> tags = person.getTags();
-        // takes tagKeywords, which could be multiple different tags and check if any tags in person matches
         return tags.stream().anyMatch(tag -> StringUtil.containsWordIgnoreCase(tagKeywords, tag.tagName));
     }
 

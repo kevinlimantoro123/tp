@@ -13,7 +13,16 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
-public class FilterCommand extends Command{
+/**
+ * Filter and display contacts whose non-unique identifier is exactly the same as the specified keyword.<br>
+ * Currently, the non-unique identifiers supported are:
+ * <ul>
+ *     <li>Name</li>
+ *     <li>Address</li>
+ *     <li>Tags</li>
+ * </ul>
+ */
+public class FilterCommand extends Command {
     public static final String COMMAND_WORD = "filter";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters all persons based on their "
