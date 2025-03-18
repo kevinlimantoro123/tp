@@ -33,6 +33,10 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
+   * `filter n/John Doe` : Filters all contacts with the name `John Doe`.
+   
+   * `find p/98765432` : Finds the contact with the phone number `98765432`.
+   
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
    * `clear` : Deletes all contacts.
@@ -82,6 +86,8 @@ Adds a person to the address book.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
+* Can only add a person with a unique phone number and email address.
+
 <box type="tip" seamless>
 
 **Tip:** A person can have any number of tags (including 0)
@@ -106,6 +112,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
+* Can only edit the phone number and email if they are unique (No duplicates in the contact book). 
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
 * You can remove all the person’s tags by typing `t/` without
     specifying any tags after it.
@@ -114,37 +121,76 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating persons by unique identifier: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons by searching for a unique attribute
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find UNIQUE_IDENTIFIER` 
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+<box type="tip" seamless>
+
+**Tip:** Only 1 parameter can be inputted at a time.
+</box>
+
+* There are 2 unique identifiers that can be used to search for a person:
+  * `p/PHONE_NUMBER`
+  * `e/EMAIL`
+* This search will always return at most 1 contact when a valid attribute is provided.
+* The inputs are case-sensitive e.g. `JOHN` will not match `john`.
+* Only full words or numbers will be matched e.g. `123` will not match `1234`.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find p/123` returns the contact with the phone number `123`
+* `find e/johnd@example.com` returns the contact with the email `johnd@example.com`
+  ![result for 'find alex david'](images/findp:123.png)
+
+### Filtering persons by common identifier: `filter`
+
+Filters persons by searching for a common attribute
+
+Format: `filter COMMON_IDENTIFIER`
+
+<box type="tip" seamless>
+
+**Tip:** Only 1 parameter TYPE can be inputted at a time.
+</box>
+
+* There are 3 common identifiers that can be used to filter for a person:
+    * `n/NAME`
+    * `a/ADDRESS`
+    * `t/TAG`
+* Note that for tags, multiple tags can be specified for filtering eg. `filter t/friend colleague`.
+* This search will return all contacts that match the common attribute provided.
+* The inputs are case-insensitive e.g. `JOHN` will match `john`.
+* Only full words will be matched e.g. `han` will not match `hans`.
+
+Examples:
+* `filter n/alex` returns all contacts with the name `alex`
+* `filter a/123 street` returns all contacts with the address `123 street`
+* `filter t/friend` returns all contacts with the tag `friend`
 
 ### Deleting a person : `delete`
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX`
+Format: `delete UNIQUE_IDENTIFIER`
 
-* Deletes the person at the specified `INDEX`.
+<box type="tip" seamless>
+
+**Tip:** Only 1 parameter can be inputted at a time.
+</box>
+
+* There are 3 unique identifiers that can be used to delete a person:
+    * `INDEX` 
+    * `p/PHONE_NUMBER`
+    * `e/EMAIL`
+* Deletes the specified person from the address book.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `filter n/Betsy` followed by `delete 1` deletes the 1st person in the results of the `filter` command.
 
 ### Clearing all entries : `clear`
 
@@ -199,8 +245,9 @@ Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear**  | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete UNIQUE_IDENTIFIER`<br> e.g., `delete 3` / `delete p/98765432`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find**   | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`
+**Filter** | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`
 **List**   | `list`
 **Help**   | `help`
