@@ -329,9 +329,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 |----------|--------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------------|
 | `* * *`  | new user                                   | see usage instructions               | refer to instructions when I forget how to use the App                                       |
 | `* * *`  | user                                       | add a new person                     |                                                                                              |
-| `* * *`  | user                                       | delete a person by unique attributes | remove entries that I no longer need quickly                                                 |
+| `* * *`  | user                                       | delete a person by unique attributes | remove entries that I no longer need just by knowing one piece of unique data                |
 | `* * *`  | user                                       | edit a person's contact              | update the person's information quickly without having to delete and re-add the person       |
-| `* * *`  | user                                       | search a person by attribute         | locate details of persons without having to go through the entire list                       |
+| `* * *`  | user                                       | filter people by common attributes   | locate details of persons without having to go through the entire list                       |
+| `* * *`  | user                                       | find people by unique attributes     | locate the full details of a person just by knowing his/her phone number or email            |
 | `* *`    | user                                       | delete a person by name              | remove entries that I no longer need if I cannot remember the person's email or phone number |
 
 *{More to be added}*
@@ -395,15 +396,21 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
+* 3a. The input is invalid.
 
-    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+    * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
 
       Use case resumes at step 3.
 
-* 3b. No contacts matching the user's supported value.
+* 3b. A non-unique attribute is supported.
 
-    * 3b1. CraftConnect shows an error message and informs the user that no contact matches their value.
+    * 3b1. CraftConnect shows an error message and informs the user that the user's attribute is not an unique attribute.
+
+      Use case resumes at step 3.
+
+* 3c. No contacts matching the user's supported value.
+
+    * 3c1. CraftConnect shows an error message and informs the user that no contact matches their value.
   
       Use case resumes at step 3.
 <br><br><br>
@@ -431,7 +438,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 3.
 
-* 3b. The inputted attributes is invalid as it does not correspond to a valid attribute within CraftConnect.
+* 3b. The inputted attributes are invalid as it does not correspond to a valid attribute within CraftConnect.
 
     * 3b1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
 
@@ -456,14 +463,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case resumes at step 3.
 <br><br><br>
 
-**Use case: Search a contact by common attribute (e.g., `Name`, `Category`)**
+**Use case: Find a contact by a unique attribute (e.g., `Email`, `Phone`)**
 
 **MSS**
 
 1.  User requests to list persons.
 2.  CraftConnect displays a list of contacts.
-3.  User request to view all contacts with the corresponding common attribute (`Name`, `Category`).
-4.  CraftConnect displays all contacts that match the inputted attribute.
+3.  User request to view the contact with the corresponding unique attribute (`Email`, `Phone`).
+4.  CraftConnect displays the contact that match the inputted attribute.
 
     Use case ends.
 
@@ -473,9 +480,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
+* 3a. The input is invalid.
 
-    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+    * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
+
+      Use case resumes at step 3.
+
+* 3b. More than one attribute is specified.
+
+    * 3b1. CraftConnect shows an error message and informs the user that only one and unique attribute should be specified.
+
+      Use case resumes at step 3.
+
+* 3c. The inputted attribute is not unique.
+
+    * 3c1. CraftConnect shows an error message and informs the user that the attribute they specified is not unique, while
+also suggesting the user to use the filter functionality if he/she wants to search using a common attribute.
 
       Use case resumes at step 3.
 <br><br><br>
@@ -527,8 +547,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
    - CraftConnect should check for corrupted or missing data files and restore automatically.
 
 3. **Usability and Accessibility**
-   - All errors should be clear and actionable (e.g. if wrong email format, tells the user how a correct email should look like).
-   - A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+   - All errors should be clear and actionable (e.g. if the wrong email format is used, tell the user how a correct email should look like).
+   - A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 
 4. **Portability**
    - CraftConnect should work on any _mainstream OS_ as long as it has Java `17` or above installed.
@@ -542,7 +562,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Mid-tier computer**: A computer that is typically used for office operations and software development, but not strong enough to handle moderate gaming. For minimum-spec reference,
     * Processor (CPU): Intel Core i3 (2nd Gen)/AMD Athion 64 X2
     * Memory (RAM): 2GB RAM
-    * Storage (HDD/SDD): 100MB free disk space
+    * Storage (HDD/SDD): 100MB of free disk space
     * Graphics: Integrated GPU (Intel HD Graphics 300 or equivalent)
     * Disk Speed: HDD (5400 RPM) or SSD if available.
 * **Contacts**: Contacts are considered to be unique if and only if they have a unique email and phone number. Thus, two contacts can still have the same names
@@ -583,13 +603,13 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
+   2. Test case: `delete 1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
+   3. Test case: `delete 0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
