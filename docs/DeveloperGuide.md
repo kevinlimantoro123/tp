@@ -480,6 +480,41 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case resumes at step 3.
 <br><br><br>
 
+**Use case: Filter existing contacts by common attributes (`Name`, `Address`, `Tag`)**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User requests to filter contacts by specifying a common attribute.
+4.  CraftConnect displays a list of contacts that match the inputted attribute.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The input is invalid.
+
+    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+
+      Use case resumes at step 3.
+
+* 3b. More than one attribute is specified.
+
+    * 3b1. CraftConnect shows an error message and informs the user that only one common attribute should be specified.
+
+      Use case resumes at step 3.
+
+* 3c. The inputted attribute is not unique.
+
+    * 3c1. CraftConnect shows an error message and informs the user that the attribute they specified is unique, while
+      also suggesting the user to use the find functionality if he/she wants to search using a unique attribute.
+      <br><br><br>
+
 **Use case: Delete a contact by `Name`**
 
 **MSS**

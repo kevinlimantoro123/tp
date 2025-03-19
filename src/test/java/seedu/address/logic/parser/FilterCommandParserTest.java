@@ -33,8 +33,8 @@ public class FilterCommandParserTest {
 
     @Test
     public void parse_argMoreThanOneAttribute_throwsParseException() {
-        assertParseFailure(parser, FilterCommand.COMMAND_WORD +
-                String.format(" %sBlk 123 %sAlex", PREFIX_ADDRESS, PREFIX_NAME),
+        assertParseFailure(parser, FilterCommand.COMMAND_WORD
+                        + String.format(" %sBlk 123 %sAlex", PREFIX_ADDRESS, PREFIX_NAME),
                 String.format(FilterCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FilterCommand.MESSAGE_USAGE));
     }
 
