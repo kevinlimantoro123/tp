@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.AddressContainsKeywordsPredicate;
+import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 
 public class FilterCommandTest {
@@ -65,11 +67,31 @@ public class FilterCommandTest {
     @Test
     public void execute_alwaysTruePredicate_everyoneFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 7);
-        FindCommand command = new FindCommand(alwaysTruePersonPredicateStub);
+        FilterCommand command = new FilterCommand(alwaysTruePersonPredicateStub);
 
         expectedModel.updateFilteredPersonList(alwaysTruePersonPredicateStub);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE), model.getFilteredPersonList());
     }
 
+    @Test
+    public void toStringMethod() {
+        // unit test
+        FilterCommand filterCommand1 = new FilterCommand(alwaysTruePersonPredicateStub);
+        String expected1 = FilterCommand.class.getCanonicalName() + "{predicate=" + alwaysTruePersonPredicateStub + "}";
+        assertEquals(expected1, filterCommand1.toString());
+
+        // integration test - name
+        NameContainsKeywordsPredicate namePredicate = new NameContainsKeywordsPredicate("alex");
+        FilterCommand filterCommand2 = new FilterCommand(namePredicate);
+        String expected2 = FilterCommand.class.getCanonicalName() + "{predicate=" + namePredicate + "}";
+        assertEquals(expected2, filterCommand2.toString());
+
+        // integration test - address
+        AddressContainsKeywordsPredicate addressPredicate =
+                new AddressContainsKeywordsPredicate("Blk 123, dummy ave");
+        FilterCommand filterCommand3 = new FilterCommand(addressPredicate);
+        String expected3 = FilterCommand.class.getCanonicalName() + "{predicate=" + addressPredicate + "}";
+        assertEquals(expected3, filterCommand3.toString());
+    }
 }
