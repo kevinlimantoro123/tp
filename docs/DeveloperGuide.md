@@ -396,22 +396,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-* 3a. The inputted user content is invalid.
+* 3a. The input is invalid.
 
-    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+    * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
 
       Use case resumes at step 3.
 
-* 3b. No contacts matching the user's supported value.
+* 3b. A non-unique attribute is supported.
 
-    * 3b1. CraftConnect shows an error message and informs the user that no contact matches their value.
+    * 3b1. CraftConnect shows an error message and informs the user that the user's attribute is not an unique attribute.
+
+      Use case resumes at step 3.
+
+* 3c. No contacts matching the user's supported value.
+
+    * 3c1. CraftConnect shows an error message and informs the user that no contact matches their value.
   
-      Use case resumes at step 3.
-
-* 3c. A non-unique attribute is supported.
-
-    * 3c1. CraftConnect shows an error message and informs the user that the user's attribute is not an unique attribute.
-
       Use case resumes at step 3.
 <br><br><br>
 
@@ -480,9 +480,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-* 3a. The inputted common attribute is invalid.
+* 3a. The input is invalid.
 
-    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+    * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
 
       Use case resumes at step 3.
 
@@ -499,28 +499,6 @@ also suggesting the user to use the filter functionality if he/she wants to sear
 
       Use case resumes at step 3.
 <br><br><br>
-
-**MSS**
-
-1.  User requests to list persons.
-2.  CraftConnect displays a list of contacts.
-3.  User request to view all contacts with the corresponding common attribute (`Name`, `Category`).
-4.  CraftConnect displays all contacts that match the inputted attribute.
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. The list is empty.
-
-  Use case ends.
-
-* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
-
-    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
-
-      Use case resumes at step 3.
-      <br><br><br>
 
 **Use case: Delete a contact by `Name`**
 
