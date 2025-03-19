@@ -58,14 +58,14 @@ public interface Model {
     boolean hasPerson(Person person);
 
     /**
-     * Returns true if a person with the same phone number as {@code person} exists in the address book.
+     * Returns a person with the same phone number as {@code person}, or null with none exists.
      */
-    boolean hasPhoneNumber(Person person);
+    Person findPersonWithSamePhoneNumber(Person person);
 
     /**
-     * Returns true if a person with the same email as {@code person} exists in the address book.
+     * Returns a person with the same email as {@code person}, or null with none exists.
      */
-    boolean hasEmail(Person person);
+    Person findPersonWithSameEmail(Person person);
 
 
     /**

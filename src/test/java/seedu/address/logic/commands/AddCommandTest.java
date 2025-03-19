@@ -55,7 +55,7 @@ public class AddCommandTest {
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
         assertThrows(CommandException.class,
-                AddCommand.MESSAGE_DUPLICATE_PHONE, ()
+                String.format(AddCommand.MESSAGE_DUPLICATE_PHONE, Messages.format(validPerson)), ()
                 -> addCommand.execute(modelStub));
     }
 
@@ -73,7 +73,7 @@ public class AddCommandTest {
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
         assertThrows(CommandException.class,
-                AddCommand.MESSAGE_DUPLICATE_EMAIL, ()
+                String.format(AddCommand.MESSAGE_DUPLICATE_EMAIL, Messages.format(validPerson)), ()
                 -> addCommand.execute(modelStub));
     }
 
@@ -91,7 +91,7 @@ public class AddCommandTest {
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
         assertThrows(CommandException.class,
-                AddCommand.MESSAGE_DUPLICATE_PHONE, ()
+                String.format(AddCommand.MESSAGE_DUPLICATE_PHONE, Messages.format(validPerson)), ()
                 -> addCommand.execute(modelStub));
     }
 
@@ -181,12 +181,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasPhoneNumber(Person person) {
+        public Person findPersonWithSamePhoneNumber(Person person) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public boolean hasEmail(Person person) {
+        public Person findPersonWithSameEmail(Person person) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -229,15 +229,23 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasPhoneNumber(Person person) {
+        public Person findPersonWithSamePhoneNumber(Person person) {
             requireNonNull(person);
-            return this.person.hasSamePhoneNumber(person);
+            if (this.person.hasSamePhoneNumber(person)) {
+                return this.person;
+            } else {
+                return null;
+            }
         }
 
         @Override
-        public boolean hasEmail(Person person) {
+        public Person findPersonWithSameEmail(Person person) {
             requireNonNull(person);
-            return this.person.hasSameEmail(person);
+            if (this.person.hasSameEmail(person)) {
+                return this.person;
+            } else {
+                return null;
+            }
         }
     }
 
@@ -254,15 +262,15 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasPhoneNumber(Person person) {
+        public Person findPersonWithSamePhoneNumber(Person person) {
             requireNonNull(person);
-            return personsAdded.stream().anyMatch(person::hasSamePhoneNumber);
+            return personsAdded.stream().filter(person::hasSamePhoneNumber).findFirst().orElse(null);
         }
 
         @Override
-        public boolean hasEmail(Person person) {
+        public Person findPersonWithSameEmail(Person person) {
             requireNonNull(person);
-            return personsAdded.stream().anyMatch(person::hasSameEmail);
+            return personsAdded.stream().filter(person::hasSameEmail).findFirst().orElse(null);
         }
 
         @Override

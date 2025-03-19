@@ -39,17 +39,17 @@ public class UniquePersonList implements Iterable<Person> {
     /**
      * Returns true if the list contains a person with the same phone number.
      */
-    public boolean containsPhoneNumber(Person toCheck) {
+    public Person findPersonWithSameEmail(Person toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().anyMatch(toCheck::hasSamePhoneNumber);
+        return internalList.stream().filter(toCheck::hasSamePhoneNumber).findFirst().orElse(null);
     }
 
     /**
      * Returns true if the list contains a person with the same email.
      */
-    public boolean containsEmail(Person toCheck) {
+    public Person findPersonWithSamePhoneNumber(Person toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().anyMatch(toCheck::hasSameEmail);
+        return internalList.stream().filter(toCheck::hasSameEmail).findFirst().orElse(null);
     }
 
     /**
