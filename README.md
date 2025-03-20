@@ -1,10 +1,12 @@
 # CraftConnect
 
-**The MVP Release is out!** Check it out [here](https://github.com/AY2425S2-CS2103T-W13-4/tp/releases/tag/v1.3).
-
 [![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/AY2425S2-CS2103T-W13-4/tp/actions)
 
 ![Ui](docs/images/Ui.png)
+
+**The MVP Release is out!** Check it out [here](https://github.com/AY2425S2-CS2103T-W13-4/tp/releases/tag/v1.3).
+
+---
 
 **CraftConnect is a desktop tool empowering small arts & crafts hobbyists and businesses.** With CraftConnect, you can keep track of many different suppliers and customers easily, using just your keyboard.
 
