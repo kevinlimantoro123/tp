@@ -94,17 +94,16 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasPhoneNumber(Person person) {
+    public Person findPersonWithSameEmail(Person person) {
         requireNonNull(person);
-        return addressBook.hasPhoneNumber(person);
+        return addressBook.findPersonWithSameEmail(person);
     }
 
     @Override
-    public boolean hasEmail(Person person) {
+    public Person findPersonWithSamePhoneNumber(Person person) {
         requireNonNull(person);
-        return addressBook.hasEmail(person);
+        return addressBook.findPersonWithSamePhoneNumber(person);
     }
-
 
     @Override
     public void deletePerson(Person target) {

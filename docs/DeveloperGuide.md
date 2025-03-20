@@ -359,22 +359,35 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.
 
 **Extensions**
+* 1a. The user fails to specify the contact name, email, phone number or address.
 
-* 1a. The email (if specified) is not in the correct email format.
-
-    * 1a1. CraftConnect shows an error message and informs the user that the email is not in the correct format, and shows the user how an email should look like.
-
-      Use case resumes at step 1.
-
-* 1b. The email (if specified) is duplicated.
-
-    * 1b1. CraftConnect shows an error message and informs the user that the email is already used for an existing contact, and shows the said contact.
+    * 1a1. CraftConnect shows an error message and informs the user of the correct command format.
 
       Use case resumes at step 1.
 
-* 1c. The phone number (if specified) is duplicated.
+* 1b. The phone number (if specified) is not in the correct phone number format.
 
-    * 1c1. CraftConnect shows an error message and informs the user that the phone number is already used for an existing contact, and shows the said contact.
+    * 1b1. CraftConnect shows an error message and informs the user that the phone number is not in the correct format, 
+    and shows the user the correct format for a phone number.
+
+      Use case resumes at step 1.
+
+* 1c. The email (if specified) is not in the correct email format.
+
+    * 1c1. CraftConnect shows an error message and informs the user that the email is not in the correct format, 
+    and shows the user the correct format for an email.
+
+      Use case resumes at step 1.
+
+* 1d. The phone number (if specified) is already used by an existing contact.
+
+    * 1d1. CraftConnect shows an error message and informs the user that the phone number is already used by an existing contact, and shows the said contact.
+
+      Use case resumes at step 1.
+
+* 1e. The email (if specified) is already used by an existing contact.
+
+    * 1e1. CraftConnect shows an error message and informs the user that the email is already used by an existing contact, and shows the said contact.
 
       Use case resumes at step 1.
 <br><br><br>
