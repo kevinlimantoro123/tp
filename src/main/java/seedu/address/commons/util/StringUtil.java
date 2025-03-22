@@ -39,31 +39,6 @@ public class StringUtil {
     }
 
     /**
-     * Returns true if the {@code sentence} contains the {@code phrase}.
-     *   Ignores case, and a full phrase match is required.
-     *   <br>examples:<pre>
-     *       containsPhraseIgnoreCase("ABc def", "abc def") == true
-     *       containsPhraseIgnoreCase("ABc def", "DEF abc") == false //order matters
-     *       containsPhraseIgnoreCase("ABc def", "AB") == false //not a full phrase match
-     *       </pre>
-     * @param sentence cannot be null
-     * @param phrase cannot be null, cannot be empty
-     */
-    public static boolean containsPhraseIgnoreCase(String sentence, String phrase) {
-        requireNonNull(sentence);
-        requireNonNull(phrase);
-
-        String preppedPhrase = phrase.trim();
-        checkArgument(!preppedPhrase.isEmpty(), "Phrase parameter cannot be empty");
-
-        String preppedSentence = sentence.toLowerCase();
-        String lowerCasePhrase = preppedPhrase.toLowerCase();
-
-        return Arrays.stream(preppedSentence.split("\\s+"))
-            .anyMatch(word -> word.equalsIgnoreCase(lowerCasePhrase));
-    }
-
-    /**
      * Returns a detailed message of the t, including the stack trace.
      */
     public static String getDetails(Throwable t) {
