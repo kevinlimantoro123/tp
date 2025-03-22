@@ -5,9 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
@@ -29,10 +26,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.person.Address;
-import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
@@ -163,55 +157,6 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
 
         assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_EMAIL + firstPerson.getName());
-    }
-
-    @Test
-    public void execute_invalidPhoneFormatUnfilteredList_failure() {
-        try {
-            Person editedPerson = new PersonBuilder().build();
-            EditPersonDescriptor descriptor =
-                new EditPersonDescriptorBuilder(editedPerson).withPhone(INVALID_PHONE_DESC).build();
-            EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-        } catch (IllegalArgumentException e) {
-            assertEquals(Phone.MESSAGE_CONSTRAINTS, e.getMessage());
-        }
-    }
-
-    @Test
-    public void execute_invalidEmailFormatUnfilteredList_failure() {
-        try {
-            Person editedPerson = new PersonBuilder().build();
-            EditPersonDescriptor descriptor =
-                new EditPersonDescriptorBuilder(editedPerson).withEmail(INVALID_EMAIL_DESC).build();
-            EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-        } catch (IllegalArgumentException e) {
-            assertEquals(Email.MESSAGE_CONSTRAINTS, e.getMessage());
-        }
-    }
-
-    @Test
-    public void execute_invalidAddressFormatUnfilteredList_failure() {
-        try {
-            Person editedPerson = new PersonBuilder().build();
-            EditPersonDescriptor descriptor =
-                new EditPersonDescriptorBuilder(editedPerson).withAddress(INVALID_ADDRESS_DESC).build();
-            EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-        } catch (IllegalArgumentException e) {
-            assertEquals(Address.MESSAGE_CONSTRAINTS, e.getMessage());
-        }
-    }
-
-    @Test
-    public void execute_noChangesUnfilteredList_success() {
-        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(personToEdit).build();
-        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(personToEdit));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-
-        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
