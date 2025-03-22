@@ -39,9 +39,9 @@ public class TagContainsKeywordsPredicateTest {
         assertTrue(oneTagPredicate.test(new PersonBuilder().withTags(oneTag).build()));
         assertTrue(oneTagPredicate.test(new PersonBuilder().withTags("friends").build()));
         // Tests not working because of new tag implementation
-//        assertTrue(multipleTagsPredicate.test(new PersonBuilder().withTags("friends").build()));
-//        assertTrue(multipleTagsPredicate.test(new PersonBuilder()
-//                        .withTags("friends").withTags("family").withTags("colleagues").build()));
+        //assertTrue(multipleTagsPredicate.test(new PersonBuilder().withTags("friends").build()));
+        //assertTrue(multipleTagsPredicate.test(new PersonBuilder()
+        //      .withTags("friends").withTags("family").withTags("colleagues").build()));
     }
 
     @Test

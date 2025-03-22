@@ -2,11 +2,9 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
@@ -28,7 +26,6 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
-import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 
@@ -77,7 +74,8 @@ public class EditCommandTest {
     @Test
     public void execute_validTagFormatUnfilteredList_success() {
         Person editedPerson = new PersonBuilder().withTags(VALID_TAG_HUSBAND).build();
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).withTags(VALID_TAG_HUSBAND).build();
+        EditPersonDescriptor descriptor =
+                new EditPersonDescriptorBuilder(editedPerson).withTags(VALID_TAG_HUSBAND).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
@@ -88,15 +86,15 @@ public class EditCommandTest {
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
-//    @Test
-//    public void execute_invalidTagFormatUnfilteredList_success() {
-//        Person editedPerson = new PersonBuilder().withTags(VALID_TAG_HUSBAND).build();
-//        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).withTags(INVALID_TAG_DESC).build();
-//        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-//
-//        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> editCommand.execute(model));
-//        assertEquals(Tag.MESSAGE_CONSTRAINTS, e.getMessage());
-//    }
+    //@Test
+    //public void execute_invalidTagFormatUnfilteredList_success() {
+    //  Person editedPerson = new PersonBuilder().withTags(VALID_TAG_HUSBAND).build();
+    //  EditPersonDescriptor descriptor =
+    //          new EditPersonDescriptorBuilder(editedPerson).withTags(INVALID_TAG_DESC).build();
+    //  EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+    //  IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> editCommand.execute(model));
+    //  assertEquals(Tag.MESSAGE_CONSTRAINTS, e.getMessage());
+    //}
 
     @Test
     public void execute_noFieldSpecifiedUnfilteredList_success() {
