@@ -50,6 +50,7 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    public static final String MESSAGE_DUPLICATE_FIELDS = "Please provide a new value for the fields you want to edit.";
     public static final String MESSAGE_DUPLICATE_PHONE = "This phone number is already being used by: ";
     public static final String MESSAGE_DUPLICATE_EMAIL = "This email is already being used by: ";
 
@@ -64,6 +65,8 @@ public class EditCommand extends Command {
         requireNonNull(index);
         requireNonNull(editPersonDescriptor);
 
+        assert index.getOneBased() > 0 : "Index must be a positive integer";
+
         this.index = index;
         this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
     }
@@ -72,16 +75,25 @@ public class EditCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
+        assert lastShownList != null : "Filtered person list cannot be null";
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
+        assert personToEdit != null : "Person to edit cannot be null";
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
+        assert editedPerson != null : "Edited person cannot be null";
+        if (editedPerson.equals(personToEdit) || !editPersonDescriptor.isAnyFieldEdited()) {
+            throw new CommandException(MESSAGE_DUPLICATE_FIELDS);
+        }
+        assert !editedPerson.equals(personToEdit) || !editPersonDescriptor.isAnyFieldEdited()
+                : "Person should be different if fields were edited";
 
         // Check if contact is being changed and if it's a duplicate
         for (Person person : lastShownList) {
+            assert person != null : "Person in list cannot be null";
             if (!person.equals(personToEdit)) {
                 // Check for duplicate phone number
                 if (editedPerson.getPhone().equals(person.getPhone())) {
@@ -105,14 +117,26 @@ public class EditCommand extends Command {
      */
     private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
         assert personToEdit != null;
+        assert editPersonDescriptor != null : "EditPersonDescriptor cannot be null";
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
-        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
-        Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        assert updatedName != null : "Updated name cannot be null";
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
+        assert updatedPhone != null : "Updated phone cannot be null";
+
+        Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
+        assert updatedEmail != null : "Updated email cannot be null";
+
+        Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
+        assert updatedAddress != null : "Updated address cannot be null";
+
+        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        assert updatedTags != null : "Updated tags cannot be null";
+
+        Person newPerson = new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        assert newPerson != null : "New person cannot be null";
+        return newPerson;
     }
 
     @Override
@@ -157,6 +181,8 @@ public class EditCommand extends Command {
          * A defensive copy of {@code tags} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
+            assert toCopy != null : "EditPersonDescriptor cannot be null";
+
             setName(toCopy.name);
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
