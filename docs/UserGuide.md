@@ -4,9 +4,9 @@
   pageNav: 3
 ---
 
-# AB-3 User Guide
+# CraftConnect User Guide
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
 
 <!-- * Table of Contents -->
 <page-nav-print />
