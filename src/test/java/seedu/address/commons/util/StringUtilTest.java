@@ -1,5 +1,6 @@
 package seedu.address.commons.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -140,4 +141,66 @@ public class StringUtilTest {
         assertThrows(NullPointerException.class, () -> StringUtil.getDetails(null));
     }
 
+    @Test
+    public void computeCloseness_identicalStrings_return0() {
+        assertEquals(0, StringUtil.computeCloseness("hello", "hello"));
+    }
+
+    @Test
+    public void computeCloseness_slightlyOffVersusCompletelyUnrelated_returnSlightlyOff() {
+        // test for one-word sequence
+        String toCompareEmail = "ilovecraftconnect@example.com";
+        String correctEmail = "ilovecraftconnect@example.com";
+        String extraCharEmail = "ilovecraftconnect@examples.com.sg";
+        String missingCharEmail = "icraftconnect@example.com";
+        String wrongCharEmail = "ilikecraftconnect@example.com";
+        String completelyOffEmail = "alexyeoh@dummy.gov.tv";
+
+        double extraCharEmailCloseness = StringUtil.computeCloseness(toCompareEmail, extraCharEmail);
+        double correctEmailCloseness = StringUtil.computeCloseness(toCompareEmail, correctEmail);
+        double missingCharEmailCloseness = StringUtil.computeCloseness(toCompareEmail, missingCharEmail);
+        double wrongCharEmailCloseness = StringUtil.computeCloseness(toCompareEmail, wrongCharEmail);
+        double completelyOffEmailCloseness = StringUtil.computeCloseness(toCompareEmail, completelyOffEmail);
+
+        assertEquals(0, correctEmailCloseness);
+        assertTrue(extraCharEmailCloseness < completelyOffEmailCloseness);
+        assertTrue(wrongCharEmailCloseness < completelyOffEmailCloseness);
+        assertTrue(missingCharEmailCloseness < completelyOffEmailCloseness);
+
+        // test for multiple-word sequences
+        String toCompareString = "booth rental CraftFes";
+        String extraOneChar = "booth rental CraftFest";
+        String missingOneChar = "booth renta CraftFes";
+        String wrongOneChar = "booth rental CraftFet";
+        String completelyUnrelated = "completely unrelated";
+        String anotherUnrelated = "boots supplier ConnectiCon";
+
+        double extraOneCharCloseness = StringUtil.computeCloseness(toCompareString, extraOneChar);
+        double missingOneCharCloseness = StringUtil.computeCloseness(toCompareString, missingOneChar);
+        double wrongOneCharCloseness = StringUtil.computeCloseness(toCompareString, wrongOneChar);
+        double completelyUnrelatedCloseness = StringUtil.computeCloseness(toCompareString, completelyUnrelated);
+        double anotherUnrelatedCloseness = StringUtil.computeCloseness(toCompareString, anotherUnrelated);
+
+        assertTrue(extraOneCharCloseness < completelyUnrelatedCloseness);
+        assertTrue(missingOneCharCloseness < completelyUnrelatedCloseness);
+        assertTrue(wrongOneCharCloseness < completelyUnrelatedCloseness);
+        assertTrue(extraOneCharCloseness < anotherUnrelatedCloseness);
+        assertTrue(missingOneCharCloseness < anotherUnrelatedCloseness);
+        assertTrue(wrongOneCharCloseness < anotherUnrelatedCloseness);
+
+        String extraChars = "booths rental CraftFestival";
+        String missingChars = "booth rent CraftFes";
+        String wrongChars = "stall rental CraftFetival";
+
+        double extraCharsCloseness = StringUtil.computeCloseness(toCompareString, extraChars);
+        double missingCharsCloseness = StringUtil.computeCloseness(toCompareString, missingChars);
+        double wrongCharsCloseness = StringUtil.computeCloseness(toCompareString, wrongChars);
+
+        assertTrue(extraCharsCloseness < anotherUnrelatedCloseness);
+        assertTrue(missingCharsCloseness < anotherUnrelatedCloseness);
+        assertTrue(wrongCharsCloseness < anotherUnrelatedCloseness);
+        assertTrue(extraCharsCloseness < completelyUnrelatedCloseness);
+        assertTrue(missingCharsCloseness < completelyUnrelatedCloseness);
+        assertTrue(wrongCharsCloseness < completelyUnrelatedCloseness);
+    }
 }
