@@ -88,8 +88,8 @@ public class EditCommand extends Command {
         if (editedPerson.equals(personToEdit) || !editPersonDescriptor.isAnyFieldEdited()) {
             throw new CommandException(MESSAGE_NOT_EDITED);
         }
-        assert !editedPerson.equals(personToEdit) || !editPersonDescriptor.isAnyFieldEdited() :
-            "Person should be different if fields were edited";
+        assert !editedPerson.equals(personToEdit) || !editPersonDescriptor.isAnyFieldEdited()
+                : "Person should be different if fields were edited";
 
         // Check if contact is being changed and if it's a duplicate
         for (Person person : lastShownList) {
