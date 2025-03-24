@@ -65,7 +65,6 @@ public class EditCommand extends Command {
         requireNonNull(editPersonDescriptor);
 
         assert index.getOneBased() > 0 : "Index must be a positive integer";
-        assert editPersonDescriptor.isAnyFieldEdited() : "At least one field must be edited";
 
         this.index = index;
         this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
@@ -181,7 +180,7 @@ public class EditCommand extends Command {
          * A defensive copy of {@code tags} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
-            assert toCopy != null : "EditPersonDescriptor to copy cannot be null";
+            assert toCopy != null : "EditPersonDescriptor cannot be null";
 
             setName(toCopy.name);
             setPhone(toCopy.phone);
