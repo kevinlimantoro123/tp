@@ -29,14 +29,14 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
 
         if (argMultimap.getNumberOfPrefixes() > 1) {
             throw new ParseException(
-                    String.format(DeleteCommand.TOO_MANY_ATTRIBUTES_SPECIFIED, DeleteCommand.MESSAGE_USAGE));
+                    String.format(DeleteCommand.MESSAGE_TOO_MANY_ATTRIBUTES_SPECIFIED, DeleteCommand.MESSAGE_USAGE));
         }
 
         if (argMultimap.getValue(PREFIX_NAME).isPresent()
                 || argMultimap.getValue(PREFIX_ADDRESS).isPresent()
                 || argMultimap.getValue(PREFIX_TAG).isPresent()) {
             throw new ParseException(
-                    String.format(DeleteCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, DeleteCommand.MESSAGE_USAGE));
+                    String.format(DeleteCommand.MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED, DeleteCommand.MESSAGE_USAGE));
         }
 
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {

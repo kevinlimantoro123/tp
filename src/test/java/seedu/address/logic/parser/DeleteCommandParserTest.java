@@ -42,7 +42,7 @@ public class DeleteCommandParserTest {
     public void parse_twoAttributes_throwsParseException() {
         assertParseFailure(parser,
                 " " + PREFIX_PHONE + "12345678 " + PREFIX_EMAIL + "dummy@example.com",
-                String.format(DeleteCommand.TOO_MANY_ATTRIBUTES_SPECIFIED, DeleteCommand.MESSAGE_USAGE));
+                String.format(DeleteCommand.MESSAGE_TOO_MANY_ATTRIBUTES_SPECIFIED, DeleteCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -51,28 +51,28 @@ public class DeleteCommandParserTest {
                 " " + PREFIX_PHONE + "12345678 "
                         + PREFIX_EMAIL + "dummy@example.com "
                         + PREFIX_NAME + "alex yeoh",
-                String.format(DeleteCommand.TOO_MANY_ATTRIBUTES_SPECIFIED, DeleteCommand.MESSAGE_USAGE));
+                String.format(DeleteCommand.MESSAGE_TOO_MANY_ATTRIBUTES_SPECIFIED, DeleteCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_nameAttribute_throwsParseException() {
         assertParseFailure(parser,
                 " " + PREFIX_NAME + "alex yeoh",
-                String.format(DeleteCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, DeleteCommand.MESSAGE_USAGE));
+                String.format(DeleteCommand.MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED, DeleteCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_addressAttribute_throwsParseException() {
         assertParseFailure(parser,
                 " " + PREFIX_ADDRESS + "420 Craft Avenue, Gotham 123746",
-                String.format(DeleteCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, DeleteCommand.MESSAGE_USAGE));
+                String.format(DeleteCommand.MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED, DeleteCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_tagAttribute_throwsParseException() {
         assertParseFailure(parser,
                 " " + PREFIX_TAG + "colleague",
-                String.format(DeleteCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, DeleteCommand.MESSAGE_USAGE));
+                String.format(DeleteCommand.MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED, DeleteCommand.MESSAGE_USAGE));
     }
 
     @Test

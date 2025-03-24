@@ -43,10 +43,10 @@ public class DeleteCommand extends Command {
             + "or: " + COMMAND_WORD + " " + PREFIX_EMAIL + "ilovecraftconnect@gmail.com";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
-    public static final String TOO_MANY_ATTRIBUTES_SPECIFIED = "Too many attributes specified!\n%1$s";
-    public static final String NOT_UNIQUE_ATTRIBUTE_DETECTED = "A non-unique attribute is detected!\n%1s";
-    public static final String NO_PERSON_WITH_MATCHING_EMAIL = "No person with matching email address.";
-    public static final String NO_PERSON_WITH_MATCHING_PHONE = "No person with matching phone number.";
+    public static final String MESSAGE_TOO_MANY_ATTRIBUTES_SPECIFIED = "Too many attributes specified!\n%1$s";
+    public static final String MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED = "A non-unique attribute is detected!\n%1s";
+    public static final String MESSAGE_NO_PERSON_WITH_MATCHING_EMAIL = "No person with matching email address.";
+    public static final String MESSAGE_NO_PERSON_WITH_MATCHING_PHONE = "No person with matching phone number.";
 
     private enum DeletionType {
         BY_INDEX, BY_EMAIL, BY_PHONE
@@ -126,7 +126,7 @@ public class DeleteCommand extends Command {
             Person personToDelete = find(lastShownList, new EmailIsKeywordPredicate(targetEmail.value));
 
             if (personToDelete == null) {
-                throw new CommandException(DeleteCommand.NO_PERSON_WITH_MATCHING_EMAIL);
+                throw new CommandException(DeleteCommand.MESSAGE_NO_PERSON_WITH_MATCHING_EMAIL);
             }
 
             model.deletePerson(personToDelete);
@@ -141,7 +141,7 @@ public class DeleteCommand extends Command {
             Person personToDelete = find(lastShownList, new PhoneIsKeywordPredicate(targetPhone.value));
 
             if (personToDelete == null) {
-                throw new CommandException(DeleteCommand.NO_PERSON_WITH_MATCHING_PHONE);
+                throw new CommandException(DeleteCommand.MESSAGE_NO_PERSON_WITH_MATCHING_PHONE);
             }
 
             model.deletePerson(personToDelete);

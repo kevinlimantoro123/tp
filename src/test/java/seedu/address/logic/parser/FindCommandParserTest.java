@@ -30,31 +30,31 @@ public class FindCommandParserTest {
     public void parse_argMoreThanOneAttribute_throwsParseException() {
         assertParseFailure(parser,
                 String.format(" %s91237483 %silovecraftconnect@gmail.com", PREFIX_PHONE, PREFIX_EMAIL),
-                String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
+                String.format(FindCommand.MESSAGE_TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
 
         assertParseFailure(parser,
                 String.format(" %sneil deGrease Tyson %sastrophysicist@nasa.gov %steacher",
                         PREFIX_NAME, PREFIX_EMAIL, PREFIX_TAG),
-                String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
+                String.format(FindCommand.MESSAGE_TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
 
         assertParseFailure(parser,
                 String.format(" %scolleagues %s59 Dummy Street, Gotham %s83582957 %sfriend",
                         PREFIX_TAG, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_TAG),
-                String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
+                String.format(FindCommand.MESSAGE_TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_argContainsName_throwsParseExceptionForNonUniqueAttribute() {
         assertParseFailure(parser,
                 " " + PREFIX_NAME + "alex yeoh",
-                String.format(FindCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
+                String.format(FindCommand.MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_argContainsAddress_throwsParseExceptionForNonUniqueAttribute() {
         assertParseFailure(parser,
                 " " + PREFIX_ADDRESS + "420 Craft Avenue, Singapore 572847",
-                String.format(FindCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
+                String.format(FindCommand.MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
     }
 
     // integration test
