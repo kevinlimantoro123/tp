@@ -50,6 +50,7 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    public static final String MESSAGE_DUPLICATE_FIELDS = "Please provide a new value for the fields you want to edit.";
     public static final String MESSAGE_DUPLICATE_PHONE = "This phone number is already being used by: ";
     public static final String MESSAGE_DUPLICATE_EMAIL = "This email is already being used by: ";
 
@@ -85,7 +86,7 @@ public class EditCommand extends Command {
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
         assert editedPerson != null : "Edited person cannot be null";
         if (editedPerson.equals(personToEdit) || !editPersonDescriptor.isAnyFieldEdited()) {
-            throw new CommandException(MESSAGE_NOT_EDITED);
+            throw new CommandException(MESSAGE_DUPLICATE_FIELDS);
         }
         assert !editedPerson.equals(personToEdit) || !editPersonDescriptor.isAnyFieldEdited()
                 : "Person should be different if fields were edited";

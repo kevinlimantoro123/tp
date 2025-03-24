@@ -75,7 +75,7 @@ public class EditCommandTest {
     public void execute_noFieldSpecifiedUnfilteredList_failure() {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, new EditPersonDescriptor());
 
-        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_NOT_EDITED);
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_FIELDS);
     }
 
     @Test
