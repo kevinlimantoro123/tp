@@ -160,7 +160,7 @@ public class ExportCommandTest {
     @Test
     @EnabledOnOs(OS.LINUX) // Run this test only on Linux
     public void execute_invalidFolderNamesLinux_throwsCommandException() {
-        String[] invalidNames = {"valid\\0invalid"};
+        String[] invalidNames = {"valid\0invalid"};
         for (String name : invalidNames) {
             assertCommandFailure(
                     new ExportCommand(name, false),
