@@ -41,7 +41,7 @@ public class ImportCommandTest {
      * @throws Exception any exception from reading, loading files... A correct setup would not throw Exceptions.
      */
     @BeforeAll
-    static void setUp() throws Exception {
+    public static void setUp() throws Exception {
         // set up a temporary directory
         tempDir = Files.createTempDirectory("importTest");
 
@@ -264,9 +264,11 @@ public class ImportCommandTest {
         String notEvenAPath = "???";
         String alsoNotEvenAPath = "???";
 
+        // same object -> returns true
         ImportCommand command = new ImportCommand("hello world");
         assertEquals(command, command);
 
+        // same arguments -> returns true
         assertEquals(
                 new ImportCommand(notEvenAPath),
                 new ImportCommand(notEvenAPath)
@@ -277,6 +279,7 @@ public class ImportCommandTest {
                 new ImportCommand(alsoNotEvenAPath)
         );
 
+        // different argument(s) -> returns false
         assertNotEquals(
                 new ImportCommand(notEvenAPath),
                 new ImportCommand(notJsonFile.getPath())
@@ -287,6 +290,7 @@ public class ImportCommandTest {
                 new ImportCommand(validJsonFile.getPath())
         );
 
+        // null -> returns false
         assertNotEquals(
                 null,
                 new ImportCommand(emptyJsonFile.getPath())

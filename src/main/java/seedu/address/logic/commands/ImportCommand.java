@@ -18,9 +18,10 @@ public class ImportCommand extends FileBasedCommand {
     public static final String COMMAND_WORD = "import";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Populates CraftConnect using the contacts from the "
-            + "specified JSON file. Note that this operation will OVERWRITE existing data."
+            + "specified JSON file. Note that this operation will OVERWRITE existing data. "
             + "Parameters: PATH_TO_JSON_FILE\n"
-            + "Example: " + COMMAND_WORD + " C:/Users/DummyUser/data.json";
+            + "Example: " + COMMAND_WORD + " C:/Users/DummyUser/data.json\n\n"
+            + "Do not put your file path inside quotation marks.\n";
 
     public static final String MESSAGE_SUCCESS = "Data successfully imported! Enjoy using CraftConnect!";
     public static final String MESSAGE_ERROR = "Command aborted due to failure to import data.\n%s";
@@ -78,22 +79,22 @@ public class ImportCommand extends FileBasedCommand {
     public CommandResult execute(Model model) throws CommandException {
         ReadOnlyAddressBook originalAddressBook = model.getAddressBook();
 
-        if (!(new File(this.filePath).exists())) {
-            throw new CommandException(generateErrorMessage(this.filePath, MESSAGE_FILE_DOES_NOT_EXIST));
+        if (!(new File(this.path).exists())) {
+            throw new CommandException(generateErrorMessage(this.path, MESSAGE_FILE_DOES_NOT_EXIST));
         }
 
-        if (!this.filePath.toLowerCase().endsWith(".json")) {
-            throw new CommandException(generateErrorMessage(this.filePath, MESSAGE_NOT_JSON_FILE));
+        if (!this.path.toLowerCase().endsWith(".json")) {
+            throw new CommandException(generateErrorMessage(this.path, MESSAGE_NOT_JSON_FILE));
         }
 
         try {
-            Path path = Path.of(filePath);
+            Path path = Path.of(this.path);
             Optional<ReadOnlyAddressBook> addressBook = storage.readAddressBook(path);
 
             model.setAddressBook(addressBook.orElse(originalAddressBook));
             return new CommandResult(MESSAGE_SUCCESS);
         } catch (DataLoadingException e) {
-            throw new CommandException(generateErrorMessage(this.filePath, MESSAGE_INCOMPATIBLE_SCHEMA));
+            throw new CommandException(generateErrorMessage(this.path, MESSAGE_INCOMPATIBLE_SCHEMA));
         }
     }
 
@@ -109,13 +110,13 @@ public class ImportCommand extends FileBasedCommand {
         }
 
         ImportCommand otherImportCommand = (ImportCommand) other;
-        return this.filePath.equals(otherImportCommand.filePath);
+        return this.path.equals(otherImportCommand.path);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("path", this.filePath)
+                .add("path", this.path)
                 .toString();
     }
 }

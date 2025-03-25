@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.commands.ImportCommand;
 
 public class ImportCommandParserTest {
-    private ImportCommandParser parser = new ImportCommandParser();
+    private final ImportCommandParser parser = new ImportCommandParser();
 
     @Test
     public void parse_emptyArgs_throwsParseException() {

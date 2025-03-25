@@ -9,10 +9,10 @@ import seedu.address.storage.Storage;
  */
 public abstract class FileBasedCommand extends Command {
     protected static Storage storage;
-    protected final String filePath;
+    protected final String path;
 
-    public FileBasedCommand(String filePath) {
-        this.filePath = filePath;
+    public FileBasedCommand(String path) {
+        this.path = path;
     }
 
     /**
