@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import seedu.address.commons.exceptions.DataLoadingException;
@@ -88,7 +89,7 @@ public class ImportCommand extends FileBasedCommand {
         }
 
         try {
-            Path path = Path.of(this.path);
+            Path path = Paths.get(this.path);
             Optional<ReadOnlyAddressBook> addressBook = storage.readAddressBook(path);
 
             model.setAddressBook(addressBook.orElse(originalAddressBook));
