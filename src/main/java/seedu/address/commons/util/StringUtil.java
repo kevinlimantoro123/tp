@@ -67,38 +67,39 @@ public class StringUtil {
     }
 
     /**
-     * Calculates recursively the edit distance between the substrings [0, i1) of word 1 and [0, i2) of word 2.
-     * This is a helper method to the dynamic programming approach of the getEditDistance method.
-     *
-     * @param word1 The first word
-     * @param word2 The second word
-     * @param i1 The end index of the [0, i1) substring of word 1
-     * @param i2 The end index of the [0, i2) substring of word 2
-     * @param dp The 2-dimensional array for dynamic programming
-     * @return The edit distance for the substrings [0, i1) of word and [0, i2) of word2
+     * Builds the 2D dynamic programming array to compute the edit distance between two words
+     * @param w1 The first word
+     * @param w2 The second word
+     * @return The fully filled 2D table
      */
-    private static int getEditDistanceHelper(String word1, String word2, int i1, int i2, int[][] dp) {
-        if (i1 < 0 || i2 < 0) {
-            return word1.length() + word2.length();
+    private static int[][] buildEditDistanceTable(String w1, String w2) {
+        int[][] dp = new int[w1.length() + 1][w2.length() + 1];
+
+        // Base cases, if one string is empty, return the length of the other string
+        for (int i = 0; i < w1.length(); i++) {
+            dp[i][0] = i;
         }
 
-        if (dp[i1][i2] != -1) {
-            return dp[i1][i2];
+        for (int j = 0; j < w2.length(); j++) {
+            dp[0][j] = j;
         }
 
-        if (word1.charAt(i1) == word2.charAt(i2)) {
-            dp[i1][i2] = getEditDistanceHelper(word1, word2, i1 - 1, i2 - 1, dp);
-            return dp[i1][i2];
+        // Build the table bottom-up
+        for (int i = 1; i <= w1.length(); i++) {
+            for (int j = 1; j <= w2.length(); j++) {
+                if (w1.charAt(i - 1) == w2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    int insertOp = dp[i][j - 1] + 1;
+                    int deleteOp = dp[i - 1][j] + 1;
+                    int replaceOp = dp[i - 1][j - 1] + 1;
+
+                    dp[i][j] = Math.min(insertOp, Math.min(deleteOp, replaceOp));
+                }
+            }
         }
 
-        int distance = Math.min(getEditDistanceHelper(word1, word2, i1 - 1, i2, dp) + 1,
-                Math.min(getEditDistanceHelper(word1, word2, i1, i2 - 1, dp) + 1,
-                        getEditDistanceHelper(word1, word2, i1 - 1, i2 - 1, dp) + 1
-                )
-        );
-
-        dp[i1][i2] = distance;
-        return distance;
+        return dp;
     }
 
     /**
@@ -117,31 +118,19 @@ public class StringUtil {
      * @return The edit distance between two words
      */
     private static double getEditDistance(String word1, String word2) {
-        int l1 = word1.length();
-        int l2 = word2.length();
-
         word1 = " " + word1;
         word2 = " " + word2;
 
-        int[][] dp = new int[l1 + 1][l2 + 1];
+        int[][] dp = buildEditDistanceTable(word1, word2);
 
-        for (int r = 0; r <= l1; r++) {
-            for (int c = 0; c <= l2; c++) {
-                dp[r][c] = r == 0
-                        ? c
-                        : c == 0
-                        ? r
-                        : -1;
-            }
-        }
-
-        return getEditDistanceHelper(word1, word2, l1, l2, dp);
+        return dp[word1.length()][word2.length()];
     }
 
     /**
-     * Computes the closeness of the task's description to the user's keyword.<br>
-     * This returns 0 if the keyword is contained within the task's description. Else, split the keywords and
-     * description into two String arrays and perform matching for each keyword word.
+     * Computes the closeness of a String to the user's keyword.<br>
+     * This returns 0 if the keyword is contained within the String.<br>
+     * Else, split the keywords and the String into two String arrays and perform matching for each word
+     * in the keywords, sum the edit distances for each keyword, and return this value.
      *
      * @param stringToCompareTo The String to compare the keywords to
      * @param keyword The user's keyword(s), which can be one word or multiple words separated by whitespace
