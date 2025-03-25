@@ -43,7 +43,8 @@ public class ExportCommand extends FileBasedCommand {
     public static final String MESSAGE_ERROR = "Command aborted due to failure to export data.\n%s";
     public static final String MESSAGE_USER_PATH = "Your file path: %s\n";
     public static final String MESSAGE_FOLDER_DOES_NOT_EXIST = "The specified folder does not exist. "
-            + "Please check if the path is correct.";
+            + "Please check if the path is correct, or use the flag "
+            + ExportCommandParser.CREATES_DIRECTORY_FLAG + ".";
     public static final String MESSAGE_NOT_A_FOLDER = "The specified path is not a valid folder. "
             + "Please ensure the correct folder path (which may be dependent on your OS).";
     public static final String MESSAGE_CREATE_FILE_ERROR = "The directory cannot be created. "

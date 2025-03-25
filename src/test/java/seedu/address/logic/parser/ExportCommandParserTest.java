@@ -31,6 +31,14 @@ public class ExportCommandParserTest {
     }
 
     @Test
+    public void parse_tooManyArguments_throwsParseException() {
+        String expectedMessage = ExportCommand.MESSAGE_TOO_MANY_ARGUMENTS;
+        String argument = "a/random/ " + ExportCommandParser.CREATES_DIRECTORY_FLAG + " /folder";
+
+        assertParseFailure(parser, argument, expectedMessage);
+    }
+
+    @Test
     public void parse_validFolderPath_success() {
         // no create directory flag
         String validArgNoFlag1 = "C:/Users/DummyUser";
