@@ -1,5 +1,7 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 
@@ -12,6 +14,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -24,8 +27,13 @@ public class ImportCommandTest {
     private static Model model;
 
     private static Path tempDir;
-    private static File defaultJsonFile, defaultUserPrefsFile;
-    private static File validJsonFile, invalidJsonFile, notJsonFile, nonExistentFile, emptyJsonFile;
+    private static File defaultJsonFile;
+    private static File defaultUserPrefsFile;
+    private static File validJsonFile;
+    private static File invalidJsonFile;
+    private static File notJsonFile;
+    private static File nonExistentFile;
+    private static File emptyJsonFile;
     private static Storage storage;
 
     /**
@@ -183,7 +191,10 @@ public class ImportCommandTest {
     @Test
     public void execute_nonExistentFile_throwsCommandException() {
         ImportCommand absolutePathCommand = new ImportCommand(nonExistentFile.getAbsolutePath());
-        String expectedMessage = String.format(ImportCommand.MESSAGE_ERROR, ImportCommand.MESSAGE_FILE_DOES_NOT_EXIST);
+        String expectedMessage = ImportCommand.generateErrorMessage(
+                nonExistentFile.getPath(),
+                ImportCommand.MESSAGE_FILE_DOES_NOT_EXIST
+        );
         assertCommandFailure(absolutePathCommand, model, expectedMessage);
 
         ImportCommand relativePathCommand = new ImportCommand(nonExistentFile.getPath());
@@ -193,7 +204,10 @@ public class ImportCommandTest {
     @Test
     public void execute_notJsonFile_throwsCommandException() {
         ImportCommand absolutePathCommand = new ImportCommand(notJsonFile.getAbsolutePath());
-        String expectedMessage = String.format(ImportCommand.MESSAGE_ERROR, ImportCommand.MESSAGE_NOT_JSON_FILE);
+        String expectedMessage = ImportCommand.generateErrorMessage(
+                notJsonFile.getPath(),
+                ImportCommand.MESSAGE_NOT_JSON_FILE
+        );
         assertCommandFailure(absolutePathCommand, model, expectedMessage);
 
         ImportCommand relativePathCommand = new ImportCommand(notJsonFile.getPath());
@@ -203,7 +217,10 @@ public class ImportCommandTest {
     @Test
     public void execute_invalidJsonSchemaFile_throwsCommandException() {
         ImportCommand absolutePathCommand = new ImportCommand(invalidJsonFile.getAbsolutePath());
-        String expectedMessage = String.format(ImportCommand.MESSAGE_ERROR, ImportCommand.MESSAGE_INCOMPATIBLE_SCHEMA);
+        String expectedMessage = ImportCommand.generateErrorMessage(
+                invalidJsonFile.getPath(),
+                ImportCommand.MESSAGE_INCOMPATIBLE_SCHEMA
+        );
         assertCommandFailure(absolutePathCommand, model, expectedMessage);
 
         ImportCommand relativePathCommand = new ImportCommand(invalidJsonFile.getPath());
@@ -213,7 +230,10 @@ public class ImportCommandTest {
     @Test
     public void execute_emptyJsonFile_throwsCommandException() {
         ImportCommand absolutePathCommand = new ImportCommand(emptyJsonFile.getAbsolutePath());
-        String expectedMessage = String.format(ImportCommand.MESSAGE_ERROR, ImportCommand.MESSAGE_INCOMPATIBLE_SCHEMA);
+        String expectedMessage = ImportCommand.generateErrorMessage(
+                emptyJsonFile.getPath(),
+                ImportCommand.MESSAGE_INCOMPATIBLE_SCHEMA
+        );
         assertCommandFailure(absolutePathCommand, model, expectedMessage);
     }
 
@@ -237,6 +257,47 @@ public class ImportCommandTest {
         }
 
         assertCommandSuccess(absolutePathCommand, model, ImportCommand.MESSAGE_SUCCESS, expectedModel);
+    }
+
+    @Test
+    public void equals() {
+        String notEvenAPath = "???";
+        String alsoNotEvenAPath = "???";
+
+        ImportCommand command = new ImportCommand("hello world");
+        assertEquals(command, command);
+
+        assertEquals(
+                new ImportCommand(notEvenAPath),
+                new ImportCommand(notEvenAPath)
+        );
+
+        assertEquals(
+                new ImportCommand(notEvenAPath),
+                new ImportCommand(alsoNotEvenAPath)
+        );
+
+        assertNotEquals(
+                new ImportCommand(notEvenAPath),
+                new ImportCommand(notJsonFile.getPath())
+        );
+
+        assertNotEquals(
+                new ImportCommand(invalidJsonFile.getPath()),
+                new ImportCommand(validJsonFile.getPath())
+        );
+
+        assertNotEquals(
+                null,
+                new ImportCommand(emptyJsonFile.getPath())
+        );
+    }
+
+    @Test
+    public void toStringMethod() {
+        ImportCommand importCommand = new ImportCommand(validJsonFile.getPath());
+        String expected = ImportCommand.class.getCanonicalName() + "{path=" + validJsonFile.getPath() + "}";
+        assertEquals(expected, importCommand.toString());
     }
 
     @AfterAll

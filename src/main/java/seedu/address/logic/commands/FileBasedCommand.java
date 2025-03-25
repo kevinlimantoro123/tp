@@ -11,6 +11,10 @@ public abstract class FileBasedCommand extends Command {
     protected static Storage storage;
     protected final String filePath;
 
+    public FileBasedCommand(String filePath) {
+        this.filePath = filePath;
+    }
+
     /**
      * Binds the storage manager object to all file-based commands.
      * This bind call is invoked after the storage manager has been instantiated.
@@ -20,9 +24,6 @@ public abstract class FileBasedCommand extends Command {
         FileBasedCommand.storage = storage;
     }
 
-    public FileBasedCommand(String filePath) {
-        this.filePath = filePath;
-    }
 
     @Override
     public abstract CommandResult execute(Model model) throws CommandException;
