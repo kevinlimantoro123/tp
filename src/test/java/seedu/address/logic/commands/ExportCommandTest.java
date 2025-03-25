@@ -275,6 +275,12 @@ public class ExportCommandTest {
                 new ExportCommand(alsoTargetFolder, false)
         );
 
+        // incompatible types -> returns false
+        assertNotEquals(
+                new ExportCommand(alsoTargetFolder, true),
+                1
+        );
+
         // null -> returns false
         assertNotEquals(
                 new ExportCommand(targetFolder2, true),

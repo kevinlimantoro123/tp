@@ -290,6 +290,12 @@ public class ImportCommandTest {
                 new ImportCommand(validJsonFile.getPath())
         );
 
+        // incompatible types -> return false
+        assertNotEquals(
+                new ImportCommand(invalidJsonFile.getPath()),
+                1
+        );
+
         // null -> returns false
         assertNotEquals(
                 null,
