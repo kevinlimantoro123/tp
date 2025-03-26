@@ -580,28 +580,28 @@ a new folder if their specified folder does not exist.
 
 **Extensions**
 
-* 1a. The entire input is invalid (anything not conformed to 1 create-folder-option and 1 path)
+* 2a. The entire input is invalid (anything not conformed to 1 create-folder-option and 1 path)
 
-    * 1a1. CraftConnect shows an error message and informs the user of the correct command usage.
+    * 2a1. CraftConnect shows an error message and informs the user of the correct command usage.
 
       Use case resumes at step 1.
 
-* 1b. The folder path is invalid (OS-dependent)
+* 2b. The folder path is invalid (OS-dependent)
 
-    * 1b1. CraftConnect shows an error message and asks the user to check for spelling.
+    * 2b1. CraftConnect shows an error message and asks the user to check for spelling.
 
       Use case resumes at step 1.
     *
-* 1c. The folder does not exist, and the option of creating folder if not exists is not specified
+* 2c. The folder does not exist, and the option of creating folder if not exists is not specified
 
-    * 1c1. CraftConnect shows an error message and tells the user to check for spelling or specify 
+    * 2c1. CraftConnect shows an error message and tells the user to check for spelling or specify 
 create-folder-if-not-exist.
 
       Use case resumes at step 1.
 
-* 1d. Some I/O error has occurred when creating folders or the file.
+* 2d. Some I/O error has occurred when creating folders or the file.
 
-    * 1d1. CraftConnect shows an error message and tells the user to check disk space or use another path.
+    * 2d1. CraftConnect shows an error message and tells the user to check disk space or use another path.
 
       Use case resumes at step 1.
       <br><br><br>
@@ -618,27 +618,27 @@ import.
 
 **Extensions**
 
-* 1a. The input is empty
+* 2a. The input is empty
 
-  * 1a1. CraftConnect shows an error message and informs the user of the correct command usage.
+  * 2a1. CraftConnect shows an error message and informs the user of the correct command usage.
   
     Use case resumes at step 1.
 
-* 1b. The file does not exist
+* 2b. The file does not exist
 
-  * 1b1. CraftConnect shows an error message and asks the user to check for spelling or choose an existent path.
+  * 2b1. CraftConnect shows an error message and asks the user to check for spelling or choose an existent path.
 
     Use case resumes at step 1.
   * 
-* 1c. The file is not a JSON file
+* 2c. The file is not a JSON file
 
-    * 1c1. CraftConnect shows an error message and asks the user to specify the path to a JSON file.
+    * 2c1. CraftConnect shows an error message and asks the user to specify the path to a JSON file.
       
       Use case resumes at step 1.
 
-* 1d. The JSON file does not follow CraftConnect's schema
+* 2d. The JSON file does not follow CraftConnect's schema
 
-    * 1d1. CraftConnect shows an error message and tells the user the schema it uses to store contacts' data.
+    * 2d1. CraftConnect shows an error message and tells the user the schema it uses to store contacts' data.
 
       Use case resumes at step 1.
 <br><br><br>
