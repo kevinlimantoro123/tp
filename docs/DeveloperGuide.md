@@ -624,7 +624,7 @@ import.
   
     Use case resumes at step 1.
 
-* 2b. The file does not exist
+* 2b. The path to the file is invalid, or is valid but the file does not exist at that location
 
   * 2b1. CraftConnect shows an error message and asks the user to check for spelling or choose an existent path.
 
