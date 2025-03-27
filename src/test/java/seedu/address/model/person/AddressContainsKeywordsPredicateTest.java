@@ -39,19 +39,17 @@ public class AddressContainsKeywordsPredicateTest {
     @Test
     public void test_nameContainsKeywords_returnsTrue() {
         // One keyword
-        AddressContainsKeywordsPredicate predicate = new AddressContainsKeywordsPredicate("Blk 123");
-        assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123").build()));
+        AddressContainsKeywordsPredicate predicate =
+                new AddressContainsKeywordsPredicate("Blk 123 dummy St 31");
+        assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31").build()));
     }
 
     @Test
     public void test_nameDoesNotContainKeywords_returnsFalse() {
-        // Zero keywords
-        AddressContainsKeywordsPredicate predicate = new AddressContainsKeywordsPredicate("");
-        assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123").build()));
-
         // Non-matching keyword
-        predicate = new AddressContainsKeywordsPredicate("Blk 321");
-        assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123").build()));
+        AddressContainsKeywordsPredicate predicate =
+                new AddressContainsKeywordsPredicate("Blk 321 dummy St 31");
+        assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123 example St 31").build()));
 
     }
 

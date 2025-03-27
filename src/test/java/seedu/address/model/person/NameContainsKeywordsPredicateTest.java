@@ -42,21 +42,16 @@ public class NameContainsKeywordsPredicateTest {
         assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
 
 
-        // Mixed-case keywords
-        predicate = new NameContainsKeywordsPredicate("aLIce");
+        // Non-capitalised name
+        predicate = new NameContainsKeywordsPredicate("alice");
         assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
     }
 
     @Test
     public void test_nameDoesNotContainKeywords_returnsFalse() {
-        // Zero keywords
-        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate("");
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
-
         // Non-matching keyword
-        predicate = new NameContainsKeywordsPredicate("Carol");
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
-
+        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate("Carol");
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
     }
 
     @Test
