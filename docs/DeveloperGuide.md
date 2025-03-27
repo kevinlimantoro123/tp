@@ -1,254 +1,735 @@
+
 ---
-  layout: default.md
-  title: "User Guide"
-  pageNav: 3
+layout: default.md
+title: "Developer Guide"
+pageNav: 3
 ---
 
-# CraftConnect User Guide
-
-CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
+# AB-3 Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
 
 --------------------------------------------------------------------------------------------------------------------
+## Contents
+[Acknowledgements](#acknowledgements)
 
-## Quick start
+[Setting up, getting started](#setting-up-getting-started)
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+[Design](#design)
+- [Architecture](#architecture)
+- [UI components](#ui-component)
+- [Logic component](#logic-component)
+- [Model component](#model-component)
+- [Storage component](#storage-component)
+- [Common classes](#common-classes)
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+[Implementation](#implementation)
+- [\[Proposed\] Undo/redo feature](#proposed-undoredo-feature)
+    - [Proposed implementation](#proposed-implementation)
+    - [Design considerations](#design-considerations)
+- [\[Proposed\] Data archiving](#proposed-data-archiving)
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+[Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+[Appendix: Requirements](#appendix-requirements)
+- [Product scope](#product-scope)
+- [User stories](#user-stories)
+- [Use cases](#use-cases)
+- [Non-Functional Requirements](#non-functional-requirements)
+- [Glossary](#glossary)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
-   Some example commands you can try:
+[Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+- [Launch and shutdown](#launch-and-shutdown)
+- [Deleting a person](#deleting-a-person)
+- [Saving data](#saving-data)
+--------------------------------------------------------------------------------------------------------------------
 
-    * `list` : Lists all contacts.
+## **Acknowledgements**
 
-    * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
-
-    * `filter n/John Doe` : Filters all contacts with the name `John Doe`.
-
-    * `find p/98765432` : Finds the contact with the phone number `98765432`.
-
-    * `delete 3` : Deletes the 3rd contact shown in the current list.
-
-    * `clear` : Deletes all contacts.
-
-    * `exit` : Exits the app.
-
-1. Refer to the [Features](#features) below for details of each command.
+_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Features
+## **Setting up, getting started**
+
+Refer to the guide [_Setting up and getting started_](SettingUp.md).
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Design**
+
+### Architecture
+
+<puml src="diagrams/ArchitectureDiagram.puml" width="280" />
+
+The ***Architecture Diagram*** given above explains the high-level design of the App.
+
+Given below is a quick overview of main components and how they interact with each other.
+
+**Main components of the architecture**
+
+**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+* At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
+* At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+
+The bulk of the app's work is done by the following four components:
+
+* [**`UI`**](#ui-component): The UI of the App.
+* [**`Logic`**](#logic-component): The command executor.
+* [**`Model`**](#model-component): Holds the data of the App in memory.
+* [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
+
+[**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
+
+**How the architecture components interact with each other**
+
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+
+<puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" />
+
+Each of the four main components (also shown in the diagram above),
+
+* defines its *API* in an `interface` with the same name as the Component.
+* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+
+For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
+
+<puml src="diagrams/ComponentManagers.puml" width="300" />
+
+The sections below give more details of each component.
+
+### UI component
+
+The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+
+<puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
+
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+
+The `UI` component,
+
+* executes user commands using the `Logic` component.
+* listens for changes to `Model` data so that the UI can be updated with the modified data.
+* keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
+* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+
+### Logic component
+
+**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+
+Here's a (partial) class diagram of the `Logic` component:
+
+<puml src="diagrams/LogicClassDiagram.puml" width="550"/>
+
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+
+<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
 
 <box type="info" seamless>
 
-**Notes about the command format:**<br>
-
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
-
-* Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
-
-* Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
-
-* Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
-
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
-  </box>
-
-### Viewing help : `help`
-
-Shows a message explaning how to access the help page.
-
-![help message](images/helpMessage.png)
-
-Format: `help`
-
-
-### Adding a person: `add`
-
-Adds a person to the address book.
-
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/CATEGORY]…​`
-
-* Can only add a person with a unique phone number and email address.
-
-<box type="tip" seamless>
-
-**Tip:** A person can have any number of categories (including 0)
+**Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
 
-Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/supplier`
+How the `Logic` component works:
 
-### Listing all persons : `list`
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
+1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
+1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
+   Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
+1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
-Shows a list of all persons in the address book.
+Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
-Format: `list`
+<puml src="diagrams/ParserClasses.puml" width="600"/>
 
-### Editing a person : `edit`
+How the parsing works:
+* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
+* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
-Edits an existing person in the address book.
+### Model component
+**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+<puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* Can only edit the phone number and email if they are unique (No duplicates in the contact book).
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-  specifying any tags after it.
 
-Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+The `Model` component,
 
-### Locating persons by unique identifier: `find`
+* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
+* does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-Finds persons by searching for a unique attribute
+<box type="info" seamless>
 
-Format: `find UNIQUE_IDENTIFIER`
+**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
-<box type="tip" seamless>
+<puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 
-**Tip:** Only 1 parameter can be inputted at a time.
 </box>
 
-* There are 2 unique identifiers that can be used to search for a person:
-    * `p/PHONE_NUMBER`
-    * `e/EMAIL`
-* This search will always return at most 1 contact when a valid attribute is provided.
-* The inputs are case-sensitive e.g. `JOHN` will not match `john`.
-* Only full words or numbers will be matched e.g. `123` will not match `1234`.
 
-Examples:
-* `find p/123` returns the contact with the phone number `123`
-* `find e/johnd@example.com` returns the contact with the email `johnd@example.com`
-  ![result for 'find alex david'](images/findp123.png)
+### Storage component
 
-### Filtering persons by common identifier: `filter`
+**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
-Filters persons by searching for a common attribute
+<puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
-Format: `filter COMMON_IDENTIFIER`
+The `Storage` component,
+* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+* inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
+* depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
-<box type="tip" seamless>
+### Common classes
 
-**Tip:** Only 1 parameter TYPE can be inputted at a time.
-</box>
-
-* There are 3 common identifiers that can be used to filter for a person:
-    * `n/NAME`
-    * `a/ADDRESS`
-    * `t/TAG`
-* Note that for tags, multiple tags can be specified for filtering eg. `filter t/friend colleague`.
-* This search will return all contacts that match the common attribute provided.
-* The inputs are case-insensitive e.g. `JOHN` will match `john`.
-* Only full words will be matched e.g. `han` will not match `hans`.
-
-Examples:
-* `filter n/alex` returns all contacts with the name `alex`
-* `filter a/123 street` returns all contacts with the address `123 street`
-* `filter t/friend` returns all contacts with the tag `friend`
-
-### Deleting a person : `delete`
-
-Deletes the specified person from the address book.
-
-Format: `delete UNIQUE_IDENTIFIER`
-
-<box type="tip" seamless>
-
-**Tip:** Only 1 parameter can be inputted at a time.
-</box>
-
-* There are 3 unique identifiers that can be used to delete a person:
-    * `INDEX`
-    * `p/PHONE_NUMBER`
-    * `e/EMAIL`
-* When using filter or find, the current list will be updated to a filtered list. When deletion by index is used, the index refers to the index number shown in the filtered persons list.
-* A valid email or phone number will delete the corresponding contact regardless of any applied filters.
-* The index **must be a positive integer** 1, 2, 3, …​
-
-Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `filter n/Betsy` followed by `delete 1` deletes the 1st person in the results of the `filter` command.
-* `delete p/1234567` deletes the person with the phone number `1234567` (even if not shown in current list).
-
-### Clearing all entries : `clear`
-
-Clears all entries from the address book.
-
-Format: `clear`
-
-### Exiting the program : `exit`
-
-Exits the program.
-
-Format: `exit`
-
-### Saving the data
-
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
-
-### Editing the data file
-
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
-
-<box type="warning" seamless>
-
-**Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
-</box>
-
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
+Classes used by multiple components are in the `seedu.address.commons` package.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## FAQ
+## **Implementation**
 
-**Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+This section describes some noteworthy details on how certain features are implemented.
+
+### \[Proposed\] Undo/redo feature
+
+#### Proposed Implementation
+
+The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+
+* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
+* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
+* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+
+These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+
+Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+
+<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
+
+Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+
+<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
+
+Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+
+<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
+
+<box type="info" seamless>
+
+**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+
+</box>
+
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+
+<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
+
+
+<box type="info" seamless>
+
+**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
+than attempting to perform the undo.
+
+</box>
+
+The following sequence diagram shows how an undo operation goes through the `Logic` component:
+
+<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+
+</box>
+
+Similarly, how an undo operation goes through the `Model` component is shown below:
+
+<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
+
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+
+<box type="info" seamless>
+
+**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+
+</box>
+
+Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+
+<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
+
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+
+<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
+
+The following activity diagram summarizes what happens when a user executes a new command:
+
+<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
+
+#### Design considerations:
+
+**Aspect: How undo & redo executes:**
+
+* **Alternative 1 (current choice):** Saves the entire address book.
+    * Pros: Easy to implement.
+    * Cons: May have performance issues in terms of memory usage.
+
+* **Alternative 2:** Individual command knows how to undo/redo by
+  itself.
+    * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+    * Cons: We must ensure that the implementation of each individual command are correct.
+
+_{more aspects and alternatives to be added}_
+
+### \[Proposed\] Data archiving
+
+_{Explain here how the data archiving feature will be implemented}_
+
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Known issues
+## **Documentation, logging, testing, configuration, dev-ops**
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+* [Documentation guide](Documentation.md)
+* [Testing guide](Testing.md)
+* [Logging guide](Logging.md)
+* [Configuration guide](Configuration.md)
+* [DevOps guide](DevOps.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Command summary
+## **Appendix: Requirements**
 
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Clear**  | `clear`
-**Delete** | `delete UNIQUE_IDENTIFIER`<br> e.g., `delete 3` / `delete p/98765432`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`
-**Filter** | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`
-**List**   | `list`
-**Help**   | `help`
+### Product scope
+
+**Target user profile**:
+
+* is a business owner, preferably in arts and crafts
+* has a need to manage a significant number of contacts
+* prefer desktop apps over other types
+* can type fast and/or prefers typing to mouse interactions
+* is reasonably comfortable using CLI apps
+
+**Value proposition**:
+
+CraftConnect app will keep track of the many different suppliers and
+customers easily and organise them into groups. Since small business owners usually have
+a lack of manpower, CraftConnect will provide an efficient solution for handling of vendor and
+customer orders. On top of that, business owners can manage contacts faster than a typical
+mouse/GUI driven app.
+
+### User stories
+
+Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
+
+| Priority | As a …​                                    | I want to …​                         | So that I can…​                                                                        |
+|----------|--------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------|
+| `* * *`  | new user                                   | see usage instructions               | refer to instructions when I forget how to use the App                                 |
+| `* * *`  | user                                       | add a new person                     |                                                                                        |
+| `* * *`  | user                                       | delete a person by unique attributes | remove entries that I no longer need just by knowing one piece of unique data          |
+| `* * *`  | user                                       | edit a person's contact              | update the person's information quickly without having to delete and re-add the person |
+| `* * *`  | user                                       | filter people by common attributes   | locate details of persons without having to go through the entire list                 |
+| `* * *`  | user                                       | find people by unique attributes     | locate the full details of a person just by knowing his/her phone number or email      |
+| `* *`    | user                                       | clear all contacts                   | start an entirely new instance of the address book                                     |
+| `* *`    | user                                       | export my contacts to a file         | back up my contacts or share them with others                                          |
+| `* *`    | user                                       | import new data from a file          | restore my address book or merge contacts from another source                          |
+
+*{More to be added}*
+
+### Use cases
+
+(For all use cases below, the **System** is `CraftConnect` and the **Actor** is the `user`, unless specified otherwise)
+<br><br><br>
+**Use case: See the usage instruction**
+
+**MSS**
+
+1. User requests to see the usage instructions.
+2. CraftConnect displays the usage instructions.
+   <br><br><br>
+
+**Use case: Add a new contact**
+
+**MSS**
+
+1.  User specifies the new contact information (`Name`, `Email`, `Phone Number`, `Address`, `Category`)
+2.  CraftConnect adds the new contact and informs the user of the successful addition.
+
+    Use case ends.
+
+**Extensions**
+* 1a. The user fails to specify the contact name, email, phone number or address.
+
+    * 1a1. CraftConnect shows an error message and informs the user of the correct command format.
+
+      Use case resumes at step 1.
+
+* 1b. The phone number (if specified) is not in the correct phone number format.
+
+    * 1b1. CraftConnect shows an error message and informs the user that the phone number is not in the correct format,
+      and shows the user the correct format for a phone number.
+
+      Use case resumes at step 1.
+
+* 1c. The email (if specified) is not in the correct email format.
+
+    * 1c1. CraftConnect shows an error message and informs the user that the email is not in the correct format,
+      and shows the user the correct format for an email.
+
+      Use case resumes at step 1.
+
+* 1d. The phone number (if specified) is already used by an existing contact.
+
+    * 1d1. CraftConnect shows an error message and informs the user that the phone number is already used by an existing contact, and shows the said contact.
+
+      Use case resumes at step 1.
+
+* 1e. The email (if specified) is already used by an existing contact.
+
+    * 1e1. CraftConnect shows an error message and informs the user that the email is already used by an existing contact, and shows the said contact.
+
+      Use case resumes at step 1.
+      <br><br><br>
+
+**Use case: Delete a contact by unique attributes (`Email`, `Index`, `Phone Number`)**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User requests to delete a contact by inputting the contact’s attribute (`Email`, `Index`, `Phone Number`).
+4.  CraftConnect deletes the specified contact and informs the user of the successful deletion.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The input is invalid.
+
+    * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
+
+      Use case resumes at step 3.
+
+* 3b. A non-unique attribute is supported.
+
+    * 3b1. CraftConnect shows an error message and informs the user that the user's attribute is not an unique attribute.
+
+      Use case resumes at step 3.
+
+* 3c. No contacts matching the user's supported value.
+
+    * 3c1. CraftConnect shows an error message and informs the user that no contact matches their value.
+
+      Use case resumes at step 3.
+      <br><br><br>
+
+**Use case: Edit an existing contact**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User requests to edit a contact by specifying the index of the contact, the attributes to be changed and the changed attributes.
+4.  CraftConnect edits the specified contact accordingly and informs the user of the successful edit.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
+
+    * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
+
+      Use case resumes at step 3.
+
+* 3b. The inputted attributes are invalid as it does not correspond to a valid attribute within CraftConnect.
+
+    * 3b1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+
+      Use case resumes at step 3.
+
+* 3c. The email (if specified) is not in the correct email format.
+
+    * 3c1. CraftConnect shows an error message and informs the user that the email is not in the correct format, and shows the user how an email should look like.
+
+      Use case resumes at step 3.
+
+* 3d. The email provided (if specified) is a duplicate.
+
+    * 3d1. CraftConnect shows an error message, informing the user of the contact which is already using the email.
+
+      Use case resumes at step 3.
+
+* 3e. The phone number provided (if specified) is a duplicate.
+
+    * 3e1. CraftConnect shows an error message, informing the user of the contact which is already using the phone number.
+
+      Use case resumes at step 3.
+      <br><br><br>
+
+**Use case: Find a contact by a unique attribute (e.g., `Email`, `Phone`)**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User request to view the contact with the corresponding unique attribute (`Email`, `Phone`).
+4.  CraftConnect displays the contact that match the inputted attribute.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The input is invalid.
+
+    * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
+
+      Use case resumes at step 3.
+
+* 3b. More than one attribute is specified.
+
+    * 3b1. CraftConnect shows an error message and informs the user that only one and unique attribute should be specified.
+
+      Use case resumes at step 3.
+
+* 3c. The inputted attribute is not unique.
+
+    * 3c1. CraftConnect shows an error message and informs the user that the attribute they specified is not unique, while
+      also suggesting the user to use the filter functionality if he/she wants to search using a common attribute.
+
+      Use case resumes at step 3.
+      <br><br><br>
+
+**Use case: Filter existing contacts by common attributes (`Name`, `Address`, `Tag`)**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User requests to filter contacts by specifying a common attribute.
+4.  CraftConnect displays a list of contacts that match the inputted attribute.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The input is invalid.
+
+    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+
+      Use case resumes at step 3.
+
+* 3b. More than one attribute is specified.
+
+    * 3b1. CraftConnect shows an error message and informs the user that only one common attribute should be specified.
+
+      Use case resumes at step 3.
+
+* 3c. The inputted attribute is not unique.
+
+    * 3c1. CraftConnect shows an error message and informs the user that the attribute they specified is unique, while
+      also suggesting the user to use the find functionality if he/she wants to search using a unique attribute.
+      <br><br><br>
+
+**Use case: Clear all contacts**
+
+**MSS**
+
+1.  User requests to list persons.
+2.  CraftConnect displays a list of contacts.
+3.  User requests to clear all contacts.
+4.  CraftConnect deletes all contacts and informs the user of the successful deletion.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+  <br><br><br>
+
+**Use case: Export contacts to a file**
+
+**MSS**
+
+1. User requests to export data by specifying the folder to store the data file, and the flag whether to create
+   a new folder if their specified folder does not exist.
+2. CraftConnect exports the data into a JSON file, stores it in the user's folder and informs the successful export.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. The entire input is invalid (anything not conformed to 1 create-folder-option and 1 path)
+
+    * 2a1. CraftConnect shows an error message and informs the user of the correct command usage.
+
+      Use case resumes at step 1.
+
+* 2b. The folder path is invalid (OS-dependent)
+
+    * 2b1. CraftConnect shows an error message and asks the user to check for spelling.
+
+      Use case resumes at step 1.
+    *
+* 2c. The folder does not exist, and the option of creating folder if not exists is not specified
+
+    * 2c1. CraftConnect shows an error message and tells the user to check for spelling or specify
+      create-folder-if-not-exist.
+
+      Use case resumes at step 1.
+
+* 2d. Some I/O error has occurred when creating folders or the file.
+
+    * 2d1. CraftConnect shows an error message and tells the user to check disk space or use another path.
+
+      Use case resumes at step 1.
+      <br><br><br>
+
+**Use case: Import contacts from a file**
+
+**MSS**
+
+1. User requests to import data by specifying the path to the file.
+2. CraftConnect replaces the address book contacts with the data from the file and informs the user of the successful
+   import.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. The input is empty
+
+    * 2a1. CraftConnect shows an error message and informs the user of the correct command usage.
+
+      Use case resumes at step 1.
+
+* 2b. The path to the file is invalid, or is valid but the file does not exist at that location
+
+    * 2b1. CraftConnect shows an error message and asks the user to check for spelling or choose an existent path.
+
+      Use case resumes at step 1.
+    *
+* 2c. The file is not a JSON file
+
+    * 2c1. CraftConnect shows an error message and asks the user to specify the path to a JSON file.
+
+      Use case resumes at step 1.
+
+* 2d. The JSON file does not follow CraftConnect's schema
+
+    * 2d1. CraftConnect shows an error message and tells the user the schema it uses to store contacts' data.
+
+      Use case resumes at step 1.
+      <br><br><br>
+
+*{More to be added}*
+
+### Non-Functional Requirements
+
+1. **Performance**
+    - CraftConnect should initialize within 2 seconds on a mid-tier computer.
+    - CraftConnect should be able to hold up to 1000 contacts while keeping all operations under 100ms.
+    - CraftConnect should not exceed 200MB RAM during peak operations.
+
+2. **Reliability and Security**
+    - In case of crashing, no data should be lost beyond the last data-modifying operation.
+    - CraftConnect should save backup files every 24 hours.
+    - CraftConnect should check for corrupted or missing data files and restore automatically.
+
+3. **Usability and Accessibility**
+    - All errors should be clear and actionable (e.g. if the wrong email format is used, tell the user how a correct email should look like).
+    - A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+
+4. **Portability**
+    - CraftConnect should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+    - Any user should be able to run CraftConnect without needing to install any other applications/dependencies (except Java 17)
+
+*{More to be added}*
+
+### Glossary
+
+* **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Mid-tier computer**: A computer that is typically used for office operations and software development, but not strong enough to handle moderate gaming. For minimum-spec reference,
+    * Processor (CPU): Intel Core i3 (2nd Gen)/AMD Athion 64 X2
+    * Memory (RAM): 2GB RAM
+    * Storage (HDD/SDD): 100MB of free disk space
+    * Graphics: Integrated GPU (Intel HD Graphics 300 or equivalent)
+    * Disk Speed: HDD (5400 RPM) or SSD if available.
+* **Contacts**: Contacts are considered to be unique if and only if they have a unique email and phone number. Thus, two contacts can still have the same names
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Instructions for manual testing**
+
+Given below are instructions to test the app manually.
+
+<box type="info" seamless>
+
+**Note:** These instructions only provide a starting point for testers to work on;
+testers are expected to do more *exploratory* testing.
+
+</box>
+
+### Launch and shutdown
+
+1. Initial launch
+
+    1. Download the jar file and copy into an empty folder
+
+    1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+
+1. Saving window preferences
+
+    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+
+    1. Re-launch the app by double-clicking the jar file.<br>
+       Expected: The most recent window size and location is retained.
+
+1. _{ more test cases …​ }_
+
+### Deleting a person
+
+1. Deleting a person while all persons are being shown
+
+    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+    2. Test case: `delete 1`<br>
+       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+
+    3. Test case: `delete 0`<br>
+       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+
+    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+       Expected: Similar to previous.
+
+1. _{ more test cases …​ }_
+
+### Saving data
+
+1. Dealing with missing/corrupted data files
+
+    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+
+1. _{ more test cases …​ }_
