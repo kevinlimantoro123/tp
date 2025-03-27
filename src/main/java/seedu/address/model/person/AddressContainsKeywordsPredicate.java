@@ -1,7 +1,9 @@
 package seedu.address.model.person;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
+import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
@@ -16,7 +18,18 @@ public class AddressContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        return person.getAddress().value.equals(addressKeyword);
+        return Arrays.stream(person.getAddress().value.split("\\s+"))
+                .anyMatch(addressPart -> {
+                    boolean isSimilar = false;
+                    String[] addressKeywordParts = addressKeyword.split("\\s+");
+                    for (String addressKeywordPart : addressKeywordParts) {
+                        if (StringUtil.computeCloseness(addressKeywordPart, addressPart) < 2
+                                && addressKeywordPart.length() > 3) {
+                            isSimilar = true;
+                        }
+                    }
+                    return isSimilar;
+                });
     }
 
     @Override

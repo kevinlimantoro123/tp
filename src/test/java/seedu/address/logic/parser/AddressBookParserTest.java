@@ -78,6 +78,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_filter() throws Exception {
         String name = "Alex";
+        System.out.println(FilterCommand.COMMAND_WORD + " " + PREFIX_NAME + name);
         assertTrue(parser.parseCommand(FilterCommand.COMMAND_WORD + " " + PREFIX_NAME + name) instanceof FilterCommand);
     }
 
