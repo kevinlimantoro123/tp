@@ -12,6 +12,9 @@ public abstract class FileBasedCommand extends Command {
     protected final String path;
 
     public FileBasedCommand(String path) {
+        // all file-based commands should be bound to a storage before invoked
+        assert storage != null;
+
         this.path = path;
     }
 
