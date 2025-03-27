@@ -324,17 +324,18 @@ mouse/GUI driven app.
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
-
-| Priority | As a …​                                    | I want to …​                          | So that I can…​                                                                               |
-|----------|--------------------------------------------|---------------------------------------|-----------------------------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions                | refer to instructions when I forget how to use the App                                        |
-| `* * *`  | user                                       | add a new contact                     |                                                                                               |
-| `* * *`  | user                                       | delete a contact by unique attributes | remove entries that I no longer need just by knowing one piece of unique data                 |
-| `* * *`  | user                                       | edit a contact's information          | update the contact's information quickly without having to delete and re-add the contact      |
-| `* * *`  | user                                       | filter people by common attributes    | locate details of contacts without having to go through the entire list                       |
-| `* * *`  | user                                       | find people by unique attributes      | locate the full details of a contact just by knowing his/her phone number or email            |
-| `* *`    | user                                       | delete a contact by name              | remove entries that I no longer need if I cannot remember the contact's email or phone number |
-| `* *`    | user                                       | add a note to a contact by index      | add specific information about certain contacts                                               |
+| Priority | As a …​                                    | I want to …​                         | So that I can…​                                                                        |
+|----------|--------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------|
+| `* * *`  | new user                                   | see usage instructions               | refer to instructions when I forget how to use the App                                 |
+| `* * *`  | user                                       | add a new person                     |                                                                                        |
+| `* * *`  | user                                       | delete a person by unique attributes | remove entries that I no longer need just by knowing one piece of unique data          |
+| `* * *`  | user                                       | edit a person's contact              | update the person's information quickly without having to delete and re-add the person |
+| `* * *`  | user                                       | filter people by common attributes   | locate details of persons without having to go through the entire list                 |
+| `* * *`  | user                                       | find people by unique attributes     | locate the full details of a person just by knowing his/her phone number or email      |
+| `* *`    | user                                       | clear all contacts                   | start an entirely new instance of the address book                                     |
+| `* *`    | user                                       | export my contacts to a file         | back up my contacts or share them with others                                          |
+| `* *`    | user                                       | import new data from a file          | restore my address book or merge contacts from another source                          |
+| `* *`    | user                                       | add a note to a contact by index      | add specific information about certain contacts                                       |
 
 *{More to be added}*
 
@@ -547,18 +548,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     * 3c1. CraftConnect shows an error message and informs the user that the attribute they specified is unique, while
       also suggesting the user to use the find functionality if he/she wants to search using a unique attribute.
-      <br><br><br>
+<br><br><br>
 
-**Use case: Delete a contact by `Name`**
+**Use case: Clear all contacts**
 
 **MSS**
 
 1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
-3.  User requests to delete a contact by inputting the contact’s `Name`.
-4.  CraftConnect displays the list of contacts with matching names.
-5.  User chooses the desired contact to delete.
-6.  CraftConnect deletes the specified contact and informs the user of the successful deletion.
+3.  User requests to clear all contacts.
+4.  CraftConnect deletes all contacts and informs the user of the successful deletion.
 
     Use case ends.
 
@@ -567,18 +566,82 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 2a. The list is empty.
 
   Use case ends.
+<br><br><br>
 
-* 3a. The inputted common attribute is invalid as it does not correspond to a valid attribute within CraftConnect.
+**Use case: Export contacts to a file**
 
-    * 3a1. CraftConnect shows an error message and informs the user of the constraints of the invalid attributes.
+**MSS**
 
-      Use case resumes at step 3.
+1. User requests to export data by specifying the folder to store the data file, and the flag whether to create
+a new folder if their specified folder does not exist.
+2. CraftConnect exports the data into a JSON file, stores it in the user's folder and informs the successful export.
 
-* 6a. User cancels the deletion action.
+   Use case ends.
 
-    * CraftConnect informs the user that the deletion has been cancelled.
+**Extensions**
 
-      Use case ends.
+* 2a. The entire input is invalid (anything not conformed to 1 create-folder-option and 1 path)
+
+    * 2a1. CraftConnect shows an error message and informs the user of the correct command usage.
+
+      Use case resumes at step 1.
+
+* 2b. The folder path is invalid (OS-dependent)
+
+    * 2b1. CraftConnect shows an error message and asks the user to check for spelling.
+
+      Use case resumes at step 1.
+    *
+* 2c. The folder does not exist, and the option of creating folder if not exists is not specified
+
+    * 2c1. CraftConnect shows an error message and tells the user to check for spelling or specify 
+create-folder-if-not-exist.
+
+      Use case resumes at step 1.
+
+* 2d. Some I/O error has occurred when creating folders or the file.
+
+    * 2d1. CraftConnect shows an error message and tells the user to check disk space or use another path.
+
+      Use case resumes at step 1.
+      <br><br><br>
+
+**Use case: Import contacts from a file**
+
+**MSS**
+
+1. User requests to import data by specifying the path to the file.
+2. CraftConnect replaces the address book contacts with the data from the file and informs the user of the successful 
+import.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The input is empty
+
+  * 2a1. CraftConnect shows an error message and informs the user of the correct command usage.
+  
+    Use case resumes at step 1.
+
+* 2b. The path to the file is invalid, or is valid but the file does not exist at that location
+
+  * 2b1. CraftConnect shows an error message and asks the user to check for spelling or choose an existent path.
+
+    Use case resumes at step 1.
+  * 
+* 2c. The file is not a JSON file
+
+    * 2c1. CraftConnect shows an error message and asks the user to specify the path to a JSON file.
+      
+      Use case resumes at step 1.
+
+* 2d. The JSON file does not follow CraftConnect's schema
+
+    * 2d1. CraftConnect shows an error message and tells the user the schema it uses to store contacts' data.
+
+      Use case resumes at step 1.
+<br><br><br>
 
 **Use case: Add a note to a contact**
 

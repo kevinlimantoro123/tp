@@ -30,7 +30,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         if (argMultimap.getNumberOfPrefixes() > 1) {
             throw new ParseException(
-                    String.format(FindCommand.TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
+                    String.format(FindCommand.MESSAGE_TOO_MANY_IDENTIFIERS_SPECIFIED, FindCommand.MESSAGE_USAGE));
         }
 
         if (!argMultimap.getPreamble().isEmpty()) {
@@ -42,7 +42,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 || argMultimap.getValue(PREFIX_ADDRESS).isPresent()
                 || argMultimap.getValue(PREFIX_TAG).isPresent()) {
             throw new ParseException(
-                    String.format(FindCommand.NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
+                    String.format(FindCommand.MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED, FindCommand.MESSAGE_USAGE));
         }
 
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {

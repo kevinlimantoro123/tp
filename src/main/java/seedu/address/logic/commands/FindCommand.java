@@ -33,8 +33,8 @@ public class FindCommand extends Command {
             + "Example: " + COMMAND_WORD + " " + PREFIX_PHONE + "91234578\n"
             + "or: " + COMMAND_WORD + " " + PREFIX_EMAIL + "ilovecraftconnect@gmail.com";
 
-    public static final String TOO_MANY_IDENTIFIERS_SPECIFIED = "Too many attributes specified!\n%1$s";
-    public static final String NOT_UNIQUE_ATTRIBUTE_DETECTED = "A non-unique attribute is detected!\n"
+    public static final String MESSAGE_TOO_MANY_IDENTIFIERS_SPECIFIED = "Too many attributes specified!\n%1$s";
+    public static final String MESSAGE_NOT_UNIQUE_ATTRIBUTE_DETECTED = "A non-unique attribute is detected!\n"
             + "For non-unique attributes, use 'filter'.\n%1$s";
 
     private final Predicate<Person> predicate;

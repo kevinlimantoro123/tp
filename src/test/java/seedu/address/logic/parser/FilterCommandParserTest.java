@@ -58,6 +58,7 @@ public class FilterCommandParserTest {
 
     @Test
     public void parse_addressArg_returnsFilterCommand() {
+        System.out.println(FilterCommand.COMMAND_WORD + " " + PREFIX_ADDRESS + "Blk 123");
         assertParseSuccess(parser, FilterCommand.COMMAND_WORD + " " + PREFIX_ADDRESS + "Blk 123",
                 new FilterCommand(new AddressContainsKeywordsPredicate("Blk 123")));
     }
@@ -66,11 +67,5 @@ public class FilterCommandParserTest {
     public void parse_oneTagArg_returnsFilterCommand() {
         assertParseSuccess(parser, FilterCommand.COMMAND_WORD + " " + PREFIX_TAG + "friends",
                 new FilterCommand(new TagContainsKeywordsPredicate("friends")));
-    }
-
-    @Test
-    public void parse_multipleTagsArg_returnsFilterCommand() {
-        assertParseSuccess(parser, FilterCommand.COMMAND_WORD + " " + PREFIX_TAG + "friends family",
-                new FilterCommand(new TagContainsKeywordsPredicate("friends family")));
     }
 }

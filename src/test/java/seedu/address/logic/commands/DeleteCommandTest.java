@@ -108,7 +108,7 @@ public class DeleteCommandTest {
         Email validEmail = AMY.getEmail();
         DeleteCommand deleteCommand = new DeleteCommand(validEmail);
 
-        String expectedMessage = DeleteCommand.NO_PERSON_WITH_MATCHING_EMAIL;
+        String expectedMessage = DeleteCommand.MESSAGE_NO_PERSON_WITH_MATCHING_EMAIL;
 
         assertCommandFailure(deleteCommand, model, expectedMessage);
     }
@@ -174,7 +174,7 @@ public class DeleteCommandTest {
         Phone validEmail = BOB.getPhone();
         DeleteCommand deleteCommand = new DeleteCommand(validEmail);
 
-        String expectedMessage = DeleteCommand.NO_PERSON_WITH_MATCHING_PHONE;
+        String expectedMessage = DeleteCommand.MESSAGE_NO_PERSON_WITH_MATCHING_PHONE;
 
         assertCommandFailure(deleteCommand, model, expectedMessage);
     }

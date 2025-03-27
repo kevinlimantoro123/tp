@@ -3,11 +3,12 @@ package seedu.address.model.person;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 /**
- * Tests that at least one of the {@code Person}'s {@code Tag} <b>exactly</b> matches any of the tags given.
+ * Tests that at least one of the {@code Person}'s {@code Tag} <b>approximately</b> matches any of the tags given.
  */
 public class TagContainsKeywordsPredicate implements Predicate<Person> {
     private final String tagKeywords;
@@ -19,7 +20,7 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         Set<Tag> tags = person.getTags();
-        return tags.stream().anyMatch(tag -> tag.tagName.equalsIgnoreCase(tagKeywords));
+        return tags.stream().anyMatch(tag -> StringUtil.computeCloseness(tagKeywords, tag.tagName) < 3);
     }
 
     @Override
