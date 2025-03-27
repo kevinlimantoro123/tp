@@ -80,62 +80,61 @@ Shows a message explaning how to access the help page.
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding a contact: `add`
 
-Adds a person to the address book.
+Adds a contact to the address book.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/CATEGORY]…​`
 
-* Can only add a person with a unique phone number and email address.
+* Can only add a contact with a unique phone number and email address.
 
 <box type="tip" seamless>
 
-**Tip:** A person can have any number of categories (including 0)
+**Tip:** A contact can have any number of categories (including 0)
 </box>
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/supplier`
 
-### Listing all persons : `list`
+### Listing all contacts : `list`
 
-Shows a list of all persons in the address book.
+Shows a list of all contacts in the address book.
 
 Format: `list`
 
-### Editing a person : `edit`
+### Editing a contact : `edit`
 
-Edits an existing person in the address book.
+Edits an existing contact in the address book.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* Can only edit the phone number and email if they are unique (No duplicates in the contact book). 
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-    specifying any tags after it.
-
-Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
-
-### Locating persons by unique identifier: `find`
-
-Finds persons by searching for a unique attribute
-
-Format: `find UNIQUE_IDENTIFIER` 
-
 <box type="tip" seamless>
 
-**Tip:** Only 1 parameter can be inputted at a time.
+**Tip:** You can remove all the contact’s tags by typing `t/` without specifying any tags after it.
 </box>
 
-* There are 2 unique identifiers that can be used to search for a person:
+* Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, …​
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
+* Can only edit the phone number and email if they are unique (No duplicates in the address book). 
+* When editing tags, the existing tags of the contact will be removed i.e adding of tags is not cumulative.
+
+Examples:
+*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
+*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
+
+### Locating contacts by unique identifier: `find`
+
+Finds contacts by searching for a unique attribute
+
+Format: `find UNIQUE_IDENTIFIER`
+
+* Only 1 parameter can be inputted at a time.
+* There are 2 unique identifiers that can be used to search for a contact:
   * `p/PHONE_NUMBER`
   * `e/EMAIL`
-* This search will always return at most 1 contact when a valid attribute is provided.
+* This search will always return at most 1 perso when a valid attribute is provided.
 * The inputs are case-sensitive e.g. `JOHN` will not match `john`.
 * Only full words or numbers will be matched e.g. `123` will not match `1234`.
 
@@ -144,18 +143,14 @@ Examples:
 * `find e/johnd@example.com` returns the contact with the email `johnd@example.com`
   ![result for 'find alex david'](images/findp123.png)
 
-### Filtering persons by common identifier: `filter`
+### Filtering contacts by common identifier: `filter`
 
-Filters persons by searching for a common attribute
+Filters contacts by searching for a common attribute
 
 Format: `filter COMMON_IDENTIFIER`
 
-<box type="tip" seamless>
-
-**Tip:** Only 1 parameter TYPE can be inputted at a time.
-</box>
-
-* There are 3 common identifiers that can be used to filter for a person:
+* Only 1 parameter TYPE can be inputted at a time.
+* There are 3 common identifiers that can be used to filter for a contact:
     * `n/NAME`
     * `a/ADDRESS`
     * `t/TAG`
@@ -169,29 +164,45 @@ Examples:
 * `filter a/123 street` returns all contacts with the address `123 street`
 * `filter t/friend` returns all contacts with the tag `friend`
 
-### Deleting a person : `delete`
+### Deleting a contact : `delete`
 
-Deletes the specified person from the address book.
+Deletes the specified contact from the address book.
 
 Format: `delete UNIQUE_IDENTIFIER`
 
-<box type="tip" seamless>
-
-**Tip:** Only 1 parameter can be inputted at a time.
-</box>
-
-* There are 3 unique identifiers that can be used to delete a person:
+* Only 1 parameter can be inputted at a time.
+* There are 3 unique identifiers that can be used to delete a contact:
     * `INDEX` 
     * `p/PHONE_NUMBER`
     * `e/EMAIL`
-* When using filter or find, the current list will be updated to a filtered list. When deletion by index is used, the index refers to the index number shown in the filtered persons list.
+* When using filter or find, the current list will be updated to a filtered list. When deletion by index is used, `INDEX` refers to the index number shown in the filtered contacts list.
 * A valid email or phone number will delete the corresponding contact regardless of any applied filters.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `filter n/Betsy` followed by `delete 1` deletes the 1st person in the results of the `filter` command.
-* `delete p/1234567` deletes the person with the phone number `1234567` (even if not shown in current list).
+* `list` followed by `delete 2` deletes the 2nd contact in the address book.
+* `filter n/Betsy` followed by `delete 1` deletes the 1st contact in the results of the `filter` command.
+* `delete p/1234567` deletes the contact with the phone number `1234567` (even if not shown in current list).
+
+### Adding a note to a contact : `note`
+
+Changes the note of an existing contact in the list. When a contact is added into the address book, the contact will
+have an empty note.
+
+Format: `note INDEX nt/NOTE`
+
+<box type="tip" seamless>
+
+**Tip:** To clear the current note of a contact, just use `note INDEX nt/`"
+</box>
+
+* Adding a new contact will create a contact with an empty note
+* When using filter or find, the current list will be updated to a filtered list. The `INDEX` now refers to the index number shown in the filtered contacts list.
+* Note that the note command is not cumulative and will overwrite the existing note.
+
+Examples:
+* `list` followed by `note 2 nt/Sample note` will overwrite the note of the 2nd contact in the address book to be "Sample note"
+* filter `n/john` followed by `note 3 nt/Sample note` will overwrite the note of the 3rd contact in the filtered contacts list to be "Sample note"
 
 ### Clearing all entries : `clear`
 
@@ -250,5 +261,7 @@ Action     | Format, Examples
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`
 **Filter** | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`
+**Note**   | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`
 **List**   | `list`
 **Help**   | `help`
+

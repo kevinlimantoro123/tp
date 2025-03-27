@@ -40,7 +40,7 @@
 
 [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
 - [Launch and shutdown](#launch-and-shutdown)
-- [Deleting a person](#deleting-a-person)
+- [Deleting a contact](#deleting-a-contact)
 - [Saving data](#saving-data)
 --------------------------------------------------------------------------------------------------------------------
 
@@ -136,7 +136,7 @@ How the `Logic` component works:
 
 1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
 1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
+1. The command can communicate with the `Model` when it is executed (e.g. to delete a contact).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
@@ -189,7 +189,7 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 ## **Implementation**
 
-This section describes some noteworthy details on how certain features are implemented.
+This sections describes the details on how certain features are implemented for CraftConnect.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -209,11 +209,11 @@ Step 1. The user launches the application for the first time. The `VersionedAddr
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete 5` command to delete the 5th contact in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new contact. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
@@ -223,7 +223,7 @@ Step 3. The user executes `add n/David …​` to add a new person. The `add` co
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the contact was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
@@ -279,7 +279,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+  * Pros: Will use less memory (e.g. for `delete`, just save the contact being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
@@ -325,15 +325,16 @@ mouse/GUI driven app.
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                         | So that I can…​                                                                              |
-|----------|--------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions               | refer to instructions when I forget how to use the App                                       |
-| `* * *`  | user                                       | add a new person                     |                                                                                              |
-| `* * *`  | user                                       | delete a person by unique attributes | remove entries that I no longer need just by knowing one piece of unique data                |
-| `* * *`  | user                                       | edit a person's contact              | update the person's information quickly without having to delete and re-add the person       |
-| `* * *`  | user                                       | filter people by common attributes   | locate details of persons without having to go through the entire list                       |
-| `* * *`  | user                                       | find people by unique attributes     | locate the full details of a person just by knowing his/her phone number or email            |
-| `* *`    | user                                       | delete a person by name              | remove entries that I no longer need if I cannot remember the person's email or phone number |
+| Priority | As a …​                                    | I want to …​                          | So that I can…​                                                                               |
+|----------|--------------------------------------------|---------------------------------------|-----------------------------------------------------------------------------------------------|
+| `* * *`  | new user                                   | see usage instructions                | refer to instructions when I forget how to use the App                                        |
+| `* * *`  | user                                       | add a new contact                     |                                                                                               |
+| `* * *`  | user                                       | delete a contact by unique attributes | remove entries that I no longer need just by knowing one piece of unique data                 |
+| `* * *`  | user                                       | edit a contact's information          | update the contact's information quickly without having to delete and re-add the contact      |
+| `* * *`  | user                                       | filter people by common attributes    | locate details of contacts without having to go through the entire list                       |
+| `* * *`  | user                                       | find people by unique attributes      | locate the full details of a contact just by knowing his/her phone number or email            |
+| `* *`    | user                                       | delete a contact by name              | remove entries that I no longer need if I cannot remember the contact's email or phone number |
+| `* *`    | user                                       | add a note to a contact by index      | add specific information about certain contacts                                               |
 
 *{More to be added}*
 
@@ -396,7 +397,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to delete a contact by inputting the contact’s attribute (`Email`, `Index`, `Phone Number`).
 4.  CraftConnect deletes the specified contact and informs the user of the successful deletion.
@@ -432,7 +433,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to edit a contact by specifying the index of the contact, the attributes to be changed and the changed attributes.
 4.  CraftConnect edits the specified contact accordingly and informs the user of the successful edit.
@@ -480,7 +481,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User request to view the contact with the corresponding unique attribute (`Email`, `Phone`).
 4.  CraftConnect displays the contact that match the inputted attribute.
@@ -517,7 +518,7 @@ also suggesting the user to use the filter functionality if he/she wants to sear
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to filter contacts by specifying a common attribute.
 4.  CraftConnect displays a list of contacts that match the inputted attribute.
@@ -552,7 +553,7 @@ also suggesting the user to use the filter functionality if he/she wants to sear
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to delete a contact by inputting the contact’s `Name`.
 4.  CraftConnect displays the list of contacts with matching names.
@@ -578,9 +579,27 @@ also suggesting the user to use the filter functionality if he/she wants to sear
     * CraftConnect informs the user that the deletion has been cancelled.
 
       Use case ends.
-<br><br><br>
 
-*{More to be added}*
+**Use case: Add a note to a contact**
+
+**MSS**
+
+1. User request to list contacts.
+2. CraftConnect displays a list of contacts.
+3. User requests to update the note of a specific contact by inputting the index and the new note.
+4. CraftConnect updates the contact's note and indicates success.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
+
+    * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
+
+      Use case resumes at step 3.
 
 ### Non-Functional Requirements
 
@@ -645,17 +664,17 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
-### Deleting a person
+### Deleting a contact
 
-1. Deleting a person while all persons are being shown
+1. Deleting a contact while all contacts are being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   1. Prerequisites: List all contacts using the `list` command. Multiple contacts in the list.
 
    2. Test case: `delete 1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
    3. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
 
    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
