@@ -113,13 +113,15 @@ public class StringUtil {
      *     <li>Add a letter to the original word.</li>
      * </ul>
      *
+     * Edit distance is case-insensitive, so Strings like "hello" and "HELLO" will be considered identical.
+     *
      * @param word1 The first word
      * @param word2 The second word
      * @return The edit distance between two words
      */
     private static double getEditDistance(String word1, String word2) {
-        word1 = " " + word1;
-        word2 = " " + word2;
+        word1 = (" " + word1).toLowerCase();
+        word2 = (" " + word2).toLowerCase();
 
         int[][] dp = buildEditDistanceTable(word1, word2);
 

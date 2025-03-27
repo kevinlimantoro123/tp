@@ -203,4 +203,36 @@ public class StringUtilTest {
         assertTrue(missingCharsCloseness < completelyUnrelatedCloseness);
         assertTrue(wrongCharsCloseness < completelyUnrelatedCloseness);
     }
+
+    @Test
+    public void computeCloseness_differentCaseStrings() {
+        // identical content, different cases -> return 0
+        assertEquals(0, StringUtil.computeCloseness("hello", "HELLO"));
+        assertEquals(0, StringUtil.computeCloseness("craftConnect", "CraftconnecT"));
+
+        // slightly off content, different case
+        String original = "hello world";
+        String missingOneChar = "HeLlO wOrL";
+        String extraOneChar = "hElLo, WoRlD";
+        String wrongOneChar = "HELLA world";
+
+        double missingOneCharCloseness = StringUtil.computeCloseness(original, missingOneChar);
+        double extraOneCharCloseness = StringUtil.computeCloseness(original, extraOneChar);
+        double wrongOneCharCloseness = StringUtil.computeCloseness(original, wrongOneChar);
+
+        // completely unrelated content, different case
+        String notRelated = "Am I high?";
+        String alsoNotRelated = "Get some sleep, brother.";
+
+        double notRelatedCloseness = StringUtil.computeCloseness(original, notRelated);
+        double alsoNotRelatedCloseness = StringUtil.computeCloseness(original, alsoNotRelated);
+
+        assertTrue(missingOneCharCloseness < notRelatedCloseness);
+        assertTrue(extraOneCharCloseness < notRelatedCloseness);
+        assertTrue(wrongOneCharCloseness < notRelatedCloseness);
+
+        assertTrue(missingOneCharCloseness < alsoNotRelatedCloseness);
+        assertTrue(extraOneCharCloseness < alsoNotRelatedCloseness);
+        assertTrue(wrongOneCharCloseness < alsoNotRelatedCloseness);
+    }
 }
