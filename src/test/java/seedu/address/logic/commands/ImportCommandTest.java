@@ -62,37 +62,43 @@ public class ImportCommandTest {
     "phone" : "87438807",
     "email" : "alexyeoh@example.com",
     "address" : "Blk 30 Geylang Street 29, #06-40",
-    "tags" : [ "customer" ]
+    "tags" : [ "customer" ],
+    "note" : "This is a note"
   }, {
     "name" : "Bernice Yu",
     "phone" : "99272758",
     "email" : "berniceyu@example.com",
     "address" : "Blk 30 Lorong 3 Serangoon Gardens, #07-18",
-    "tags" : [ "bulkbuyer", "customer" ]
+    "tags" : [ "bulkbuyer", "customer" ],
+    "note" :
   }, {
     "name" : "Charlotte Oliveiro",
     "phone" : "93210283",
     "email" : "charlotte@example.com",
     "address" : "Blk 11 Ang Mo Kio Street 74, #11-04",
-    "tags" : [ "boothRentalCraftFes" ]
+    "tags" : [ "boothRentalCraftFes" ],
+    "note" :
   }, {
     "name" : "David Li",
     "phone" : "91031282",
     "email" : "lidavid@example.com",
     "address" : "Blk 436 Serangoon Gardens Street 26, #16-43",
-    "tags" : [ "keychainManufacturer" ]
+    "tags" : [ "keychainManufacturer" ],
+    "note" :
   }, {
     "name" : "Irfan Ibrahim",
     "phone" : "92492021",
     "email" : "irfan@example.com",
     "address" : "Blk 47 Tampines Street 20, #17-35",
-    "tags" : [ "stickerMaterialSupplier" ]
+    "tags" : [ "stickerMaterialSupplier" ],
+    "note" :
   }, {
     "name" : "Roy Balakrishnan",
     "phone" : "92624417",
     "email" : "royb@example.com",
     "address" : "Blk 45 Aljunied Street 85, #11-31",
-    "tags" : [ "boothRentalConnectiCon" ]
+    "tags" : [ "boothRentalConnectiCon" ],
+    "note" :
   } ]
 }
                 """;
@@ -141,19 +147,22 @@ public class ImportCommandTest {
     "phone" : "92343827",
     "email" : "dicksontan@example.com",
     "address" : "Blk 30 Geylang Street 29, #06-40",
-    "tags" : [ "boothPartner" ]
+    "tags" : [ "boothPartner" ],
+    "note" : "This is a note"
   }, {
     "name" : "Mirai Sasaki",
     "phone" : "83082531",
     "email" : "miraisasaki@example.com",
     "address" : "Blk 30 Lorong 3 Serangoon Gardens, #07-18",
-    "tags" : [ "customer" ]
+    "tags" : [ "customer" ],
+    "note" :
   }, {
     "name" : "Ismail bin Mail",
     "phone" : "99273461",
     "email" : "ismailbinmail@example.com",
     "address" : "Blk 11 Ang Mo Kio Street 74, #11-04",
-    "tags" : [ "keychainManufacturer", "paintSupplier" ]
+    "tags" : [ "keychainManufacturer", "paintSupplier" ],
+    "note" :
   } ]
 }
                 """;
@@ -169,7 +178,8 @@ public class ImportCommandTest {
     "not_phone" : "92343827",
     "not_email" : "dicksontan@example.com",
     "not_address" : "Blk 30 Geylang Street 29, #06-40",
-    "not_tags" : [ "boothPartner" ]
+    "not_tags" : [ "boothPartner" ],
+    "not_note" : "This is a note"
   } ]
 }
                 """;
