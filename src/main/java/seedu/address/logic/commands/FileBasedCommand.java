@@ -11,6 +11,10 @@ public abstract class FileBasedCommand extends Command {
     protected static Storage storage;
     protected final String path;
 
+    /**
+     * Initializes a file-based command, also ensuring that the command is bounded to a Storage.
+     * @param path The path to the user's file/folder
+     */
     public FileBasedCommand(String path) {
         // all file-based commands should be bound to a storage before invoked
         assert storage != null;
