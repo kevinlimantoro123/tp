@@ -115,6 +115,7 @@ public class DeleteCommand extends Command {
 
             Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
             model.deletePerson(personToDelete);
+            model.commitAddressBook(this);
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
         case BY_EMAIL -> {
@@ -130,6 +131,7 @@ public class DeleteCommand extends Command {
             }
 
             model.deletePerson(personToDelete);
+            model.commitAddressBook(this);
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
         case BY_PHONE -> {
@@ -145,6 +147,7 @@ public class DeleteCommand extends Command {
             }
 
             model.deletePerson(personToDelete);
+            model.commitAddressBook(this);
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
         default -> {

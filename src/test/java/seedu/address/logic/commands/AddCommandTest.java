@@ -171,6 +171,20 @@ public class AddCommandTest {
         }
 
         @Override
+        public void commitAddressBook(Command command) {
+        }
+
+        @Override
+        public Command redoAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Command undoAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public ReadOnlyAddressBook getAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
