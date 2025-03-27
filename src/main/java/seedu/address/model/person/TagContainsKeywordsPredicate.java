@@ -20,16 +20,7 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         Set<Tag> tags = person.getTags();
-        return tags.stream().anyMatch(tag -> {
-            boolean isSimilar = false;
-            String[] tagNameParts = tag.tagName.split("\\s+");
-            for (String tagNamePart : tagNameParts) {
-                if (StringUtil.computeCloseness(tagKeywords, tagNamePart) < 2) {
-                    isSimilar = true;
-                }
-            }
-            return isSimilar;
-        });
+        return tags.stream().anyMatch(tag -> StringUtil.computeCloseness(tagKeywords, tag.tagName) < 3);
     }
 
     @Override

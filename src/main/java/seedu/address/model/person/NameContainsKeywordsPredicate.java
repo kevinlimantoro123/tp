@@ -7,7 +7,7 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Name} <b>exactly</b> matches the name given (case-insensitive).
+ * Tests that a {@code Person}'s {@code Name} <b>approximately</b> matches the name given (case-insensitive).
  */
 public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private final String nameKeyword;
