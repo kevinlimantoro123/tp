@@ -23,7 +23,6 @@ public class ExportCommand extends FileBasedCommand {
             + "Parameters: PATH_TO_FOLDER [" + ExportCommandParser.CREATES_DIRECTORY_FLAG + "]\n"
             + "- The " + ExportCommandParser.CREATES_DIRECTORY_FLAG + " flag tells CraftConnect to create the relevant "
             + "folders to store the data file, and it can be placed before or after the folder path.\n"
-            + "CraftConnect does not restrict the file type, but we recommend you to store in a .json file.\n"
             + "Example: " + COMMAND_WORD + " C:/Users/DummyUser\n"
             + "or: " + COMMAND_WORD + " C:/Users/DummyUser " + ExportCommandParser.CREATES_DIRECTORY_FLAG + "\n"
             + "or: " + COMMAND_WORD + " " + ExportCommandParser.CREATES_DIRECTORY_FLAG + " C:/Users/DummyUser\n\n"
@@ -36,7 +35,8 @@ public class ExportCommand extends FileBasedCommand {
             + "CraftConnect will create a data.json folder on top of your desired folder and put the "
             + "data export file in that folder.\n"
             + "This is to allow for cases when you intentionally want to create "
-            + "a folder whose name contains the '.' symbol.\n\n"
+            + "a folder whose name contains the '.' symbol.\n"
+            + "However, if there is an existing file at that path, an error message will be displayed.\n\n"
             + "We also recommend using the absolute folder path so that you know where the file will be.\n";
 
     public static final String MESSAGE_SUCCESS = "Data successfully exported at \n%s\n!";
@@ -81,6 +81,7 @@ public class ExportCommand extends FileBasedCommand {
      * @return The full message containing the user's folder path and the specific error message
      */
     public static String generateErrorMessage(String userFolder, String errorInformation) {
+        assert userFolder != null;
         return String.format(MESSAGE_ERROR,
                 String.format(MESSAGE_USER_PATH, userFolder) + errorInformation);
     }

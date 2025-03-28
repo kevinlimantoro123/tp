@@ -204,6 +204,66 @@ Examples:
 * `list` followed by `note 2 nt/Sample note` will overwrite the note of the 2nd contact in the address book to be "Sample note"
 * filter `n/john` followed by `note 3 nt/Sample note` will overwrite the note of the 3rd contact in the filtered contacts list to be "Sample note"
 
+### Export data : `export`
+
+Exports the current contacts from CraftConnect into a JSON file named `craftconnect.json`, 
+and puts the file into a folder whose absolute path is specified.
+
+Format: `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]`
+
+- The absolute path refers to the full location of the file starting from the root of the system, for example,
+  - `C:\Users\JohnDoe\Documents\Data` (Windows)
+  - `/home/johndoe/Documents/Data` (Linux)
+- When the path to the folder contains spaces, do not include quotation marks. Leave the path as it is.
+- When there is no folder at the specified path, the `-–create-dir` flag will tell CraftConnect to create that folder 
+before inserting the JSON file into it. If the flag is not specified, there **must be** an existing folder at that path.
+- The –create-dir flag can be put anywhere after the export command, so
+  - `export -–create-dir C:\Users\John\Data`
+  - `export C:\Users\John\Data -–create-dir`
+
+  are all valid commands.
+- It is highly recommended to use an absolute path to ensure that the correct file is imported. 
+Using a relative path (e.g. `Documents/Data/`) may cause unexpected behaviour because the system would not 
+know your current location.
+- If the following conditions are met:
+  - There is an existing folder, for example `C:\Users\John\Data`
+  - There does not exist a specific file within that folder, for example `C:\Users\John\Data\data.json`
+  - An accidental call to import with the path to that file
+  - The `-–create-dir` flag is enabled, for example, `export C:\Users\John\Data\data.json –-create-dir`.
+  
+  Then, CraftConnect will create the new folder, for example with name `data.json`, and put the exported data file 
+  into this folder, resulting in the data file being located in `C:\Users\John\Data\data.json\craftconnect.json`. 
+  This is to allow for folder names that contain the ‘.’ character.
+- Accidentally calling import with a path to an existing file will return an error.
+
+Examples
+- `export C:\Users\John\Data` will export all data into a file located at `C:\Users\John\Data\craftconnect.json` if the 
+folder exists, and returns an error otherwise.
+- `export C:\Users\John\My Data –create-dir` will create a new folder located at `C:\Users\John\My Data` if the folder 
+has not existed, and export all data into a file located at `C:\Users\John\Data\craftconnect.json`.
+
+### Import data : `import`
+
+Overwrites the current contacts in CraftConnect by new data from a JSON file in the specified path.
+
+Format: `import ABSOLUTE_PATH_TO_JSON_FILE`
+
+- The absolute path refers to the full location of the file starting from the root of the system, for example,
+  - `C:\Users\JohnDoe\Documents\Data\addressbook.json` (Windows)
+  - `/home/johndoe/Documents/Data/addressbook.json` (Linux)
+- When the path to the file contains spaces, do not include quotation marks. Leave the path as it is.
+- It is highly recommended to use an absolute path to ensure that the correct file is imported. 
+Using a relative path (e.g. `Documents/Data/addressbook.json`) may cause unexpected behaviour because the system would 
+not know your current location.
+- The file to be imported must exist, have the `.json` extension, and follow the data schema of CraftConnect. 
+It is best for non-technical users to pair the `import` functionality with `export`, to carry data from one 
+CraftConnect address book to another CraftConnect address book.
+
+Examples:
+- `import C:\Users\JohnDoe\Documents\My Data\addressbook.json` will overwrite the current contacts in CraftConnect 
+with new data from a JSON file located at `C:\Users\JohnDoe\Documents\My Data\addressbook.json`.
+
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
@@ -252,16 +312,16 @@ _Details coming soon ..._
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command summary
-
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Clear**  | `clear`
-**Delete** | `delete UNIQUE_IDENTIFIER`<br> e.g., `delete 3` / `delete p/98765432`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`
-**Filter** | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`
-**Note**   | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`
-**List**   | `list`
-**Help**   | `help`
-
+| Action      | Format, Examples                                                                                                                                                      |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add**     | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague` |
+| **Clear**   | `clear`                                                                                                                                                               |
+| **Delete**  | `delete UNIQUE_IDENTIFIER`<br> e.g., `delete 3` / `delete p/98765432`                                                                                                 |                                                                                                  
+| **Edit**    | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                           |                                          
+| **Export**  | `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]` <br> e.g., `export C:\Users\John\Data --create-dir`                                                                   |                                      
+| **Find**    | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`                                                                                                                  |                                     
+| **Filter**  | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`                                                                                                                |                                    
+| **Import**  | `import ABSOLUTE_PATH_TO_JSON_FILE` <br> e.g., `export C:\Users\John\Data\data.json`                                                                                  |                                   
+| **Note**    | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`                                                                                                                |
+| **List**    | `list`                                                                                                                                                                |                                  
+| **Help**    | `help`                                                                                                                                                                |                                 

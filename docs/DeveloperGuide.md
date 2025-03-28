@@ -336,6 +336,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user                                       | export my contacts to a file         | back up my contacts or share them with others                                          |
 | `* *`    | user                                       | import new data from a file          | restore my address book or merge contacts from another source                          |
 | `* *`    | user                                       | add a note to a contact by index      | add specific information about certain contacts                                       |
+| `* *`    | user                                       | undo the most recent change to the contact list    | restore an incorrect edit or delete |
+| `* *`    | user                                       | restore the most recently undone change to the contact list |  restore an accidentally undone change |
 
 *{More to be added}*
 
@@ -663,6 +665,44 @@ import.
     * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
 
       Use case resumes at step 3.
+
+**Use case: Undo the most recent change to the contact list**
+
+**MSS**
+
+1. User requests to undo the most recent change to the contact list
+2. CraftConnect restores the state of the contact list to before the most recent change
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. There are no changes to undo
+
+  * 1a1. CraftConnect shows an error message and informs the user that there are no changes to undo.
+  
+    Use case ends.
+<br><br><br>
+
+**Use case: Restore the most recent undone change to the contact list**
+
+**MSS**
+
+1. User requests to restore the most recent undone change to the contact list
+2. CraftConnect restores the state of the contact list to after the undone change
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. There are no changes to restore
+
+  * 1a1. CraftConnect shows an error message and informs the user that there are no changes to restore.
+  
+    Use case ends.
+<br><br><br>
+
+*{More to be added}*
 
 ### Non-Functional Requirements
 
