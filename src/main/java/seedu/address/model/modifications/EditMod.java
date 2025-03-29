@@ -8,7 +8,7 @@ import seedu.address.model.person.Person;
  * Record of an edit of a contact in the address book.
  */
 public class EditMod extends Modification {
-    public static final String MOD_TYPE = "Edit";
+    public static final String MOD_TYPE = "Edit Person";
     private final Person newPerson;
 
     /**
