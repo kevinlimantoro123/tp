@@ -1,0 +1,30 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor COMMAND_COLOR_T4
+skinparam classBackgroundColor COMMAND_COLOR
+
+class "<<interface>>\nCommand" as Command
+class "{abstract}\nFileBasedCommand" as FileBasedCommand
+
+class ExportCommand
+class ImportCommand
+
+class Storage
+
+package Model <<Rectangle>> {
+Class HiddenModel #FFFFFF
+}
+
+package Storage <<Rectangle>> {
+Class HiddenStorage #FFFFFF
+}
+
+FileBasedCommand .up.|> Command
+ExportCommand -up-|> FileBasedCommand
+ImportCommand -up-|> FileBasedCommand
+
+FileBasedCommand -r-> Storage
+FileBasedCommand ..> Model
+
+@enduml
