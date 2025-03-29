@@ -25,8 +25,8 @@
 
 [Implementation](#implementation)
 - [\[Proposed\] Undo/redo feature](#proposed-undoredo-feature)
-  - [Proposed implementation](#proposed-implementation)
-  - [Design considerations](#design-considerations)
+    - [Proposed implementation](#proposed-implementation)
+    - [Design considerations](#design-considerations)
 - [\[Proposed\] Data archiving](#proposed-data-archiving)
 
 [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
@@ -40,7 +40,7 @@
 
 [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
 - [Launch and shutdown](#launch-and-shutdown)
-- [Deleting a person](#deleting-a-person)
+- [Deleting a contact](#deleting-a-contact)
 - [Saving data](#saving-data)
 --------------------------------------------------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ The *Sequence Diagram* below shows how the components interact with each other f
 Each of the four main components (also shown in the diagram above),
 
 * defines its *API* in an `interface` with the same name as the Component.
-* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point).
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
@@ -135,10 +135,10 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 How the `Logic` component works:
 
 1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
+2. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
+3. The command can communicate with the `Model` when it is executed (e.g. to delete a contact).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
-1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+4. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
@@ -189,7 +189,7 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 ## **Implementation**
 
-This section describes some noteworthy details on how certain features are implemented.
+This sections describes the details on how certain features are implemented for CraftConnect.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -209,11 +209,11 @@ Step 1. The user launches the application for the first time. The `VersionedAddr
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete 5` command to delete the 5th contact in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new contact. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
@@ -223,7 +223,7 @@ Step 3. The user executes `add n/David …​` to add a new person. The `add` co
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the contact was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
@@ -274,13 +274,13 @@ The following activity diagram summarizes what happens when a user executes a ne
 **Aspect: How undo & redo executes:**
 
 * **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+    * Pros: Easy to implement.
+    * Cons: May have performance issues in terms of memory usage.
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+    * Pros: Will use less memory (e.g. for `delete`, just save the contact being deleted).
+    * Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
 
@@ -315,16 +315,15 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Value proposition**:
 
-CraftConnect app will keep track of the many different suppliers and 
-customers easily and organise them into groups. Since small business owners usually have 
-a lack of manpower, CraftConnect will provide an efficient solution for handling of vendor and 
-customer orders. On top of that, business owners can manage contacts faster than a typical 
+CraftConnect app will keep track of the many different suppliers and
+customers easily and organise them into groups. Since small business owners usually have
+a lack of manpower, CraftConnect will provide an efficient solution for handling of vendor and
+customer orders. On top of that, business owners can manage contacts faster than a typical
 mouse/GUI driven app.
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
-
 | Priority | As a …​                                    | I want to …​                         | So that I can…​                                                                        |
 |----------|--------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------|
 | `* * *`  | new user                                   | see usage instructions               | refer to instructions when I forget how to use the App                                 |
@@ -336,6 +335,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user                                       | clear all contacts                   | start an entirely new instance of the address book                                     |
 | `* *`    | user                                       | export my contacts to a file         | back up my contacts or share them with others                                          |
 | `* *`    | user                                       | import new data from a file          | restore my address book or merge contacts from another source                          |
+| `* *`    | user                                       | add a note to a contact by index      | add specific information about certain contacts                                       |
 | `* *`    | user                                       | undo the most recent change to the contact list    | restore an incorrect edit or delete |
 | `* *`    | user                                       | restore the most recently undone change to the contact list |  restore an accidentally undone change |
 
@@ -351,7 +351,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. User requests to see the usage instructions.
 2. CraftConnect displays the usage instructions.
-<br><br><br>
+   <br><br><br>
 
 **Use case: Add a new contact**
 
@@ -371,15 +371,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1b. The phone number (if specified) is not in the correct phone number format.
 
-    * 1b1. CraftConnect shows an error message and informs the user that the phone number is not in the correct format, 
-    and shows the user the correct format for a phone number.
+    * 1b1. CraftConnect shows an error message and informs the user that the phone number is not in the correct format,
+      and shows the user the correct format for a phone number.
 
       Use case resumes at step 1.
 
 * 1c. The email (if specified) is not in the correct email format.
 
-    * 1c1. CraftConnect shows an error message and informs the user that the email is not in the correct format, 
-    and shows the user the correct format for an email.
+    * 1c1. CraftConnect shows an error message and informs the user that the email is not in the correct format,
+      and shows the user the correct format for an email.
 
       Use case resumes at step 1.
 
@@ -394,13 +394,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 1e1. CraftConnect shows an error message and informs the user that the email is already used by an existing contact, and shows the said contact.
 
       Use case resumes at step 1.
-<br><br><br>
+      <br><br><br>
 
 **Use case: Delete a contact by unique attributes (`Email`, `Index`, `Phone Number`)**
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to delete a contact by inputting the contact’s attribute (`Email`, `Index`, `Phone Number`).
 4.  CraftConnect deletes the specified contact and informs the user of the successful deletion.
@@ -421,22 +421,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3b. A non-unique attribute is supported.
 
-    * 3b1. CraftConnect shows an error message and informs the user that the user's attribute is not an unique attribute.
+    * 3b1. CraftConnect shows an error message and informs the user that the user's attribute is not a unique attribute.
 
       Use case resumes at step 3.
 
 * 3c. No contacts matching the user's supported value.
 
     * 3c1. CraftConnect shows an error message and informs the user that no contact matches their value.
-  
+
       Use case resumes at step 3.
-<br><br><br>
+      <br><br><br>
 
 **Use case: Edit an existing contact**
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to edit a contact by specifying the index of the contact, the attributes to be changed and the changed attributes.
 4.  CraftConnect edits the specified contact accordingly and informs the user of the successful edit.
@@ -464,7 +464,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3c. The email (if specified) is not in the correct email format.
 
     * 3c1. CraftConnect shows an error message and informs the user that the email is not in the correct format, and shows the user how an email should look like.
-  
+
       Use case resumes at step 3.
 
 * 3d. The email provided (if specified) is a duplicate.
@@ -478,13 +478,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3e1. CraftConnect shows an error message, informing the user of the contact which is already using the phone number.
 
       Use case resumes at step 3.
-<br><br><br>
+      <br><br><br>
 
 **Use case: Find a contact by a unique attribute (e.g., `Email`, `Phone`)**
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User request to view the contact with the corresponding unique attribute (`Email`, `Phone`).
 4.  CraftConnect displays the contact that match the inputted attribute.
@@ -512,16 +512,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3c. The inputted attribute is not unique.
 
     * 3c1. CraftConnect shows an error message and informs the user that the attribute they specified is not unique, while
-also suggesting the user to use the filter functionality if he/she wants to search using a common attribute.
+      also suggesting the user to use the filter functionality if he/she wants to search using a common attribute.
 
       Use case resumes at step 3.
-<br><br><br>
+      <br><br><br>
 
 **Use case: Filter existing contacts by common attributes (`Name`, `Address`, `Tag`)**
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to filter contacts by specifying a common attribute.
 4.  CraftConnect displays a list of contacts that match the inputted attribute.
@@ -556,7 +556,7 @@ also suggesting the user to use the filter functionality if he/she wants to sear
 
 **MSS**
 
-1.  User requests to list persons.
+1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
 3.  User requests to clear all contacts.
 4.  CraftConnect deletes all contacts and informs the user of the successful deletion.
@@ -645,6 +645,27 @@ import.
       Use case resumes at step 1.
 <br><br><br>
 
+**Use case: Add a note to a contact**
+
+**MSS**
+
+1. User request to list contacts.
+2. CraftConnect displays a list of contacts.
+3. User requests to update the note of a specific contact by inputting the index and the new note.
+4. CraftConnect updates the contact's note and indicates success.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
+
+    * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
+
+      Use case resumes at step 3.
+
 **Use case: Undo the most recent change to the contact list**
 
 **MSS**
@@ -686,22 +707,22 @@ import.
 ### Non-Functional Requirements
 
 1. **Performance**
-   - CraftConnect should initialize within 2 seconds on a mid-tier computer.
-   - CraftConnect should be able to hold up to 1000 contacts while keeping all operations under 100ms.
-   - CraftConnect should not exceed 200MB RAM during peak operations.
+    - CraftConnect should initialize within 2 seconds on a mid-tier computer.
+    - CraftConnect should be able to hold up to 1000 contacts while keeping all operations under 100ms.
+    - CraftConnect should not exceed 200MB RAM during peak operations.
 
 2. **Reliability and Security**
-   - In case of crashing, no data should be lost beyond the last data-modifying operation.
-   - CraftConnect should save backup files every 24 hours.
-   - CraftConnect should check for corrupted or missing data files and restore automatically.
+    - In case of crashing, no data should be lost beyond the last data-modifying operation.
+    - CraftConnect should save backup files every 24 hours.
+    - CraftConnect should check for corrupted or missing data files and restore automatically.
 
 3. **Usability and Accessibility**
-   - All errors should be clear and actionable (e.g. if the wrong email format is used, tell the user how a correct email should look like).
-   - A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+    - All errors should be clear and actionable (e.g. if the wrong email format is used, tell the user how a correct email should look like).
+    - A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 
 4. **Portability**
-   - CraftConnect should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-   - Any user should be able to run CraftConnect without needing to install any other applications/dependencies (except Java 17)
+    - CraftConnect should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+    - Any user should be able to run CraftConnect without needing to install any other applications/dependencies (except Java 17)
 
 *{More to be added}*
 
@@ -715,7 +736,7 @@ import.
     * Graphics: Integrated GPU (Intel HD Graphics 300 or equivalent)
     * Disk Speed: HDD (5400 RPM) or SSD if available.
 * **Contacts**: Contacts are considered to be unique if and only if they have a unique email and phone number. Thus, two contacts can still have the same names
-  
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
@@ -733,40 +754,40 @@ testers are expected to do more *exploratory* testing.
 
 1. Initial launch
 
-   1. Download the jar file and copy into an empty folder
+    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+    2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+    2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+3. _{ more test cases …​ }_
 
-### Deleting a person
+### Deleting a contact
 
-1. Deleting a person while all persons are being shown
+1. Deleting a contact while all contacts are being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+    1. Prerequisites: List all contacts using the `list` command. Multiple contacts in the list.
 
-   2. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    2. Test case: `delete 1`<br>
+       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-   3. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+    3. Test case: `delete 0`<br>
+       Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
 
-   4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+2. _{ more test cases …​ }_
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
-1. _{ more test cases …​ }_
+2. _{ more test cases …​ }_

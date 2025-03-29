@@ -24,6 +24,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Note;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -136,7 +137,10 @@ public class EditCommand extends Command {
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         assert updatedTags != null : "Updated tags cannot be null";
 
-        Person newPerson = new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        Note updatedNote = editPersonDescriptor.getNote().orElse(personToEdit.getNote());
+
+        Person newPerson = new Person(updatedName, updatedPhone, updatedEmail,
+                updatedAddress, updatedTags, updatedNote);
         assert newPerson != null : "New person cannot be null";
         return newPerson;
     }
@@ -175,6 +179,7 @@ public class EditCommand extends Command {
         private Email email;
         private Address address;
         private Set<Tag> tags;
+        private Note note;
 
         public EditPersonDescriptor() {}
 
@@ -190,6 +195,8 @@ public class EditCommand extends Command {
             setEmail(toCopy.email);
             setAddress(toCopy.address);
             setTags(toCopy.tags);
+            setNote(toCopy.note);
+
         }
 
         /**
@@ -231,6 +238,14 @@ public class EditCommand extends Command {
             return Optional.ofNullable(address);
         }
 
+        public void setNote(Note note) {
+            this.note = note;
+        }
+
+        public Optional<Note> getNote() {
+            return Optional.ofNullable(note);
+        }
+
         /**
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.
@@ -264,7 +279,8 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+                    && Objects.equals(tags, otherEditPersonDescriptor.tags)
+                    && Objects.equals(note, otherEditPersonDescriptor.note);
         }
 
         @Override
@@ -275,6 +291,7 @@ public class EditCommand extends Command {
                     .add("email", email)
                     .add("address", address)
                     .add("tags", tags)
+                    .add("note", note)
                     .toString();
         }
     }
