@@ -3,7 +3,7 @@ package seedu.address.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import seedu.address.logic.commands.Command;
+import seedu.address.model.modifications.Modification;
 import seedu.address.model.person.exceptions.CannotRedoException;
 import seedu.address.model.person.exceptions.CannotUndoException;
 
@@ -29,44 +29,44 @@ public class AddressBookStateManager {
     /**
      * Signals to the state manager that a command that modifies the address book has finished
      * and the state of the working address book should be stored.
-     * @param command The Command that just modified the address book.
+     * @param modification The Modification done to the address book.
      */
-    public void commit(Command command) {
-        assert(command != null);
+    public void commit(Modification modification) {
+        assert(modification != null);
         assert(currentStatePointer >= 0 && currentStatePointer < addressBookStateHistory.size());
         if (addressBookStateHistory.size() - 1 > currentStatePointer) {
             addressBookStateHistory.subList(currentStatePointer + 1, addressBookStateHistory.size()).clear();
         }
-        addressBookStateHistory.add(new AddressBookStateNode(new AddressBook(this.addressBook), command));
+        addressBookStateHistory.add(new AddressBookStateNode(new AddressBook(this.addressBook), modification));
         currentStatePointer++;
     }
 
     /**
      * Restores the state of the working address book to before the last command that modifies it.
-     * @returns The Command that was undone.
+     * @returns The Modification that was undone.
      */
-    public Command undo() throws CannotUndoException {
+    public Modification undo() throws CannotUndoException {
         assert(currentStatePointer >= 0 && currentStatePointer < addressBookStateHistory.size());
         if (currentStatePointer == 0) {
             throw new CannotUndoException();
         }
 
-        Command undoneCommand = addressBookStateHistory.get(currentStatePointer).getCommand();
+        Modification undoneMod = addressBookStateHistory.get(currentStatePointer).getModification();
 
         currentStatePointer--;
         AddressBookStateNode node = addressBookStateHistory.get(currentStatePointer);
-        this.addressBook = new AddressBook(node.getState());
+        this.addressBook.resetData(node.getState());
 
         assert(node != null);
         assert(node.getState() != null);
-        return undoneCommand;
+        return undoneMod;
     }
 
     /**
      * Restores the state of the working address book to before the last command that modifies it.
-     * @returns The Command that was undone.
+     * @returns The Modification that was undone.
      */
-    public Command redo() throws CannotRedoException {
+    public Modification redo() throws CannotRedoException {
         assert(currentStatePointer >= 0 && currentStatePointer < addressBookStateHistory.size());
         if (currentStatePointer == addressBookStateHistory.size() - 1) {
             throw new CannotRedoException();
@@ -74,12 +74,12 @@ public class AddressBookStateManager {
 
         currentStatePointer++;
         AddressBookStateNode node = addressBookStateHistory.get(currentStatePointer);
-        this.addressBook = new AddressBook(node.getState());
+        this.addressBook.resetData(node.getState());
 
         assert(node != null);
         assert(node.getState() != null);
-        assert(node.getCommand() != null);
-        return node.getCommand();
+        assert(node.getModification() != null);
+        return node.getModification();
     }
 
     /**

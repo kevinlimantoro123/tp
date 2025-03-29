@@ -1,20 +1,20 @@
 package seedu.address.model;
 
-import seedu.address.logic.commands.Command;
+import seedu.address.model.modifications.Modification;
 
 /**
  * Representation a historical state of the model's address book.
  */
 public class AddressBookStateNode {
     private ReadOnlyAddressBook state;
-    private Command command;
+    private Modification modification;
 
     /**
      * Constructs an AddressBookStateNode.
      */
-    public AddressBookStateNode(ReadOnlyAddressBook state, Command command) {
+    public AddressBookStateNode(ReadOnlyAddressBook state, Modification modification) {
         this.state = state;
-        this.command = command;
+        this.modification = modification;
     }
 
     /**
@@ -25,10 +25,10 @@ public class AddressBookStateNode {
     }
 
     /**
-     * Returns the command that resulted in this state of the address book.
+     * Returns the modification that resulted in this state of the address book.
      */
-    public Command getCommand() {
-        return this.command;
+    public Modification getModification() {
+        return this.modification;
     }
 
     @Override
@@ -44,7 +44,8 @@ public class AddressBookStateNode {
 
         AddressBookStateNode otherModelManager = (AddressBookStateNode) other;
         return state.equals(otherModelManager.state)
-                && ((command == null && otherModelManager.command == null)
-                || (command != null && otherModelManager.command != null && command.equals(otherModelManager.command)));
+                && ((modification == null && otherModelManager.modification == null)
+                || (modification != null && otherModelManager.modification != null
+                && modification.equals(otherModelManager.modification)));
     }
 }

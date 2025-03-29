@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.logic.commands.Command;
+import seedu.address.model.modifications.Modification;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.CannotRedoException;
 import seedu.address.model.person.exceptions.CannotUndoException;
@@ -132,23 +132,19 @@ public class ModelManager implements Model {
     //=========== addressBookStateHistory ===================================================================
 
     @Override
-    public void commitAddressBook(Command command) {
-        this.addressBookStateManager.commit(command);
+    public void commitAddressBook(Modification modification) {
+        this.addressBookStateManager.commit(modification);
     }
 
     @Override
-    public Command undoAddressBook() throws CannotUndoException {
-        Command undoneCommand = this.addressBookStateManager.undo();
-        filteredPersons.clear();
-        filteredPersons.addAll(this.getAddressBook().getPersonList());
-        return undoneCommand;
+    public Modification undoAddressBook() throws CannotUndoException {
+        Modification undoneMod = this.addressBookStateManager.undo();
+        return undoneMod;
     }
     @Override
-    public Command redoAddressBook() throws CannotRedoException {
-        Command restoredCommand = this.addressBookStateManager.redo();
-        filteredPersons.clear();
-        filteredPersons.addAll(this.getAddressBook().getPersonList());
-        return restoredCommand;
+    public Modification redoAddressBook() throws CannotRedoException {
+        Modification restoredMod = this.addressBookStateManager.redo();
+        return restoredMod;
     }
 
     //=========== Filtered Person List Accessors =============================================================
