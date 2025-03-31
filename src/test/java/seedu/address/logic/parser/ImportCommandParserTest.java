@@ -27,9 +27,9 @@ public class ImportCommandParserTest {
         String validArgs3 = "C:/Users/FalseUser/data.json randomWord";
         String validArgs4 = "the parser faithfully parse the argument, the command checks the path validity";
 
-        assertParseSuccess(parser, validArgs1, new ImportCommand(validArgs1));
-        assertParseSuccess(parser, validArgs2, new ImportCommand(validArgs2));
-        assertParseSuccess(parser, validArgs3, new ImportCommand(validArgs3));
-        assertParseSuccess(parser, validArgs4, new ImportCommand(validArgs4));
+        assertParseSuccess(parser, validArgs1, new ImportCommand(validArgs1, false, false));
+        assertParseSuccess(parser, validArgs2, new ImportCommand(validArgs2, false, false));
+        assertParseSuccess(parser, validArgs3, new ImportCommand(validArgs3, false, false));
+        assertParseSuccess(parser, validArgs4, new ImportCommand(validArgs4, false, false));
     }
 }

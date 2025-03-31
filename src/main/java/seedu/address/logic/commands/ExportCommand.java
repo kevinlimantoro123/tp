@@ -30,7 +30,7 @@ public class ExportCommand extends FileBasedCommand {
             + "Note that if you accidentally specify the folder path to look like a file, such as: \n"
             + ">> export C:/Users/DummyUser/Documents/CraftConnect/data.json\n"
             + "and your desired intention is to put a 'data.json' file in the folder\n"
-            + "C:/Users/DummyUser/Documents/CraftConnect\n,and the " + ExportCommandParser.CREATES_DIRECTORY_FLAG
+            + "C:/Users/DummyUser/Documents/CraftConnect\n, and the " + ExportCommandParser.CREATES_DIRECTORY_FLAG
             + " flag is enabled, "
             + "CraftConnect will create a data.json folder on top of your desired folder and put the "
             + "data export file in that folder.\n"

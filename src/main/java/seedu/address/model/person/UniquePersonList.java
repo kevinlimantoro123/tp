@@ -41,7 +41,7 @@ public class UniquePersonList implements Iterable<Person> {
      */
     public Person findPersonWithSameEmail(Person toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().filter(toCheck::hasSamePhoneNumber).findFirst().orElse(null);
+        return internalList.stream().filter(toCheck::hasSameEmail).findFirst().orElse(null);
     }
 
     /**
@@ -49,7 +49,7 @@ public class UniquePersonList implements Iterable<Person> {
      */
     public Person findPersonWithSamePhoneNumber(Person toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().filter(toCheck::hasSameEmail).findFirst().orElse(null);
+        return internalList.stream().filter(toCheck::hasSamePhoneNumber).findFirst().orElse(null);
     }
 
     /**

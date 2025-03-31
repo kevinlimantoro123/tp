@@ -9,6 +9,9 @@ import seedu.address.logic.parser.exceptions.ParseException;
  * Parses input argument and returns a new ImportCommand object.
  */
 public class ImportCommandParser implements Parser<ImportCommand> {
+    public static final String IS_OVERWRITE_FLAG = "--overwrite";
+    public static final String SUPPRESSES_DUPLICATE_ERROR_FLAG = "--ignore-duplicates";
+
     /**
      * Parses the given {@code String} of arguments in the context of the ImportCommand
      * and returns an ImportCommand object for execution.
@@ -22,6 +25,6 @@ public class ImportCommandParser implements Parser<ImportCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
         }
 
-        return new ImportCommand(filePath);
+        return new ImportCommand(filePath, true, false);
     }
 }
