@@ -63,42 +63,42 @@ public class ImportCommandTest {
     "email" : "alexyeoh@example.com",
     "address" : "Blk 30 Geylang Street 29, #06-40",
     "tags" : [ "customer" ],
-    "note" : "This is a note"
+    "note" : "Note 1"
   }, {
     "name" : "Bernice Yu",
     "phone" : "99272758",
     "email" : "berniceyu@example.com",
     "address" : "Blk 30 Lorong 3 Serangoon Gardens, #07-18",
     "tags" : [ "bulkbuyer", "customer" ],
-    "note" :
+    "note" : ""
   }, {
     "name" : "Charlotte Oliveiro",
     "phone" : "93210283",
     "email" : "charlotte@example.com",
     "address" : "Blk 11 Ang Mo Kio Street 74, #11-04",
     "tags" : [ "boothRentalCraftFes" ],
-    "note" :
+    "note" : ""
   }, {
     "name" : "David Li",
     "phone" : "91031282",
     "email" : "lidavid@example.com",
     "address" : "Blk 436 Serangoon Gardens Street 26, #16-43",
     "tags" : [ "keychainManufacturer" ],
-    "note" :
+    "note" : ""
   }, {
     "name" : "Irfan Ibrahim",
     "phone" : "92492021",
     "email" : "irfan@example.com",
     "address" : "Blk 47 Tampines Street 20, #17-35",
     "tags" : [ "stickerMaterialSupplier" ],
-    "note" :
+    "note" : "Frequent buyer who always comes every week"
   }, {
     "name" : "Roy Balakrishnan",
     "phone" : "92624417",
     "email" : "royb@example.com",
     "address" : "Blk 45 Aljunied Street 85, #11-31",
     "tags" : [ "boothRentalConnectiCon" ],
-    "note" :
+    "note" : "Consistent supplier with good quality materials"
   } ]
 }
                 """;
@@ -148,21 +148,21 @@ public class ImportCommandTest {
     "email" : "dicksontan@example.com",
     "address" : "Blk 30 Geylang Street 29, #06-40",
     "tags" : [ "boothPartner" ],
-    "note" : "This is a note"
+    "note" : ""
   }, {
     "name" : "Mirai Sasaki",
     "phone" : "83082531",
     "email" : "miraisasaki@example.com",
     "address" : "Blk 30 Lorong 3 Serangoon Gardens, #07-18",
     "tags" : [ "customer" ],
-    "note" :
+    "note" : ""
   }, {
     "name" : "Ismail bin Mail",
     "phone" : "99273461",
     "email" : "ismailbinmail@example.com",
     "address" : "Blk 11 Ang Mo Kio Street 74, #11-04",
     "tags" : [ "keychainManufacturer", "paintSupplier" ],
-    "note" :
+    "note" : ""
   } ]
 }
                 """;
@@ -179,7 +179,7 @@ public class ImportCommandTest {
     "not_email" : "dicksontan@example.com",
     "not_address" : "Blk 30 Geylang Street 29, #06-40",
     "not_tags" : [ "boothPartner" ],
-    "not_note" : "This is a note"
+    "not_note" : ""
   } ]
 }
                 """;
