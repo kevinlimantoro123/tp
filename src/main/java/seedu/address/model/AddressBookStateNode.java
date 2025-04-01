@@ -43,9 +43,12 @@ public class AddressBookStateNode {
         }
 
         AddressBookStateNode otherModelManager = (AddressBookStateNode) other;
-        return state.equals(otherModelManager.state)
-                && ((modification == null && otherModelManager.modification == null)
-                || (modification != null && otherModelManager.modification != null
-                && modification.equals(otherModelManager.modification)));
+
+        boolean hasSameState = state.equals(otherModelManager.state);
+        boolean bothHasNoMod = (modification == null && otherModelManager.modification == null);
+        boolean hasSameMod = (modification != null && otherModelManager.modification != null
+                && modification.equals(otherModelManager.modification));
+
+        return (hasSameState && (bothHasNoMod || hasSameMod));
     }
 }
