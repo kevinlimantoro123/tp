@@ -93,7 +93,7 @@ public class FileUtil {
      */
     public static void populateEmptyJsonFile(File f) throws IOException {
         try (FileWriter fileWriter = new FileWriter(f)) {
-            fileWriter.write("");
+            fileWriter.write(" ");
         }
     }
 
