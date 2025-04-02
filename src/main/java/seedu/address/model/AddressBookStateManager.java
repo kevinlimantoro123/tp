@@ -81,6 +81,40 @@ public class AddressBookStateManager {
         assert(node.getModification() != null);
         return node.getModification();
     }
+    
+    /**
+     * Undoes the last n (or all, if there are less than n) modifications to the address book.
+     * @param numberOfTimes The value of n.
+     * @returns The list of Modifications that were undone.
+     */
+    List<Modification> undoMultiple(int numberOfTimes) {
+        List<Modification> undoneMods = new ArrayList<Modification>();
+        for (int i = 0; i < numberOfTimes; i++) {
+            try {
+                undoneMods.add(this.undo());
+            } catch (CannotUndoException e) {
+                // Ignore
+            }
+        }
+        return undoneMods;
+    }
+
+    /**
+     * Restores the last n (or all, if there are less than n) undone modifications to the address book.
+     * @param numberOfTimes The value of n.
+     * @returns The list of Modifications that were undone.
+     */
+    List<Modification> redoMultiple(int numberOfTimes) {
+        List<Modification> restoredMods = new ArrayList<Modification>();
+        for (int i = 0; i < numberOfTimes; i++) {
+            try {
+                restoredMods.add(this.redo());
+            } catch (CannotRedoException e) {
+                // Ignore
+            }
+        }
+        return restoredMods;
+    }
 
     /**
      * Returns the current state of the working address book.

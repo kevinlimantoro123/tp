@@ -9,7 +9,7 @@ import seedu.address.model.person.Person;
  * Record of an addition of a contact to the address book.
  */
 public class AddMod extends Modification {
-    public static final String MOD_TYPE = "Add";
+    public static final String MOD_TYPE = "Add person";
 
     public AddMod(Person targetPerson) {
         super(targetPerson);
