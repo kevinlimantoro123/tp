@@ -517,7 +517,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case resumes at step 3.
       <br><br><br>
 
-**Use case: Filter existing contacts by common attributes (`Name`, `Address`, `Tag`)**
+**Use case: Filter contacts by common attributes (`Name`, `Address`, `Tag`)**
 
 **MSS**
 
@@ -665,6 +665,7 @@ import.
     * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
 
       Use case resumes at step 3.
+<br><br><br>
 
 **Use case: Undo the most recent change to the contact list**
 

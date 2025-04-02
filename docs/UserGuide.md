@@ -130,7 +130,7 @@ Finds contacts by searching for a unique attribute
 
 Format: `find UNIQUE_IDENTIFIER`
 
-* Only 1 parameter can be inputted at a time.
+* Only 1 unique identifier can be inputted at a time.
 * There are 2 unique identifiers that can be used to search for a contact:
   * `p/PHONE_NUMBER`
   * `e/EMAIL`
@@ -145,16 +145,15 @@ Examples:
 
 ### Filtering contacts by common identifier: `filter`
 
-Filters contacts by searching for a common attribute
+Filters contacts by searching for a common identifier.
 
 Format: `filter COMMON_IDENTIFIER`
 
-* Only 1 parameter TYPE can be inputted at a time.
+* Only 1 common identifier TYPE can be inputted at a time. Note that for tags, multiple tags can be specified for filtering eg. `filter t/friend colleague`.
 * There are 3 common identifiers that can be used to filter for a contact:
     * `n/NAME`
     * `a/ADDRESS`
     * `t/TAG`
-* Note that for tags, multiple tags can be specified for filtering eg. `filter t/friend colleague`.
 * This search will return all contacts that match the common attribute provided.
 * The inputs are case-insensitive e.g. `JOHN` will match `john`.
 * Only full words will be matched e.g. `han` will not match `hans`.
@@ -170,7 +169,7 @@ Deletes the specified contact from the address book.
 
 Format: `delete UNIQUE_IDENTIFIER`
 
-* Only 1 parameter can be inputted at a time.
+* Only 1 unique identifier can be inputted at a time.
 * There are 3 unique identifiers that can be used to delete a contact:
     * `INDEX`
     * `p/PHONE_NUMBER`
@@ -193,7 +192,7 @@ Format: `note INDEX nt/NOTE`
 
 <box type="tip" seamless>
 
-**Tip:** To clear the current note of a contact, just use `note INDEX nt/`"
+**Tip:** To clear the current note of a contact, just use `note INDEX nt/`
 </box>
 
 * Adding a new contact will create a contact with an empty note
@@ -282,7 +281,7 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+AddressBook data is saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <box type="warning" seamless>
 

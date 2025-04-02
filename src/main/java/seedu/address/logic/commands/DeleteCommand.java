@@ -12,6 +12,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.modifications.DeleteMod;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmailIsKeywordPredicate;
 import seedu.address.model.person.Person;
@@ -115,7 +116,7 @@ public class DeleteCommand extends Command {
 
             Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
             model.deletePerson(personToDelete);
-            model.commitAddressBook(this);
+            model.commitAddressBook(new DeleteMod(personToDelete));
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
         case BY_EMAIL -> {
@@ -131,7 +132,7 @@ public class DeleteCommand extends Command {
             }
 
             model.deletePerson(personToDelete);
-            model.commitAddressBook(this);
+            model.commitAddressBook(new DeleteMod(personToDelete));
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
         case BY_PHONE -> {
@@ -147,7 +148,7 @@ public class DeleteCommand extends Command {
             }
 
             model.deletePerson(personToDelete);
-            model.commitAddressBook(this);
+            model.commitAddressBook(new DeleteMod(personToDelete));
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
         default -> {
