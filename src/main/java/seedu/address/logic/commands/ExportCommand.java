@@ -52,7 +52,7 @@ public class ExportCommand extends FileBasedCommand {
     public static final String MESSAGE_ERROR_COPYING_DATA = "Cannot copy CraftConnect data to export file. "
             + "Please check if you have enough space, or choose another path.";
     public static final String MESSAGE_TOO_MANY_ARGUMENTS = "Too many arguments specified!\n"
-            + "Please make sure that you only supply the folder path "
+            + "Please make sure that you only supply ONE folder path "
             + "(and optionally, " + ExportCommandParser.CREATES_DIRECTORY_FLAG + ")\n";
 
     private final boolean createsDirectory;

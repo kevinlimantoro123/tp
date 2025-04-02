@@ -22,7 +22,8 @@ public class ImportCommand extends FileBasedCommand {
     public static final String COMMAND_WORD = "import";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Populates CraftConnect using the contacts from the "
-            + "specified JSON file. Note that this operation will OVERWRITE existing data. "
+            + "specified JSON file. It's recommended to only use this to transfer data from another CraftConnect to "
+            + "minimise errors. "
             + "Parameters: PATH_TO_JSON_FILE ["
             + ImportCommandParser.IS_OVERWRITE_FLAG + "] ["
             + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG + "]\n"
@@ -30,7 +31,7 @@ public class ImportCommand extends FileBasedCommand {
             + "data in the new JSON file. Else, CraftConnect will append new data to the existing data by default.\n"
             + "- The " + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG + " tells CraftConnect to ignore all "
             + "messages about duplicated contacts (duplication is when there are more than one people with the same "
-            + "email addresses or the same phone number). This flag will be ignored if overwrite is enabled. "
+            + "email addresses or the same phone number). "
             + "Else, if there are duplicated contacts, CraftConnect will abort the command and tell the user the "
             + "first instance of duplicated contact detected in the specified JSON file.\n"
             + "All flags and the file path can be specified in any order as long as they are after the export "
@@ -57,7 +58,8 @@ public class ImportCommand extends FileBasedCommand {
             + "Please ensure the correct file format.";
 
     public static final String MESSAGE_INCOMPATIBLE_SCHEMA = "The JSON file is either empty or does not follow "
-            + "CraftConnect's schema. "
+            + "CraftConnect's schema. If duplicates are not ignored, it may also be because of duplicate contacts "
+            + "in your JSON file.\n\n"
             + "Please ensure that your JSON data file follows the following convention: \n"
             + "{\n"
             + "  \"persons\" : [ {\n"
@@ -77,7 +79,7 @@ public class ImportCommand extends FileBasedCommand {
             + "    \"email\" : \"alexyeoh@example.com\",\n"
             + "    \"address\" : \"Blk 30 Geylang Street 29, #06-40\",\n"
             + "    \"tags\" : [ \"bulkbuyer\", \"customer\" ],\n"
-            + "    \"notes\" : \"ordered 200 flower stickers\""
+            + "    \"notes\" : \"ordered 200 flower stickers\"\n"
             + "  }, {\n"
             + "    \"name\" : \"Bernice Yu\",\n"
             + "    \"phone\" : \"99272758\",\n"
@@ -88,15 +90,18 @@ public class ImportCommand extends FileBasedCommand {
             + "  } ]\n"
             + "}";
 
-    public static final String MESSAGE_DUPLICATE_PHONE = "Two people with the same phone detected! "
-            + "The second duplicated contact:\n%s\n"
-            + "It may be that this contact has the same phone number as an existing one in the existing contact list, "
-            + "or there are two contacts with the same phone number in your JSON file. Please check your JSON file.";
+    public static final String MESSAGE_DUPLICATE_PHONE = "A contact in your JSON file has the same phone number "
+            + "as an existing contact! The second duplicated contact:\n%s\n"
+            + "Please check your JSON file.";
 
-    public static final String MESSAGE_DUPLICATE_EMAIL = "Two people with the same email address detected! "
-            + "The second duplicated contact:\n%s\n"
-            + "It may be that this contact has the same email address as an existing one in the existing contact list, "
-            + "or there are two contacts with the same email address in your JSON file. Please check your JSON file.";
+    public static final String MESSAGE_DUPLICATE_EMAIL = "A contact in your JSON file has the same email address "
+            + "as an existing contact! The second duplicated contact:\n%s\n"
+            + "Please check your JSON file.";
+
+    public static final String MESSAGE_TOO_MANY_ARGUMENTS = "Too many arguments specified!\n"
+            + "Please make sure that you only supply ONE file path "
+            + "(and optionally, " + ImportCommandParser.IS_OVERWRITE_FLAG + ")"
+            + "(and also optionally, " + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG + ")\n";
 
     private final boolean isOverwrite;
     private final boolean suppressesDuplicateErrors;
@@ -120,6 +125,7 @@ public class ImportCommand extends FileBasedCommand {
      */
     public ImportCommand(String filePath, boolean isOverwrite, boolean suppressesDuplicateErrors) {
         super(filePath);
+
         this.isOverwrite = isOverwrite;
         this.suppressesDuplicateErrors = suppressesDuplicateErrors;
     }
@@ -179,7 +185,13 @@ public class ImportCommand extends FileBasedCommand {
 
         try {
             Path path = Paths.get(this.path);
-            Optional<ReadOnlyAddressBook> addressBook = storage.readAddressBook(path);
+            Optional<ReadOnlyAddressBook> addressBook;
+
+            if (this.suppressesDuplicateErrors) {
+                addressBook = storage.readAddressBookIgnoreDuplicates(path);
+            } else {
+                addressBook = storage.readAddressBook(path);
+            }
 
             if (this.isOverwrite) {
                 model.setAddressBook(addressBook.orElse(originalAddressBook));

@@ -409,4 +409,61 @@ public class FileUtil {
             fileWriter.write(expectedJsonContentAfterAppendDupeEmail);
         }
     }
+
+    /**
+     * Populates a given file with duplicated entries within itself.
+     *
+     * @param f the path to the file
+     * @throws IOException if there are I/O exceptions
+     */
+    public static void populateDuplicatedPersonFile(File f) throws IOException {
+        String duplicatedPersonsContent = """
+{
+   "persons": [ {
+     "name": "Alice Pauline",
+     "phone": "94351253",
+     "email": "alice@example.com",
+     "address": "123, Jurong West Ave 6, #08-111",
+     "tags": [ "friends" ],
+     "note": ""
+   }, {
+     "name": "Alice Pauline",
+     "phone": "94351253",
+     "email": "pauline@example.com",
+     "address": "4th street",
+     "note": ""
+   } ]
+}
+                """;
+
+        try (FileWriter fileWriter = new FileWriter(f)) {
+            fileWriter.write(duplicatedPersonsContent);
+        }
+    }
+
+    /**
+     * Populates a given file with valid JSON address book data after appending valid-with-1-email-dupe
+     * data to default data.
+     *
+     * @param f the path to the file
+     * @throws IOException if there are I/O exceptions
+     */
+    public static void populateExpectedAfterOverwriteDupe(File f) throws IOException {
+        String expectedJsonContentAfterOverwriteDupe = """
+{
+   "persons": [ {
+     "name": "Alice Pauline",
+     "phone": "94351253",
+     "email": "alice@example.com",
+     "address": "123, Jurong West Ave 6, #08-111",
+     "tags": [ "friends" ],
+     "note": ""
+   } ]
+}
+                """;
+
+        try (FileWriter fileWriter = new FileWriter(f)) {
+            fileWriter.write(expectedJsonContentAfterOverwriteDupe);
+        }
+    }
 }

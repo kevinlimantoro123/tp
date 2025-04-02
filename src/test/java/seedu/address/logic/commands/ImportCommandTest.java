@@ -7,8 +7,8 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.AfterAll;
@@ -37,9 +37,12 @@ import seedu.address.testutil.FileUtil;
 import seedu.address.testutil.PersonBuilder;
 
 public class ImportCommandTest {
+    private static final Path TEST_DATA_FOLDER =
+            Paths.get("src", "test", "data", "FileBasedCommandTest")
+                    .toAbsolutePath();
+
     private static Model model;
 
-    private static Path tempDir;
     private static File defaultJsonFile;
     private static File defaultUserPrefsFile;
     private static File invalidJsonFile;
@@ -55,6 +58,9 @@ public class ImportCommandTest {
     private static File expectedJsonAfterAppendDupePhoneFile;
     private static File expectedJsonAfterAppendDupeEmailFile;
 
+    private static File duplicatedPersonFile;
+    private static File expectedJsonAfterOverwriteDupeFile;
+
     private static Storage storage;
 
     /**
@@ -64,25 +70,31 @@ public class ImportCommandTest {
     @BeforeAll
     public static void setUp() throws Exception {
         // set up a temporary directory
-        tempDir = Files.createTempDirectory("importTest");
 
         // set up the test files
-        invalidJsonFile = new File(tempDir.toFile(), "invalid_contacts.json");
-        notJsonFile = new File(tempDir.toFile(), "not_json.txt");
-        nonExistentFile = new File(tempDir.toFile(), "non_existent_file.json");
-        defaultJsonFile = new File(tempDir.toFile(), "addressbook.json");
-        defaultUserPrefsFile = new File(tempDir.toFile(), "preferences.json");
-        emptyJsonFile = new File(tempDir.toFile(), "empty.json");
+        invalidJsonFile = new File(TEST_DATA_FOLDER.toFile(), "invalid_contacts.json");
+        notJsonFile = new File(TEST_DATA_FOLDER.toFile(), "not_json.txt");
+        nonExistentFile = new File(TEST_DATA_FOLDER.toFile(), "non_existent_file.json");
+        defaultJsonFile = new File(TEST_DATA_FOLDER.toFile(), "addressbook.json");
+        defaultUserPrefsFile = new File(TEST_DATA_FOLDER.toFile(), "preferences.json");
+        emptyJsonFile = new File(TEST_DATA_FOLDER.toFile(), "empty.json");
 
-        validNoDupesJsonFile = new File(tempDir.toFile(), "valid_contacts.json");
-        validJsonDupePhoneFile = new File(tempDir.toFile(), "valid_json_dupe_phone.json");
-        validJsonDupeEmailFile = new File(tempDir.toFile(), "valid_json_dupe_email.json");
+        validNoDupesJsonFile = new File(TEST_DATA_FOLDER.toFile(), "valid_contacts.json");
+        validJsonDupePhoneFile = new File(TEST_DATA_FOLDER.toFile(), "valid_json_dupe_phone.json");
+        validJsonDupeEmailFile = new File(TEST_DATA_FOLDER.toFile(), "valid_json_dupe_email.json");
 
-        expectedJsonAfterAppendNoDupeFile = new File(tempDir.toFile(), "expected_json_append_no_dupe.json");
-        expectedJsonAfterAppendDupeEmailFile = new File(tempDir.toFile(), "expected_json_append_dupe_email.json");
-        expectedJsonAfterAppendDupePhoneFile = new File(tempDir.toFile(), "expected_json_append_dupe_phone.json");
+        expectedJsonAfterAppendNoDupeFile = new File(TEST_DATA_FOLDER.toFile(), "expected_json_append_no_dupe.json");
+        expectedJsonAfterAppendDupeEmailFile =
+                new File(TEST_DATA_FOLDER.toFile(), "expected_json_append_dupe_email.json");
+        expectedJsonAfterAppendDupePhoneFile =
+                new File(TEST_DATA_FOLDER.toFile(), "expected_json_append_dupe_phone.json");
+
+        duplicatedPersonFile = new File(TEST_DATA_FOLDER.toFile(), "duplicate_person_address_book.json");
+        expectedJsonAfterOverwriteDupeFile =
+                new File(TEST_DATA_FOLDER.toFile(), "expected_json_overwrite_dupe.json");
 
         // set up stub files for address book data and user preferences data
+        // the files are already populated, but re-population is performed just in case
         FileUtil.populateDefaultJsonFile(defaultJsonFile);
         FileUtil.populateInvalidJsonFile(invalidJsonFile);
         FileUtil.populateNotJsonFile(notJsonFile);
@@ -96,6 +108,9 @@ public class ImportCommandTest {
         FileUtil.populateExpectedAfterAppendNoDupe(expectedJsonAfterAppendNoDupeFile);
         FileUtil.populateExpectedAfterAppendDupePhone(expectedJsonAfterAppendDupePhoneFile);
         FileUtil.populateExpectedAfterAppendDupeEmail(expectedJsonAfterAppendDupeEmailFile);
+
+        FileUtil.populateDuplicatedPersonFile(duplicatedPersonFile);
+        FileUtil.populateExpectedAfterOverwriteDupe(expectedJsonAfterOverwriteDupeFile);
     }
 
     /**
@@ -387,6 +402,40 @@ public class ImportCommandTest {
         assertCommandFailure(absolutePathCommand, model, expectedMessage);
     }
 
+    @Test
+    public void executeOverwriteThrowDupeErrors_selfDupedFile_throwCommandError() {
+        ImportCommand absolutePathCommand = new ImportCommand(duplicatedPersonFile.getAbsolutePath(), true, false);
+
+        String expectedMessage = ImportCommand.generateErrorMessage(
+                duplicatedPersonFile.getPath(),
+                ImportCommand.MESSAGE_INCOMPATIBLE_SCHEMA
+        );
+
+        assertCommandFailure(absolutePathCommand, model, expectedMessage);
+    }
+
+    @Test
+    public void executeOverwriteSuppressDupeErrors_selfDupedFile_success() throws DataLoadingException {
+        ImportCommand absolutePathCommand = new ImportCommand(duplicatedPersonFile.getAbsolutePath(), true, true);
+
+        Storage expectedStorage = new StorageManager(
+                new JsonAddressBookStorage(expectedJsonAfterOverwriteDupeFile.toPath()),
+                new JsonUserPrefsStorage(defaultUserPrefsFile.toPath()));
+
+        Model expectedModel = new ModelStub();
+        if (storage.readAddressBook().isPresent() && storage.readUserPrefs().isPresent()) {
+            expectedModel = new ModelStub(
+                    storage.readAddressBook().get(),
+                    storage.readUserPrefs().get());
+        }
+
+        if (expectedStorage.readAddressBook().isPresent()) {
+            expectedModel.setAddressBook(expectedStorage.readAddressBook().get());
+        }
+
+        assertCommandSuccess(absolutePathCommand, model, ImportCommand.MESSAGE_SUCCESS, expectedModel);
+    }
+
     // __________
     // The following tests are about other utility methods
     // __________
@@ -457,22 +506,7 @@ public class ImportCommandTest {
 
     @AfterAll
     static void tearDown() throws IOException {
-        Files.deleteIfExists(defaultJsonFile.toPath());
-        Files.deleteIfExists(defaultUserPrefsFile.toPath());
-        Files.deleteIfExists(invalidJsonFile.toPath());
-        Files.deleteIfExists(notJsonFile.toPath());
-        Files.deleteIfExists(nonExistentFile.toPath());
-        Files.deleteIfExists(emptyJsonFile.toPath());
-
-        Files.deleteIfExists(validNoDupesJsonFile.toPath());
-        Files.deleteIfExists(validJsonDupePhoneFile.toPath());
-        Files.deleteIfExists(validJsonDupeEmailFile.toPath());
-
-        Files.deleteIfExists(expectedJsonAfterAppendDupeEmailFile.toPath());
-        Files.deleteIfExists(expectedJsonAfterAppendNoDupeFile.toPath());
-        Files.deleteIfExists(expectedJsonAfterAppendDupePhoneFile.toPath());
-
-        Files.delete(tempDir);
+        FileUtil.populateDefaultJsonFile(defaultJsonFile);
     }
 
     private static class ModelStub implements Model {
