@@ -332,7 +332,7 @@ with(this){return _c('p',[_c('strong',[_v("Extensions")])])}
 with(this){return _c('ul',[_c('li',[_c('p',[_v("2a. The list is empty.")]),_v(" "),_c('p',[_v("Use case ends.")])]),_v(" "),_c('li',[_c('p',[_v("3a. The input is invalid.")]),_v(" "),_c('ul',[_c('li',[_c('p',[_v("3a1. CraftConnect shows an error message and informs the user on the correct input syntax.")]),_v(" "),_c('p',[_v("Use case resumes at step 3.")])])])]),_v(" "),_c('li',[_c('p',[_v("3b. More than one attribute is specified.")]),_v(" "),_c('ul',[_c('li',[_c('p',[_v("3b1. CraftConnect shows an error message and informs the user that only one and unique attribute should be specified.")]),_v(" "),_c('p',[_v("Use case resumes at step 3.")])])])]),_v(" "),_c('li',[_c('p',[_v("3c. The inputted attribute is not unique.")]),_v(" "),_c('ul',[_c('li',[_c('p',[_v("3c1. CraftConnect shows an error message and informs the user that the attribute they specified is not unique, while\nalso suggesting the user to use the filter functionality if he/she wants to search using a common attribute.")]),_v(" "),_c('p',[_v("Use case resumes at step 3.\n"),_c('br'),_c('br'),_c('br')])])])])])}
 },function anonymous(
 ) {
-with(this){return _c('p',[_c('strong',[_v("Use case: Filter existing contacts by common attributes ("),_c('code',{pre:true,attrs:{"class":"hljs inline no-lang"}},[_v("Name")]),_v(", "),_c('code',{pre:true,attrs:{"class":"hljs inline no-lang"}},[_v("Address")]),_v(", "),_c('code',{pre:true,attrs:{"class":"hljs inline no-lang"}},[_v("Tag")]),_v(")")])])}
+with(this){return _c('p',[_c('strong',[_v("Use case: Filter contacts by common attributes ("),_c('code',{pre:true,attrs:{"class":"hljs inline no-lang"}},[_v("Name")]),_v(", "),_c('code',{pre:true,attrs:{"class":"hljs inline no-lang"}},[_v("Address")]),_v(", "),_c('code',{pre:true,attrs:{"class":"hljs inline no-lang"}},[_v("Tag")]),_v(")")])])}
 },function anonymous(
 ) {
 with(this){return _c('p',[_c('strong',[_v("MSS")])])}
@@ -404,7 +404,7 @@ with(this){return _c('ol',[_c('li',[_v("User request to list contacts.")]),_v(" 
 with(this){return _c('p',[_c('strong',[_v("Extensions")])])}
 },function anonymous(
 ) {
-with(this){return _c('ul',[_c('li',[_c('p',[_v("2a. The list is empty.")]),_v(" "),_c('p',[_v("Use case ends.")])]),_v(" "),_c('li',[_c('p',[_v("3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.")]),_v(" "),_c('ul',[_c('li',[_c('p',[_v("3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.")]),_v(" "),_c('p',[_v("Use case resumes at step 3.")])])])])])}
+with(this){return _c('ul',[_c('li',[_c('p',[_v("2a. The list is empty.")]),_v(" "),_c('p',[_v("Use case ends.")])]),_v(" "),_c('li',[_c('p',[_v("3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.")]),_v(" "),_c('ul',[_c('li',[_c('p',[_v("3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.")]),_v(" "),_c('p',[_v("Use case resumes at step 3.\n"),_c('br'),_c('br'),_c('br')])])])])])}
 },function anonymous(
 ) {
 with(this){return _c('p',[_c('strong',[_v("Use case: Undo the most recent change to the contact list")])])}
@@ -476,6 +476,6 @@ with(this){return _c('h3',{attrs:{"id":"saving-data"}},[_v("Saving data"),_c('a'
 with(this){return _c('ol',[_c('li',[_c('p',[_v("Dealing with missing/corrupted data files")]),_v(" "),_c('ol',[_c('li',[_c('em',[_v("{explain how to simulate a missing/corrupted file, and the expected behavior}")])])])]),_v(" "),_c('li',[_c('p',[_c('em',[_v("{ more test cases …​ }")])])])])}
 },function anonymous(
 ) {
-with(this){return _c('footer',[_c('div',{staticClass:"text-center"},[_c('small',[_v("["),_c('span',[_c('strong',[_v("Powered by")])]),_v(" "),_c('img',{attrs:{"src":"https://markbind.org/favicon.ico","width":"30"}}),_v(" "),_c('a',{attrs:{"href":"https://markbind.org/"}},[_v("MarkBind 5.6.0")]),_v(", generated on Mon, 31 Mar 2025, 20:03:59 GMT+8]")])])])}
+with(this){return _c('footer',[_c('div',{staticClass:"text-center"},[_c('small',[_v("["),_c('span',[_c('strong',[_v("Powered by")])]),_v(" "),_c('img',{attrs:{"src":"https://markbind.org/favicon.ico","width":"30"}}),_v(" "),_c('a',{attrs:{"href":"https://markbind.org/"}},[_v("MarkBind 5.6.0")]),_v(", generated on Wed, 2 Apr 2025, 20:19:02 GMT+8]")])])])}
 }];
   
