@@ -75,10 +75,9 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
 Shows a message explaning how to access the help page.
 
-![help message](images/helpMessage.png)
-
 Format: `help`
 
+![help message](images/helpMessage.png)
 
 ### Adding a contact: `add`
 
