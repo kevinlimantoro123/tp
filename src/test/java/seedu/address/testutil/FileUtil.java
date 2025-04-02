@@ -81,7 +81,7 @@ public class FileUtil {
      */
     public static void populateNotJsonFile(File f) throws IOException {
         try (FileWriter fileWriter = new FileWriter(f)) {
-            fileWriter.write("NAHHHHH!");
+            fileWriter.write("NAHHHHH!\n");
         }
     }
 
