@@ -610,12 +610,12 @@ public class ImportCommandTest {
         }
 
         @Override
-        public Command undoAddressBook() throws CannotUndoException {
+        public Command undoAddressBook() {
             return null;
         }
 
         @Override
-        public Command redoAddressBook() throws CannotRedoException {
+        public Command redoAddressBook() {
             return null;
         }
 
