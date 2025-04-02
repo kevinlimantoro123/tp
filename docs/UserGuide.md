@@ -113,6 +113,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 **Tip:** You can remove all the contact’s tags by typing `t/` without specifying any tags after it.
 </box>
 
+* Edit command must contain 1 attribute that is changed. If all given edited attributes are the same as the old attributes, the command will show an error. 
 * Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
