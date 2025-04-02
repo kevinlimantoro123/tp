@@ -26,9 +26,8 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.modifications.Modification;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.exceptions.CannotRedoException;
-import seedu.address.model.person.exceptions.CannotUndoException;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
@@ -605,17 +604,17 @@ public class ImportCommandTest {
         }
 
         @Override
-        public void commitAddressBook(Command command) {
+        public void commitAddressBook(Modification command) {
 
         }
 
         @Override
-        public Command undoAddressBook() {
+        public Modification undoAddressBook() {
             return null;
         }
 
         @Override
-        public Command redoAddressBook() {
+        public Modification redoAddressBook() {
             return null;
         }
 
