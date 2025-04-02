@@ -72,6 +72,7 @@ public class ImportCommand extends FileBasedCommand {
      * @return The full message containing the user's file path and the specific error message
      */
     public static String generateErrorMessage(String userFile, String errorInformation) {
+        assert userFile != null;
         return String.format(MESSAGE_ERROR,
                 String.format(MESSAGE_USER_PATH, userFile) + errorInformation);
     }

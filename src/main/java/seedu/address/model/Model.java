@@ -5,7 +5,10 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.modifications.Modification;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.exceptions.CannotRedoException;
+import seedu.address.model.person.exceptions.CannotUndoException;
 
 /**
  * The API of the Model component.
@@ -95,4 +98,25 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Signals to the model that a command that modifies the address book has finished
+     * and the state of the address book should be stored.
+     * @param modification A record of the modification done to the address book.
+     */
+    void commitAddressBook(Modification modification);
+
+    /**
+     * Restores the state of the address book before the last command that modifies it.
+     * @returns The Modification that was undone.
+     * @throws CannotUndoException If no more undos are possible.
+     */
+    Modification undoAddressBook() throws CannotUndoException;
+
+    /**
+     * Restores the state of the address book before the last call to undoAddressBook.
+     * @returns The Modification that was restored.
+     * @throws CannotRedoException If no more redos are possible.
+     */
+    Modification redoAddressBook() throws CannotRedoException;
 }

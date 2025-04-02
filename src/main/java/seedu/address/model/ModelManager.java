@@ -11,7 +11,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.modifications.Modification;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.exceptions.CannotRedoException;
+import seedu.address.model.person.exceptions.CannotUndoException;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -19,9 +22,9 @@ import seedu.address.model.person.Person;
 public class ModelManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private final AddressBook addressBook;
+    private final AddressBookStateManager addressBookStateManager;
     private final UserPrefs userPrefs;
-    private final FilteredList<Person> filteredPersons;
+    private FilteredList<Person> filteredPersons;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -31,13 +34,17 @@ public class ModelManager implements Model {
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
-        this.addressBook = new AddressBook(addressBook);
+        this.addressBookStateManager = new AddressBookStateManager(new AddressBook(addressBook));
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        filteredPersons = new FilteredList<>(this.getAddressBook().getPersonList());
     }
 
     public ModelManager() {
         this(new AddressBook(), new UserPrefs());
+    }
+
+    private AddressBook getInternalAddressBook() {
+        return this.addressBookStateManager.getCurrentAddressBook();
     }
 
     //=========== UserPrefs ==================================================================================
@@ -79,40 +86,40 @@ public class ModelManager implements Model {
 
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
-        this.addressBook.resetData(addressBook);
+        this.getInternalAddressBook().resetData(addressBook);
     }
 
     @Override
     public ReadOnlyAddressBook getAddressBook() {
-        return addressBook;
+        return this.addressBookStateManager.getCurrentAddressBook();
     }
 
     @Override
     public boolean hasPerson(Person person) {
         requireNonNull(person);
-        return addressBook.hasPerson(person);
+        return this.getInternalAddressBook().hasPerson(person);
     }
 
     @Override
     public Person findPersonWithSameEmail(Person person) {
         requireNonNull(person);
-        return addressBook.findPersonWithSameEmail(person);
+        return this.getInternalAddressBook().findPersonWithSameEmail(person);
     }
 
     @Override
     public Person findPersonWithSamePhoneNumber(Person person) {
         requireNonNull(person);
-        return addressBook.findPersonWithSamePhoneNumber(person);
+        return this.getInternalAddressBook().findPersonWithSamePhoneNumber(person);
     }
 
     @Override
     public void deletePerson(Person target) {
-        addressBook.removePerson(target);
+        this.getInternalAddressBook().removePerson(target);
     }
 
     @Override
     public void addPerson(Person person) {
-        addressBook.addPerson(person);
+        this.getInternalAddressBook().addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
@@ -120,7 +127,24 @@ public class ModelManager implements Model {
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
 
-        addressBook.setPerson(target, editedPerson);
+        this.getInternalAddressBook().setPerson(target, editedPerson);
+    }
+    //=========== addressBookStateHistory ===================================================================
+
+    @Override
+    public void commitAddressBook(Modification modification) {
+        this.addressBookStateManager.commit(modification);
+    }
+
+    @Override
+    public Modification undoAddressBook() throws CannotUndoException {
+        Modification undoneMod = this.addressBookStateManager.undo();
+        return undoneMod;
+    }
+    @Override
+    public Modification redoAddressBook() throws CannotRedoException {
+        Modification restoredMod = this.addressBookStateManager.redo();
+        return restoredMod;
     }
 
     //=========== Filtered Person List Accessors =============================================================
@@ -152,7 +176,7 @@ public class ModelManager implements Model {
         }
 
         ModelManager otherModelManager = (ModelManager) other;
-        return addressBook.equals(otherModelManager.addressBook)
+        return addressBookStateManager.equals(otherModelManager.addressBookStateManager)
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredPersons.equals(otherModelManager.filteredPersons);
     }
