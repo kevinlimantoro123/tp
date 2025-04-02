@@ -19,12 +19,16 @@ public class UndoCommandParser implements Parser<UndoCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args);
         int numberOfTimes;
 
+        if (argMultimap.getPreamble().isEmpty()) {
+            return new UndoCommand();
+        }
+
         try {
             numberOfTimes = Integer.parseInt(argMultimap.getPreamble());
         } catch (NumberFormatException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE));
         }
-        
+
         if (numberOfTimes <= 0) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE));
         }

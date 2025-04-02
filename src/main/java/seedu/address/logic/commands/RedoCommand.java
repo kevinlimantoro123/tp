@@ -1,6 +1,5 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
@@ -18,8 +17,8 @@ public class RedoCommand extends Command {
     public static final String COMMAND_WORD = "redo";
 
     public static final String MESSAGE_SUCCESS = "The following change has been restored: ";
-    public static final String MESSAGE_SUCCESS_MULTIPLE 
-            = "The last %d undone change(s) have been restored! (Requested: %d changes)";
+    public static final String MESSAGE_SUCCESS_MULTIPLE =
+            "The last %d undone change(s) have been restored! (Requested: %d changes)";
     public static final String MESSAGE_CANNOT_REDO = "There are no more changes to restore!";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Restores the last undone changes to the person list.\n"
@@ -29,6 +28,10 @@ public class RedoCommand extends Command {
 
     private final int numberOfTimes;
 
+    public RedoCommand() {
+        this.numberOfTimes = 1;
+    }
+
     public RedoCommand(int numberOfTimes) {
         this.numberOfTimes = numberOfTimes;
     }
@@ -36,7 +39,7 @@ public class RedoCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        if (isNull(this.numberOfTimes)) {
+        if (this.numberOfTimes == 1) {
             Modification restoredMod;
             try {
                 restoredMod = model.redoAddressBook();
@@ -46,7 +49,12 @@ public class RedoCommand extends Command {
             return new CommandResult(MESSAGE_SUCCESS + restoredMod.getUserDescription());
         } else {
             List<Modification> restoredMods = model.redoAddressBookMultiple(this.numberOfTimes);
-            return new CommandResult(String.format(MESSAGE_SUCCESS_MULTIPLE, restoredMods.size(), this.numberOfTimes));
+            if (restoredMods.size() == 0) {
+                throw new CommandException(MESSAGE_CANNOT_REDO);
+            } else {
+                return new CommandResult(
+                    String.format(MESSAGE_SUCCESS_MULTIPLE, restoredMods.size(), this.numberOfTimes));
+            }
         }
     }
 }

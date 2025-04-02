@@ -148,12 +148,12 @@ public class ModelManager implements Model {
         return restoredMod;
     }
 
-    @Override    
+    @Override
     public List<Modification> undoAddressBookMultiple(int numberOfTimes) {
         return this.addressBookStateManager.undoMultiple(numberOfTimes);
     }
 
-    @Override    
+    @Override
     public List<Modification> redoAddressBookMultiple(int numberOfTimes) {
         return this.addressBookStateManager.redoMultiple(numberOfTimes);
     }

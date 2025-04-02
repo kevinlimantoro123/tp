@@ -1,6 +1,5 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
@@ -18,8 +17,8 @@ public class UndoCommand extends Command {
     public static final String COMMAND_WORD = "undo";
 
     public static final String MESSAGE_SUCCESS = "The following change has been undone: \n";
-    public static final String MESSAGE_SUCCESS_MULTIPLE 
-            = "The last %d change(s) have been undone! (Requested: %d changes)";
+    public static final String MESSAGE_SUCCESS_MULTIPLE =
+            "The last %d change(s) have been undone! (Requested: %d changes)";
     public static final String MESSAGE_CANNOT_UNDO = "There are no more changes to undo!";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Undoes the latest changes to the person list.\n"
@@ -27,8 +26,11 @@ public class UndoCommand extends Command {
         + "Parameters: NUMBER_OF_CHANGES (must be a positive integer)\n"
         + "Example: " + COMMAND_WORD + " 3";
 
-
     private final int numberOfTimes;
+
+    public UndoCommand() {
+        this.numberOfTimes = 1;
+    }
 
     public UndoCommand(int numberOfTimes) {
         this.numberOfTimes = numberOfTimes;
@@ -37,7 +39,7 @@ public class UndoCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        if (isNull(this.numberOfTimes)) {
+        if (this.numberOfTimes == 1) {
             Modification undoneMod;
             try {
                 undoneMod = model.undoAddressBook();
@@ -47,7 +49,12 @@ public class UndoCommand extends Command {
             return new CommandResult(MESSAGE_SUCCESS + undoneMod.getUserDescription());
         } else {
             List<Modification> undoneMods = model.undoAddressBookMultiple(this.numberOfTimes);
-            return new CommandResult(String.format(MESSAGE_SUCCESS_MULTIPLE, undoneMods.size(), this.numberOfTimes));
+            if (undoneMods.size() == 0) {
+                throw new CommandException(MESSAGE_CANNOT_UNDO);
+            } else {
+                return new CommandResult(
+                    String.format(MESSAGE_SUCCESS_MULTIPLE, undoneMods.size(), this.numberOfTimes));
+            }
         }
     }
 }

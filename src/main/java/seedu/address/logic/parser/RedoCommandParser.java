@@ -19,12 +19,16 @@ public class RedoCommandParser implements Parser<RedoCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args);
         int numberOfTimes;
 
+        if (argMultimap.getPreamble().isEmpty()) {
+            return new RedoCommand();
+        }
+
         try {
             numberOfTimes = Integer.parseInt(argMultimap.getPreamble());
         } catch (NumberFormatException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RedoCommand.MESSAGE_USAGE));
         }
-        
+
         if (numberOfTimes <= 0) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RedoCommand.MESSAGE_USAGE));
         }

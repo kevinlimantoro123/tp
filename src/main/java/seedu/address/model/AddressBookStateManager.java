@@ -81,7 +81,7 @@ public class AddressBookStateManager {
         assert(node.getModification() != null);
         return node.getModification();
     }
-    
+
     /**
      * Undoes the last n (or all, if there are less than n) modifications to the address book.
      * @param numberOfTimes The value of n.
