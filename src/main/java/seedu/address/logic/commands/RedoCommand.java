@@ -60,4 +60,17 @@ public class RedoCommand extends Command {
             }
         }
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof RedoCommand)) {
+            return false;
+        }
+        RedoCommand otherCommand = (RedoCommand) other;
+        return numberOfTimes == (otherCommand.numberOfTimes);
+    }
 }

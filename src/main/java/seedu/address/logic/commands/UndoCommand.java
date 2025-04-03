@@ -60,4 +60,17 @@ public class UndoCommand extends Command {
             }
         }
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof UndoCommand)) {
+            return false;
+        }
+        UndoCommand otherCommand = (UndoCommand) other;
+        return numberOfTimes == (otherCommand.numberOfTimes);
+    }
 }
