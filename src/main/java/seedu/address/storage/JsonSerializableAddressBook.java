@@ -57,4 +57,22 @@ class JsonSerializableAddressBook {
         return addressBook;
     }
 
+    /**
+     * Converts this address book into the model's {@code AddressBook} object.
+     * This version will silently ignore all duplicates (two contacts with the same unique identifiers,
+     * which currently includes phone number and email addresses.
+     *
+     * @throws IllegalValueException if there were any data constraints violated.
+     */
+    public AddressBook toModelTypeIgnoreDuplicates() throws IllegalValueException {
+        AddressBook addressBook = new AddressBook();
+        for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
+            Person person = jsonAdaptedPerson.toModelType();
+            if (addressBook.hasPerson(person)) {
+                continue;
+            }
+            addressBook.addPerson(person);
+        }
+        return addressBook;
+    }
 }
