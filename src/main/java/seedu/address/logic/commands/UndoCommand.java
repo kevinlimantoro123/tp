@@ -24,7 +24,8 @@ public class UndoCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Undoes the latest changes to the person list.\n"
         + "Format: " + COMMAND_WORD + " [NUMBER_OF_CHANGES]\n"
         + "Parameters: NUMBER_OF_CHANGES (must be a positive integer)\n"
-        + "Example: " + COMMAND_WORD + " 3";
+        + "Example: " + COMMAND_WORD + " 3\n"
+        + "If NUMBER_OF_CHANGES is not specified, it defaults to 1.";
 
     private final int numberOfTimes;
 
