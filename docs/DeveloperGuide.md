@@ -284,6 +284,19 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 _{more aspects and alternatives to be added}_
 
+### Note Feature
+This feature allows the user to add a note to an existing contact. When a user is first created, it has an empty string as the value of its note field. Users
+can use this to keep track of any additional information they want to remember about a contact.
+
+#### Design Considerations
+* **Current implementation:** Uses the index of the contact in the current list
+    * Pros: Easy to implement, and easy to understand
+    * Cons: The index of the contact may change if the user filters the list, and the user may not remember the index of the contact they want to edit.
+
+* **Alternative 1:** Uses a contact's attributes
+    * Pros: The user can use any attribute of the contact to identify it (name, phone, email, etc.)
+    * Cons: The attribute chosen may not be unique and can cause confusion
+
 ### \[Proposed\] Data archiving
 
 _{Explain here how the data archiving feature will be implemented}_
@@ -338,8 +351,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user                                       | add a note to a contact by index      | add specific information about certain contacts                                       |
 | `* *`    | user                                       | undo the most recent change to the contact list    | restore an incorrect edit or delete |
 | `* *`    | user                                       | restore the most recently undone change to the contact list |  restore an accidentally undone change |
-
-*{More to be added}*
 
 ### Use cases
 
@@ -402,7 +413,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1.  User requests to list contacts.
 2.  CraftConnect displays a list of contacts.
-3.  User requests to delete a contact by inputting the contact’s attribute (`Email`, `Index`, `Phone Number`).
+3.  User requests to delete a contact by inputting the contact’s unique attribute (`Email`, `Index`, `Phone Number`).
 4.  CraftConnect deletes the specified contact and informs the user of the successful deletion.
 
     Use case ends.
@@ -477,6 +488,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     * 3e1. CraftConnect shows an error message, informing the user of the contact which is already using the phone number.
 
+      Use case resumes at step 3.
+
+* 3f. The inputted attributes are the same as the old attributes of the contact
+
+    * 3f1. CraftConnect shows an error message, informing the user that the inputted attributes are the same as the old attributes of the contact.
+    
       Use case resumes at step 3.
       <br><br><br>
 
@@ -724,8 +741,6 @@ import.
 4. **Portability**
     - CraftConnect should work on any _mainstream OS_ as long as it has Java `17` or above installed.
     - Any user should be able to run CraftConnect without needing to install any other applications/dependencies (except Java 17)
-
-*{More to be added}*
 
 ### Glossary
 
