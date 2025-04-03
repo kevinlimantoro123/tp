@@ -33,7 +33,7 @@ public abstract class Modification {
         if (!(other instanceof Modification)) {
             return false;
         }
-        
+
         return true;
     }
 }

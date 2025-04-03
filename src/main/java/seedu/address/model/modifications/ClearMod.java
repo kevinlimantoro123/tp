@@ -38,7 +38,7 @@ public class ClearMod extends Modification {
         if (!(other instanceof ClearMod)) {
             return false;
         }
-        
+
         return true;
     }
 }

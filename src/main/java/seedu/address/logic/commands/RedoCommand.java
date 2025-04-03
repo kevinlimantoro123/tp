@@ -39,6 +39,8 @@ public class RedoCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        assert(this.numberOfTimes >= 1);
+
         if (this.numberOfTimes == 1) {
             Modification restoredMod;
             try {

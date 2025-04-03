@@ -10,6 +10,10 @@ public abstract class ModificationWithTarget extends Modification {
     public static final String MOD_TYPE = "Generic modification with target person: ";
     private final Person targetPerson;
 
+    /**
+     * Constructs a ModificationWithTarget.
+     * @param targetPerson The target person.
+     */
     public ModificationWithTarget(Person targetPerson) {
         super();
         this.targetPerson = targetPerson;
