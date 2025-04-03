@@ -149,19 +149,36 @@ Filters contacts by searching for a common identifier.
 
 Format: `filter COMMON_IDENTIFIER`
 
-* Only 1 common identifier TYPE can be inputted at a time. Note that for tags, multiple tags can be specified for filtering eg. `filter t/friend colleague`.
+* Only 1 common identifier and 1 common identifier TYPE can be inputted at a time.
 * There are 3 common identifiers that can be used to filter for a contact:
     * `n/NAME`
     * `a/ADDRESS`
     * `t/TAG`
-* This search will return all contacts that match the common attribute provided.
+* This search will return all contacts within the user's entire contact list that exactly or approximately match the common attribute provided.
 * The inputs are case-insensitive e.g. `JOHN` will match `john`.
-* Only full words will be matched e.g. `han` will not match `hans`.
+
+
+Searching by `NAME` allows for one misspelled or missing letter in each part of the name i.e. surname, last name.
+If the `NAME` inputted is more than 1 word, contacts that only match part of the `NAME` and are not similar enough will not be listed. 
 
 Examples:
-* `filter n/alex` returns all contacts with the name `alex`
-* `filter a/123 street` returns all contacts with the address `123 street`
-* `filter t/friend` returns all contacts with the tag `friend`
+* `filter n/Alex` can return contacts with names `Alec` and `Alex Yeoh` but not `David`
+* `filter n/Alex Yeoh` can return contacts with names `Alec Yeoh` and `Alex Marvin Yeoh`, but not `Alex Tan` and `Marvin Yeoh`
+
+
+Searching by `ADDRESS` allows for two misspelled or missing letters in each part of the address, except for numeric parts (e.g. block number), which must be exact. Unit number is exempted from this exception.
+Contacts that only match part of the `ADDRESS` inputted will not be listed and are not similar enough.
+
+Examples:
+* `filter a/Blk 123 Geylang St 31` can return contacts with address `Blk 123 Geylang St 31, #06-30` and `Blk 123 Geylang St 31, #06-41` but not `Blk 123 Geylang St 30, #06-31`
+* `filter a/Blk 123 Geylang St 31 #06-40` can return contacts with address `Blk 123 Geylang St 31, #06-30` but not `Blk 123 Geylang St 31` and `Blk 123 Lorong St 31,`
+
+Searching by `TAG` allows for two misspelled or missing letters in each part of the tag. 
+If the `TAG` inputted is more than 1 word, contacts that only match part of the `TAG` and are not similar enough will not be listed.
+
+Examples:
+* `filter t/supplier` can return contacts with the tag `supplier` and `paint supplier`
+* `filter t/paint supplier` can return contacts with the tag `acrylic paint supplier` but not those with the tag `paper supplier`
 
 ### Deleting a contact : `delete`
 

@@ -47,6 +47,8 @@ public class FilterCommandParser implements Parser<FilterCommand> {
                     String.format(FilterCommand.UNIQUE_ATTRIBUTE_DETECTED, FilterCommand.MESSAGE_USAGE));
         }
 
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TAG, PREFIX_ADDRESS, PREFIX_NAME);
+
         if (argMultimap.getValue(PREFIX_TAG).isPresent()) {
             Tag tag = ParserUtil.parseTag(argMultimap.getValue(PREFIX_TAG).get());
             return new FilterCommand(new TagContainsKeywordsPredicate(tag.tagName));
@@ -59,6 +61,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
 
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
             Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
+            System.out.println(name);
             return new FilterCommand(new NameContainsKeywordsPredicate(name.fullName));
         }
 
