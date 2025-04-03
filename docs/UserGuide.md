@@ -18,15 +18,15 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
@@ -43,7 +43,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -243,10 +243,12 @@ has not existed, and export all data into a file located at `C:\Users\John\Data\
 
 ### Import data : `import`
 
-Overwrites the current contacts in CraftConnect by new data from a JSON file in the specified path.
+Imports new data from a JSON file in the specified path into CraftConnect.
 
-Format: `import ABSOLUTE_PATH_TO_JSON_FILE`
+Format: `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]`
 
+- Duplicated contacts are contacts with at least 1 identical unique identifier, such as two contacts with the same phone
+number, or two contacts with the same email address.
 - The absolute path refers to the full location of the file starting from the root of the system, for example,
   - `C:\Users\JohnDoe\Documents\Data\addressbook.json` (Windows)
   - `/home/johndoe/Documents/Data/addressbook.json` (Linux)
@@ -254,14 +256,79 @@ Format: `import ABSOLUTE_PATH_TO_JSON_FILE`
 - It is highly recommended to use an absolute path to ensure that the correct file is imported. 
 Using a relative path (e.g. `Documents/Data/addressbook.json`) may cause unexpected behaviour because the system would 
 not know your current location.
+- The optional `--overwrite` flag tells CraftConnect to overwrite existing contacts with new data from the JSON file. 
+By default, CraftConnect will add new contacts on top of the existing contacts.
+- The optional `--ignore-duplicate` flag tells CraftConnect to ignore duplicated contacts when adding new contacts. 
+By default, if there are duplicated contacts within the JSON file, or a contact in the JSON file is a duplicate of an 
+existing contact, CraftConnect will display an error message related to duplicated contacts. For example, there are two
+contacts with the same phone number or email address. The first contact will be added to CraftConnect. If 
+`--ignore-duplicates` are specified, the second contact is not added to CraftConnect, otherwise, there will be an error
+message about duplicated contacts.
+- Flags can be put anywhere after the `import` command, that is:
+  - `import --overwrite --ignore-duplicates C:/Users/Dummy/data.json`
+  - `import --overwrite C:/Users/Dummy/data.json --ignore-duplicates`
+  - `import C:/Users/Dummy/data.json --overwrite --ignore-duplicates`
+  - `import --ignore-duplicates --overwrite C:/Users/Dummy/data.json`
+  - `import --ignore-duplicates C:/Users/Dummy/data.json --overwrite`
+  - `import C:/Users/Dummy/data.json --ignore-duplicates --overwrite`
+  - `import --overwrite C:/Users/Dummy/data.json`
+  - `import C:/Users/Dummy/data.json --overwrite`
+  - `import --ignore-duplicates C:/Users/Dummy/data.json`
+  - `import C:/Users/Dummy/data.json --ignore-duplicates`
+  
+  are all valid commands.
 - The file to be imported must exist, have the `.json` extension, and follow the data schema of CraftConnect. 
 It is best for non-technical users to pair the `import` functionality with `export`, to carry data from one 
 CraftConnect address book to another CraftConnect address book.
 
 Examples:
-- `import C:\Users\JohnDoe\Documents\My Data\addressbook.json` will overwrite the current contacts in CraftConnect 
-with new data from a JSON file located at `C:\Users\JohnDoe\Documents\My Data\addressbook.json`.
 
+**Disclaimer**: This is not how data is represented in CraftConnect, but it works as an illustration.
+
+Consider a CraftConnect address book with two people:
+```
+1. Alice, with phone number 98765432
+2. Ben, with phone number 12345678
+```
+
+And the `C:\Users\JohnDoe\Documents\My Data\addressbook.json` file contains
+```
+1. Cheryl, with phone number 97867564
+2. Daniel, with phone number 12345678
+```
+
+See that Ben and Daniel have the same contacts, so they are considered duplicated contacts.
+
+- `import C:\Users\JohnDoe\Documents\My Data\addressbook.json` will add new contacts on top of the current contacts in 
+CraftConnect with new data from the given JSON file.\
+=> **Result**: 
+```
+Error: Duplicated entries
+```
+- `import --overwrite C:\Users\JohnDoe\Documents\My Data\addressbook.json` will replace the current contacts in
+CraftConnect with new data from the given JSON file.
+  => **Result**: CraftConnect will now contain
+```
+1. Cheryl, with phone number 97867564
+2. Daniel, with phone number 12345678
+```
+- `import --ignore-duplicates C:\Users\JohnDoe\Documents\My Data\addressbook.json` will add new contacts on top of the 
+current contacts in CraftConnect with new data from the given JSON file, and will ignore duplicated contacts 
+(except the first one added).
+  => **Result**: CraftConnect will now contain
+```
+1. Alice, with phone number 98765432
+2. Ben, with phone number 12345678
+3. Cheryl, with phone number 97867564
+```
+- `import --overwrite --ignore-duplicates C:\Users\JohnDoe\Documents\My Data\addressbook.json` will replace
+current contacts in CraftConnect with new data from the given JSON file, and will ignore duplicated contacts 
+(except the first one added).
+  => **Result**: CraftConnect will now contain
+```
+1. Cheryl, with phone number 97867564
+2. Daniel, with phone number 12345678
+```
 
 ### Clearing all entries : `clear`
 
@@ -288,6 +355,8 @@ AddressBook data is saved automatically as a JSON file `[JAR file location]/data
 **Caution:**
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+
+In fact, it is safest to not edit the data file. Facilitate any data modification and transfer using commands.
 </box>
 
 ### Archiving data files `[coming in v2.0]`
@@ -299,7 +368,12 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Assume you transfer data from *Computer A* to *Computer B*,
+1. Use the `export` command to export the contacts in *Computer A* to a JSON file.
+2. Install CraftConnect in *Computer B*.
+3. Copy the JSON file from *Computer A* to *Computer B*.
+4. In *Computer B*, use the `import` command to transfer the data from the JSON file to the CraftConnect address book 
+in this computer.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -320,7 +394,7 @@ _Details coming soon ..._
 | **Export**  | `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]` <br> e.g., `export C:\Users\John\Data --create-dir`                                                                   |                                      
 | **Find**    | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`                                                                                                                  |                                     
 | **Filter**  | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`                                                                                                                |                                    
-| **Import**  | `import ABSOLUTE_PATH_TO_JSON_FILE` <br> e.g., `export C:\Users\John\Data\data.json`                                                                                  |                                   
+| **Import**  | `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]` <br> e.g., `import --overwrite C:\Users\John\Data\data.json`                                  |                                   
 | **Note**    | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`                                                                                                                |
 | **List**    | `list`                                                                                                                                                                |                                  
 | **Help**    | `help`                                                                                                                                                                |                                 
