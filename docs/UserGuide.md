@@ -20,7 +20,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
 1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for the app.
 
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
@@ -31,7 +31,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the address book.
 
    * `filter n/John Doe` : Filters all contacts with the name `John Doe`.
 
@@ -40,6 +40,8 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
    * `clear` : Deletes all contacts.
+
+   * `undo` : Revert a change you accidentally did to the address book.
 
    * `exit` : Exits the app.
 
@@ -372,5 +374,7 @@ _Details coming soon ..._
 | **Filter**  | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`                                                                                                                |                                    
 | **Import**  | `import ABSOLUTE_PATH_TO_JSON_FILE` <br> e.g., `export C:\Users\John\Data\data.json`                                                                                  |                                   
 | **Note**    | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`                                                                                                                |
-| **List**    | `list`                                                                                                                                                                |                                  
+| **List**    | `list`                                                                                                                                                                |
+| **Undo**    | `undo [NUMBER_OF_CHANGES]`<br> e.g., `undo 3`| 
+| **Undo**    | `redo [NUMBER_OF_CHANGES]`<br> e.g., `redo 3`|  
 | **Help**    | `help`                                                                                                                                                                |                                 
