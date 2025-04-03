@@ -31,6 +31,17 @@ public interface AddressBookStorage {
     Optional<ReadOnlyAddressBook> readAddressBook(Path filePath) throws DataLoadingException;
 
     /**
+     * Returns AddressBook data as a {@link ReadOnlyAddressBook}.
+     * Returns {@code Optional.empty()} if storage file is not found.<br>
+     * Unlike {@link #readAddressBook()}, this will not throw an exception for duplicated contacts (two
+     * contacts share the same unique identifier, which currently includes phone number and email address).
+     *
+     * @throws DataLoadingException if loading the data from storage failed.
+     * @see #getAddressBookFilePath()
+     */
+    Optional<ReadOnlyAddressBook> readAddressBookIgnoreDuplicates(Path filePath) throws DataLoadingException;
+
+    /**
      * Saves the given {@link ReadOnlyAddressBook} to the storage.
      * @param addressBook cannot be null.
      * @throws IOException if there was any problem writing to the file.

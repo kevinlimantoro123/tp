@@ -7,9 +7,12 @@ import java.util.Optional;
 
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.parser.ImportCommandParser;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.person.Person;
 
 /**
  * Import data from a JSON file with the specified path to the application.
@@ -19,9 +22,31 @@ public class ImportCommand extends FileBasedCommand {
     public static final String COMMAND_WORD = "import";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Populates CraftConnect using the contacts from the "
-            + "specified JSON file. Note that this operation will OVERWRITE existing data. "
-            + "Parameters: PATH_TO_JSON_FILE\n"
-            + "Example: " + COMMAND_WORD + " C:/Users/DummyUser/data.json\n\n"
+            + "specified JSON file. It's recommended to only use this to transfer data from another CraftConnect to "
+            + "minimise errors. "
+            + "Parameters: PATH_TO_JSON_FILE ["
+            + ImportCommandParser.IS_OVERWRITE_FLAG + "] ["
+            + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG + "]\n"
+            + "- The " + ImportCommandParser.IS_OVERWRITE_FLAG + " tells CraftConnect to overwrite existing data with "
+            + "data in the new JSON file. Else, CraftConnect will append new data to the existing data by default.\n"
+            + "- The " + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG + " tells CraftConnect to ignore all "
+            + "messages about duplicated contacts (duplication is when there are more than one people with the same "
+            + "email addresses or the same phone number). "
+            + "Else, if there are duplicated contacts, CraftConnect will abort the command and tell the user the "
+            + "first instance of duplicated contact detected in the specified JSON file.\n"
+            + "All flags and the file path can be specified in any order as long as they are after the export "
+            + "command.\n"
+            + "Example: " + COMMAND_WORD + " C:/Users/Dummy/data.json\n"
+            + "or: " + COMMAND_WORD + " C:/Users/Dummy/data.json " + ImportCommandParser.IS_OVERWRITE_FLAG + "\n"
+            + "or: " + COMMAND_WORD + " " + ImportCommandParser.IS_OVERWRITE_FLAG + " C:/Users/Dummy/data.json\n"
+            + "or: " + COMMAND_WORD + " C:/Users/Dummy/data.json "
+            + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG + "\n"
+            + "or: " + COMMAND_WORD + " " + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG
+            + " C:/Users/Dummy/data.json\n"
+            + "or: " + COMMAND_WORD + " " + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG
+            + " " + ImportCommandParser.IS_OVERWRITE_FLAG + " C:/Users/Dummy/data.json\n"
+            + "or: " + COMMAND_WORD + " " + ImportCommandParser.IS_OVERWRITE_FLAG
+            + " C:/Users/Dummy/data.json " + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG + "\n"
             + "Do not put your file path inside quotation marks.\n";
 
     public static final String MESSAGE_SUCCESS = "Data successfully imported! Enjoy using CraftConnect!";
@@ -33,7 +58,8 @@ public class ImportCommand extends FileBasedCommand {
             + "Please ensure the correct file format.";
 
     public static final String MESSAGE_INCOMPATIBLE_SCHEMA = "The JSON file is either empty or does not follow "
-            + "CraftConnect's schema. "
+            + "CraftConnect's schema. If duplicates are not ignored, it may also be because of duplicate contacts "
+            + "in your JSON file.\n\n"
             + "Please ensure that your JSON data file follows the following convention: \n"
             + "{\n"
             + "  \"persons\" : [ {\n"
@@ -42,6 +68,7 @@ public class ImportCommand extends FileBasedCommand {
             + "    \"email\" : (type: string, conforms to the email format),\n"
             + "    \"address\" : (type: string),\n"
             + "    \"tags\" : [ (type: string),... ],\n"
+            + "    \"notes\" : (type: string) "
             + "  }, ...\n"
             + "}\n"
             + "Example file: \n"
@@ -52,17 +79,55 @@ public class ImportCommand extends FileBasedCommand {
             + "    \"email\" : \"alexyeoh@example.com\",\n"
             + "    \"address\" : \"Blk 30 Geylang Street 29, #06-40\",\n"
             + "    \"tags\" : [ \"bulkbuyer\", \"customer\" ],\n"
+            + "    \"notes\" : \"ordered 200 flower stickers\"\n"
             + "  }, {\n"
             + "    \"name\" : \"Bernice Yu\",\n"
             + "    \"phone\" : \"99272758\",\n"
             + "    \"email\" : \"berniceyu@example.com\",\n"
             + "    \"address\" : \"Blk 30 Lorong 3 Serangoon Gardens, #07-18\",\n"
             + "    \"tags\" : [ \"boothRental\" ],\n"
+            + "    \"notes\" : \"$280 for 2 days\""
             + "  } ]\n"
             + "}";
 
-    public ImportCommand(String filePath) {
+    public static final String MESSAGE_DUPLICATE_PHONE = "A contact in your JSON file has the same phone number "
+            + "as an existing contact! The second duplicated contact:\n%s\n"
+            + "Please check your JSON file.";
+
+    public static final String MESSAGE_DUPLICATE_EMAIL = "A contact in your JSON file has the same email address "
+            + "as an existing contact! The second duplicated contact:\n%s\n"
+            + "Please check your JSON file.";
+
+    public static final String MESSAGE_TOO_MANY_ARGUMENTS = "Too many arguments specified!\n"
+            + "Please make sure that you only supply ONE file path "
+            + "(and optionally, " + ImportCommandParser.IS_OVERWRITE_FLAG + ")"
+            + "(and also optionally, " + ImportCommandParser.SUPPRESSES_DUPLICATE_ERROR_FLAG + ")\n";
+
+    private final boolean isOverwrite;
+    private final boolean suppressesDuplicateErrors;
+
+    /**
+     * Initialises a new ImportCommand instance.<br><br>
+     *
+     * By default, ImportCommand will attempt to append data from the specified JSON file to the existing address book
+     * data. To overwrite existing data instead, set <code>isOverwrite</code> to <code>true</code>.
+     * If overwrite is enabled, suppression of duplicate errors will not take effect.<br><br>
+     *
+     * When appending data, there may be cases of duplicate people (as in same email, phone number, any other unique
+     * identifier...), and by default, if there is a duplicate person, this throws an exception alongside the first
+     * instance of a duplicated person. To suppress all duplication exceptions,
+     * set <code>suppressesDuplicateErrors</code> to <code>true</code>.
+     *
+     * @param filePath The path to the JSON file
+     * @param isOverwrite If set to true, overwrites existing data with data from the specified JSON file.
+     * @param suppressesDuplicateErrors If set to true, the system will silently remove duplicated entries from the
+     *                                  new data list (duplicate as in same unique identifiers).
+     */
+    public ImportCommand(String filePath, boolean isOverwrite, boolean suppressesDuplicateErrors) {
         super(filePath);
+
+        this.isOverwrite = isOverwrite;
+        this.suppressesDuplicateErrors = suppressesDuplicateErrors;
     }
 
     /**
@@ -75,6 +140,35 @@ public class ImportCommand extends FileBasedCommand {
         assert userFile != null;
         return String.format(MESSAGE_ERROR,
                 String.format(MESSAGE_USER_PATH, userFile) + errorInformation);
+    }
+
+    /**
+     * Appends (iteratively) new contacts from a ReadOnlyAddressBook into the model.
+     *
+     * @param model the Model containing the existing contacts
+     * @param src the address book containing new data from the user-supplied JSON file
+     * @throws CommandException if there are duplicated entries and duplicate suppression is not enabled
+     */
+    private void appendContacts(Model model, ReadOnlyAddressBook src) throws CommandException {
+        for (Person newPerson : src.getPersonList()) {
+            Person duplicatedPerson = model.findPersonWithSamePhoneNumber(newPerson);
+            if (duplicatedPerson != null) {
+                if (this.suppressesDuplicateErrors) {
+                    continue;
+                }
+                throw new CommandException(String.format(MESSAGE_DUPLICATE_PHONE, Messages.format(newPerson)));
+            }
+
+            duplicatedPerson = model.findPersonWithSameEmail(newPerson);
+            if (duplicatedPerson != null) {
+                if (this.suppressesDuplicateErrors) {
+                    continue;
+                }
+                throw new CommandException(String.format(MESSAGE_DUPLICATE_EMAIL, Messages.format(newPerson)));
+            }
+
+            model.addPerson(newPerson);
+        }
     }
 
     @Override
@@ -91,9 +185,20 @@ public class ImportCommand extends FileBasedCommand {
 
         try {
             Path path = Paths.get(this.path);
-            Optional<ReadOnlyAddressBook> addressBook = storage.readAddressBook(path);
+            Optional<ReadOnlyAddressBook> addressBook;
 
-            model.setAddressBook(addressBook.orElse(originalAddressBook));
+            if (this.suppressesDuplicateErrors) {
+                addressBook = storage.readAddressBookIgnoreDuplicates(path);
+            } else {
+                addressBook = storage.readAddressBook(path);
+            }
+
+            if (this.isOverwrite) {
+                model.setAddressBook(addressBook.orElse(originalAddressBook));
+            } else if (addressBook.isPresent()) {
+                this.appendContacts(model, addressBook.get());
+            }
+
             return new CommandResult(MESSAGE_SUCCESS);
         } catch (DataLoadingException e) {
             throw new CommandException(generateErrorMessage(this.path, MESSAGE_INCOMPATIBLE_SCHEMA));
@@ -112,13 +217,17 @@ public class ImportCommand extends FileBasedCommand {
         }
 
         ImportCommand otherImportCommand = (ImportCommand) other;
-        return this.path.equals(otherImportCommand.path);
+        return this.path.equals(otherImportCommand.path)
+                && this.isOverwrite == otherImportCommand.isOverwrite
+                && this.suppressesDuplicateErrors == otherImportCommand.suppressesDuplicateErrors;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("path", this.path)
+                .add("overwrite", this.isOverwrite)
+                .add("suppressDupeErrors", this.suppressesDuplicateErrors)
                 .toString();
     }
 }
