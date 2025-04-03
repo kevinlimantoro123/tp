@@ -489,6 +489,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3e1. CraftConnect shows an error message, informing the user of the contact which is already using the phone number.
 
       Use case resumes at step 3.
+
+* 3f. The inputted attributes are the same as the old attributes of the contact
+
+    * 3f1. CraftConnect shows an error message, informing the user that the inputted attributes are the same as the old attributes of the contact.
+    
+      Use case resumes at step 3.
       <br><br><br>
 
 **Use case: Find a contact by a unique attribute (e.g., `Email`, `Phone`)**
