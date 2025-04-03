@@ -39,7 +39,7 @@ public class ExportCommand extends FileBasedCommand {
             + "However, if there is an existing file at that path, an error message will be displayed.\n\n"
             + "We also recommend using the absolute folder path so that you know where the file will be.\n";
 
-    public static final String MESSAGE_SUCCESS = "Data successfully exported at \n%s\n!";
+    public static final String MESSAGE_SUCCESS = "Export successful! Your exported data is located at:\n%s\n";
     public static final String MESSAGE_ERROR = "Command aborted due to failure to export data.\n%s";
     public static final String MESSAGE_USER_PATH = "Your file path: %s\n";
     public static final String MESSAGE_FOLDER_DOES_NOT_EXIST = "The specified folder does not exist. "
