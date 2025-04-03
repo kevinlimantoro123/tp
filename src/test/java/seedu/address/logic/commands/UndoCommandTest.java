@@ -68,11 +68,27 @@ public class UndoCommandTest {
     @Test
     public void undoOnce_changesMade_success() {
         Model model = sampleModels.get(5);
-        Model expectedModel = sampleModels.get(4);
         UndoCommand undoCommand = new UndoCommand(1);
         assertCommandSuccess(undoCommand, model,
-                String.format(UndoCommand.MESSAGE_SUCCESS, sampleModifications.get(4).getUserDescription()),
-                expectedModel);
+                String.format(UndoCommand.MESSAGE_SUCCESS,
+                sampleModifications.get(4).getUserDescription()),
+                sampleModels.get(4));
+        assertCommandSuccess(undoCommand, model,
+                String.format(UndoCommand.MESSAGE_SUCCESS,
+                sampleModifications.get(3).getUserDescription()),
+                sampleModels.get(3));
+        assertCommandSuccess(undoCommand, model,
+                String.format(UndoCommand.MESSAGE_SUCCESS,
+                sampleModifications.get(2).getUserDescription()),
+                sampleModels.get(2));
+        assertCommandSuccess(undoCommand, model,
+                String.format(UndoCommand.MESSAGE_SUCCESS,
+                sampleModifications.get(1).getUserDescription()),
+                sampleModels.get(1));
+        assertCommandSuccess(undoCommand, model,
+                String.format(UndoCommand.MESSAGE_SUCCESS,
+                sampleModifications.get(0).getUserDescription()),
+                sampleModels.get(0));
     }
 
     @Test
