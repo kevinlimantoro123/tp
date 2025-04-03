@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.AfterAll;
@@ -615,6 +616,16 @@ public class ImportCommandTest {
 
         @Override
         public Modification redoAddressBook() {
+            return null;
+        }
+
+        @Override
+        public List<Modification> undoAddressBookMultiple(int numberOfTimes) {
+            return null;
+        }
+
+        @Override
+        public List<Modification> redoAddressBookMultiple(int numberOfTimes) {
             return null;
         }
 

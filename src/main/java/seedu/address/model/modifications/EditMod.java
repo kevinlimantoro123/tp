@@ -7,14 +7,14 @@ import seedu.address.model.person.Person;
 /**
  * Record of an edit of a contact in the address book.
  */
-public class EditMod extends Modification {
-    public static final String MOD_TYPE = "Edit Person";
+public class EditMod extends ModificationWithTarget {
+    public static final String MOD_TYPE = "Edit person";
     private final Person newPerson;
 
     /**
      * Constructs an EditMod.
      * @param targetPerson The person being edited.
-     * @param newPerson The resulting person, after the edir.
+     * @param newPerson The resulting person, after the edit.
      */
     public EditMod(Person targetPerson, Person newPerson) {
         super(targetPerson);

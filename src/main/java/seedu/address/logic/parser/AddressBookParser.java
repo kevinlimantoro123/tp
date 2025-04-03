@@ -87,10 +87,10 @@ public class AddressBookParser {
             return new ListCommand();
 
         case UndoCommand.COMMAND_WORD:
-            return new UndoCommand();
+            return new UndoCommandParser().parse(arguments);
 
         case RedoCommand.COMMAND_WORD:
-            return new RedoCommand();
+            return new RedoCommandParser().parse(arguments);
 
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
