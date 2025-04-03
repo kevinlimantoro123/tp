@@ -285,6 +285,40 @@ Clears all entries from the address book.
 
 Format: `clear`
 
+
+### Reverting changes to the address book : `undo`
+
+Reverts the latest one or more changes to the address book.
+
+Format: `undo [NUMBER_OF_CHANGES]`
+
+Parameter:
+
+- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer.
+If not supplied, defaults to `1`.
+
+Example: `undo`, `undo 3`
+
+
+### Restoring changes to the address book : `undo`
+
+Restores the latest one or more changes to the address book that were reverted by `undo`.
+
+Format: `redo [NUMBER_OF_CHANGES]`
+
+Parameter:
+
+- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer.
+If not supplied, defaults to `1`.
+
+Example: `redo`, `redo 3`
+
+### Clearing all entries : `clear`
+
+Clears all entries from the address book.
+
+Format: `clear`
+
 ### Exiting the program : `exit`
 
 Exits the program.
