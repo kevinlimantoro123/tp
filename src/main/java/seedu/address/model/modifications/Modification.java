@@ -1,27 +1,19 @@
 package seedu.address.model.modifications;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.person.Person;
 
 /**
  * Abstract class representing a record of a modification to the address book.
  */
 public abstract class Modification {
-    public static final String MOD_TYPE = "Generic Modification";
-    private final Person targetPerson;
+    public static final String MOD_TYPE = "Generic modification";
 
-    public Modification(Person targetPerson) {
-        this.targetPerson = targetPerson;
-    }
-
-    public Person getTargetPerson() {
-        return this.targetPerson;
+    public Modification() {
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("targetPerson", this.getTargetPerson())
                 .toString();
     }
 
@@ -41,8 +33,7 @@ public abstract class Modification {
         if (!(other instanceof Modification)) {
             return false;
         }
-
-        Modification otherMod = (Modification) other;
-        return this.targetPerson.equals(otherMod.targetPerson);
+        
+        return true;
     }
 }

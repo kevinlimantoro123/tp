@@ -7,7 +7,7 @@ import seedu.address.model.person.Person;
 /**
  * Record of a deletion of a contact from the address book.
  */
-public class DeleteMod extends Modification {
+public class DeleteMod extends ModificationWithTarget {
     public static final String MOD_TYPE = "Delete person";
 
     public DeleteMod(Person targetPerson) {

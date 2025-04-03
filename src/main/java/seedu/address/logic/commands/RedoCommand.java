@@ -16,7 +16,7 @@ public class RedoCommand extends Command {
 
     public static final String COMMAND_WORD = "redo";
 
-    public static final String MESSAGE_SUCCESS = "The following change has been restored: ";
+    public static final String MESSAGE_SUCCESS = "The following change has been restored: \n%s";
     public static final String MESSAGE_SUCCESS_MULTIPLE =
             "The last %d undone change(s) have been restored! (Requested: %d changes)";
     public static final String MESSAGE_CANNOT_REDO = "There are no more changes to restore!";
@@ -46,7 +46,8 @@ public class RedoCommand extends Command {
             } catch (CannotRedoException e) {
                 throw new CommandException(MESSAGE_CANNOT_REDO);
             }
-            return new CommandResult(MESSAGE_SUCCESS + restoredMod.getUserDescription());
+            return new CommandResult(
+                String.format(MESSAGE_SUCCESS, restoredMod.getUserDescription()));
         } else {
             List<Modification> restoredMods = model.redoAddressBookMultiple(this.numberOfTimes);
             if (restoredMods.size() == 0) {

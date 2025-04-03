@@ -16,7 +16,7 @@ public class UndoCommand extends Command {
 
     public static final String COMMAND_WORD = "undo";
 
-    public static final String MESSAGE_SUCCESS = "The following change has been undone: \n";
+    public static final String MESSAGE_SUCCESS = "The following change has been undone: \n%s";
     public static final String MESSAGE_SUCCESS_MULTIPLE =
             "The last %d change(s) have been undone! (Requested: %d changes)";
     public static final String MESSAGE_CANNOT_UNDO = "There are no more changes to undo!";
@@ -46,7 +46,8 @@ public class UndoCommand extends Command {
             } catch (CannotUndoException e) {
                 throw new CommandException(MESSAGE_CANNOT_UNDO);
             }
-            return new CommandResult(MESSAGE_SUCCESS + undoneMod.getUserDescription());
+            return new CommandResult(
+                String.format(MESSAGE_SUCCESS, undoneMod.getUserDescription()));
         } else {
             List<Modification> undoneMods = model.undoAddressBookMultiple(this.numberOfTimes);
             if (undoneMods.size() == 0) {
