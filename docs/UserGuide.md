@@ -302,7 +302,7 @@ If not supplied, defaults to `1`.
 Example: `undo`, `undo 3`
 
 
-### Restoring changes to the address book : `undo`
+### Restoring changes to the address book : `redo`
 
 Restores the latest one or more changes to the address book that were reverted by `undo`.
 
@@ -376,5 +376,5 @@ _Details coming soon ..._
 | **Note**    | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`                                                                                                                |
 | **List**    | `list`                                                                                                                                                                |
 | **Undo**    | `undo [NUMBER_OF_CHANGES]`<br> e.g., `undo 3`| 
-| **Undo**    | `redo [NUMBER_OF_CHANGES]`<br> e.g., `redo 3`|  
+| **Redo**    | `redo [NUMBER_OF_CHANGES]`<br> e.g., `redo 3`|  
 | **Help**    | `help`                                                                                                                                                                |                                 
