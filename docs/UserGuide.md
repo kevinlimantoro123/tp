@@ -6,23 +6,26 @@
 
 # CraftConnect User Guide
 
-CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
+CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. Our target audience is small business owners, especially in the arts and crafts sector. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
 
 <!-- * Table of Contents -->
 <page-nav-print />
 
 --------------------------------------------------------------------------------------------------------------------
-
 ## Quick start
 
 1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).<br>
+   To check for Java installation, open a command terminal and type `java -version`. You should see a message indicating the version of Java installed. If you do not see this message, please install Java from [here](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html).
 
 1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for the app.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in. For example, if the file is in a folder called `apps` in your desktop, type
+   `cd /Desktop/apps` in the terminal.
+
+1. Type in `java -jar craftconnect.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -54,6 +57,11 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 <box type="info" seamless>
 
 **Notes about the command format:**<br>
+
+* Our commands do not support `/` for any of the parameters. For example, if your name is `John s/o Doe`, you should enter it as `John so Doe` instead of `John s/o Doe`. This is because `/` breaks the command format and causes the command to fail.
+
+* Command words are case-sensitive. Make sure to follow exactly as given in this guide,<br>
+  e.g. `add` is correct but `Add` or `ADD` will not work.
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
@@ -136,7 +144,7 @@ Format: `find UNIQUE_IDENTIFIER`
   * `p/PHONE_NUMBER`
   * `e/EMAIL`
 * This search will always return at most 1 perso when a valid attribute is provided.
-* The inputs are case-sensitive e.g. `JOHN` will not match `john`.
+* The inputs are case-insensitive e.g. `JOHN` will match `john`.
 * Only full words or numbers will be matched e.g. `123` will not match `1234`.
 
 Examples:
@@ -279,14 +287,6 @@ CraftConnect address book to another CraftConnect address book.
 Examples:
 - `import C:\Users\JohnDoe\Documents\My Data\addressbook.json` will overwrite the current contacts in CraftConnect 
 with new data from a JSON file located at `C:\Users\JohnDoe\Documents\My Data\addressbook.json`.
-
-
-### Clearing all entries : `clear`
-
-Clears all entries from the address book.
-
-Format: `clear`
-
 
 ### Reverting changes to the address book : `undo`
 
