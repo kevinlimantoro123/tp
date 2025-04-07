@@ -20,7 +20,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
 2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the file to the folder you want to use as the _home folder_ for the CraftConnect app.
 
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar craftconnect.jar` command to run the application.<br>
    For example, if you put your `craftconnect.jar` file in a folder with path
@@ -316,7 +316,6 @@ CraftConnect address book to another CraftConnect address book.
 
 Examples:
 
-<<<<<<< HEAD
 **Disclaimer**: This is not how data is represented in CraftConnect, but it works as an illustration.
 
 Consider a CraftConnect address book with two people:
@@ -363,7 +362,6 @@ current contacts in CraftConnect with new data from the given JSON file, and wil
 1. Cheryl, with phone number 97867564
 2. Daniel, with phone number 12345678
 ```
-=======
 ### Reverting changes to the address book : `undo`
 
 Reverts the latest one or more changes to the address book.
@@ -372,11 +370,16 @@ Format: `undo [NUMBER_OF_CHANGES]`
 
 Parameter:
 
-- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer.
+- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer not exceeding 100000.
 If not supplied, defaults to `1`.
 
 Example: `undo`, `undo 3`
 
+<box type="warning" seamless>
+
+**Note:**
+Due to performance limitations, CraftConnect currently can only support reverting up to 100000 changes at once.
+</box>
 
 ### Restoring changes to the address book : `redo`
 
@@ -386,11 +389,24 @@ Format: `redo [NUMBER_OF_CHANGES]`
 
 Parameter:
 
-- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer.
+- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer not exceeding 100000.
 If not supplied, defaults to `1`.
 
 Example: `redo`, `redo 3`
->>>>>>> master
+
+<box type="warning" seamless>
+
+**Note:**
+Due to performance limitations, CraftConnect currently can only support restoring up to 100000 changes at once.
+</box>
+
+<box type="warning" seamless>
+
+**Caution:**
+Due to implementation limitations, the history of changes will be lost upon exiting the CraftConnect app.
+In addition, any undone changes will be lost, and cannot be restored using `redo`, should the user perform a command that
+changes the address book.
+</box>
 
 ### Clearing all entries : `clear`
 
@@ -410,7 +426,7 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 ### Editing the data file
 
-AddressBook data is saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+AddressBook data is saved automatically as a JSON file `[home folder]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <box type="warning" seamless>
 
@@ -420,10 +436,6 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 
 In fact, it is safest to not edit the data file. Facilitate any data modification and transfer using commands.
 </box>
-
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
 
 --------------------------------------------------------------------------------------------------------------------
 

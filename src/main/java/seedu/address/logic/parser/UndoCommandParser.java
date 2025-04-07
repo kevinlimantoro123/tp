@@ -30,7 +30,11 @@ public class UndoCommandParser implements Parser<UndoCommand> {
         }
 
         if (numberOfTimes <= 0) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE));
+            throw new ParseException(UndoCommand.MESSAGE_NOT_POSITIVE);
+        }
+
+        if (numberOfTimes > 100000) {
+            throw new ParseException(UndoCommand.MESSAGE_LIMIT_EXCEEDED);
         }
 
         return new UndoCommand(numberOfTimes);

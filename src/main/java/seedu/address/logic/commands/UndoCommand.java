@@ -20,11 +20,14 @@ public class UndoCommand extends Command {
     public static final String MESSAGE_SUCCESS_MULTIPLE =
             "The last %d change(s) have been undone! (Requested: %d changes)";
     public static final String MESSAGE_CANNOT_UNDO = "There are no more changes to undo!";
+    public static final String MESSAGE_NOT_POSITIVE = "Number of changes to undo must be a positive integer!";
+    public static final String MESSAGE_LIMIT_EXCEEDED = "Number of changes to undo must not exceed 100000!";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Undoes the latest changes to the person list.\n"
         + "Format: " + COMMAND_WORD + " [NUMBER_OF_CHANGES]\n"
         + "Parameters: NUMBER_OF_CHANGES (must be a positive integer)\n"
         + "Example: " + COMMAND_WORD + " 3\n"
+        + "NUMBER_OF_CHANGES must not exceed 100000.\n"
         + "If NUMBER_OF_CHANGES is not specified, it defaults to 1.";
 
     private final int numberOfTimes;
@@ -40,7 +43,7 @@ public class UndoCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        assert(this.numberOfTimes >= 1);
+        assert(this.numberOfTimes >= 1 && this.numberOfTimes <= 100000);
 
         if (this.numberOfTimes == 1) {
             Modification undoneMod;

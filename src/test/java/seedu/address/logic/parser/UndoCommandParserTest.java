@@ -16,6 +16,10 @@ public class UndoCommandParserTest {
         String userInput = "123";
         UndoCommand expectedCommand = new UndoCommand(123);
         assertParseSuccess(parser, userInput, expectedCommand);
+        // Boundary value
+        String userInput2 = "100000";
+        UndoCommand expectedCommand2 = new UndoCommand(100000);
+        assertParseSuccess(parser, userInput2, expectedCommand2);
     }
 
     @Test
@@ -27,7 +31,8 @@ public class UndoCommandParserTest {
 
     @Test
     public void parse_zeroNum_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE);
+        // Boundary value
+        String expectedMessage = UndoCommand.MESSAGE_NOT_POSITIVE;
 
         String userInput = "0";
         assertParseFailure(parser, userInput, expectedMessage);
@@ -35,9 +40,19 @@ public class UndoCommandParserTest {
 
     @Test
     public void parse_negativeNum_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE);
+        // Boundary value
+        String expectedMessage = UndoCommand.MESSAGE_NOT_POSITIVE;
 
         String userInput = "-1";
+        assertParseFailure(parser, userInput, expectedMessage);
+    }
+
+    @Test
+    public void parse_exceedsLimit_failure() {
+        // Boundary value
+        String expectedMessage = UndoCommand.MESSAGE_LIMIT_EXCEEDED;
+
+        String userInput = "100001";
         assertParseFailure(parser, userInput, expectedMessage);
     }
 

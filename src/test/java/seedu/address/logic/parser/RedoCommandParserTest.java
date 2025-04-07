@@ -16,6 +16,11 @@ public class RedoCommandParserTest {
         String userInput = "123";
         RedoCommand expectedCommand = new RedoCommand(123);
         assertParseSuccess(parser, userInput, expectedCommand);
+
+        // Boundary value
+        String userInput2 = "100000";
+        RedoCommand expectedCommand2 = new RedoCommand(100000);
+        assertParseSuccess(parser, userInput2, expectedCommand2);
     }
 
     @Test
@@ -27,7 +32,8 @@ public class RedoCommandParserTest {
 
     @Test
     public void parse_zeroNum_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, RedoCommand.MESSAGE_USAGE);
+        // Boundary value
+        String expectedMessage = RedoCommand.MESSAGE_NOT_POSITIVE;
 
         String userInput = "0";
         assertParseFailure(parser, userInput, expectedMessage);
@@ -35,9 +41,19 @@ public class RedoCommandParserTest {
 
     @Test
     public void parse_negativeNum_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, RedoCommand.MESSAGE_USAGE);
+        // Boundary value
+        String expectedMessage = RedoCommand.MESSAGE_NOT_POSITIVE;
 
         String userInput = "-1";
+        assertParseFailure(parser, userInput, expectedMessage);
+    }
+
+    @Test
+    public void parse_exceedsLimit_failure() {
+        // Boundary value
+        String expectedMessage = RedoCommand.MESSAGE_LIMIT_EXCEEDED;
+
+        String userInput = "100001";
         assertParseFailure(parser, userInput, expectedMessage);
     }
 
