@@ -389,7 +389,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3a. The input is invalid.
 
     * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
-      
+
       **NOTE**: : a non-positive index or an index outside the range of a Java integer results in an invalid command format
           exception, because these can be detected during the parsing phase. A positive index that is outside the range
           of the contact list can only be detected at command execution phase, so another message will be returned.
@@ -463,7 +463,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3f. The inputted attributes are the same as the old attributes of the contact
 
     * 3f1. CraftConnect shows an error message, informing the user that the inputted attributes are the same as the old attributes of the contact.
-    
+
       Use case resumes at step 3.
       <br><br><br>
 
@@ -583,7 +583,7 @@ a new folder if their specified folder does not exist.
 
 * 2c. The folder does not exist, and the option of creating folder if not exists is not specified
 
-    * 2c1. CraftConnect shows an error message and tells the user to check for spelling or specify 
+    * 2c1. CraftConnect shows an error message and tells the user to check for spelling or specify
 create-folder-if-not-exist.
 
       Use case resumes at step 1.
@@ -602,7 +602,7 @@ create-folder-if-not-exist.
 1. User requests to import data by specifying the path to the file, whether to overwrite existing contacts with the
 new contacts from the JSON file or to append new contacts into the existing contacts, and whether to ignore duplicated
 contacts.
-2. CraftConnect replaces the address book contacts with the data from the file and informs the user of the successful 
+2. CraftConnect replaces the address book contacts with the data from the file and informs the user of the successful
 import.
 
     Use case ends.
@@ -612,7 +612,7 @@ import.
 * 2a. The input is empty
 
   * 2a1. CraftConnect shows an error message and informs the user of the correct command usage.
-  
+
     Use case resumes at step 1.
 
 * 2b. The path to the file is invalid, or is valid but the file does not exist at that location
@@ -624,7 +624,7 @@ import.
 * 2c. The file is not a JSON file
 
     * 2c1. CraftConnect shows an error message and asks the user to specify the path to a JSON file.
-      
+
       Use case resumes at step 1.
 
 * 2d. The JSON file does not follow CraftConnect's schema
@@ -633,7 +633,7 @@ import.
 
       Use case resumes at step 1.
 
-* 2e. (Exclusive to when duplicates are not ignored) The JSON file contains duplicated contacts within itself, or it 
+* 2e. (Exclusive to when duplicates are not ignored) The JSON file contains duplicated contacts within itself, or it
 contains duplicated contacts with an existing contact in append mode.
 
     * 2e1. CraftConnect shows an error message about duplicated contacts.
@@ -660,7 +660,7 @@ contains duplicated contacts with an existing contact in append mode.
 * 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
 
     * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
-      
+
       **NOTE**: a non-positive index or an index outside the range of a Java integer results in an invalid command format
         exception, because these can be detected during the parsing phase. A positive index that is outside the range
         of the contact list can only be detected at command execution phase, so another message will be returned.
@@ -682,25 +682,25 @@ contains duplicated contacts with an existing contact in append mode.
 * 1a. The user specifies a non-positive `N`
 
   * 1a1. CraftConnect shows an error message and instructs the user to specify a positive `N`.
-  
+
     Use case resumes from step 1.
 
 * 1b. `N` is greater than 100000
 
   * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 100000.
-  
+
     Use case resumes from step 1.
 
 * 1c. There are no changes to undo
 
   * 1c1. CraftConnect shows an error message and informs the user that there are no changes to undo.
-  
+
     Use case ends.
 
 * 1d. N is greater than the number of changes available to undo
 
   * 1d1. CraftConnect undoes all changes and informs the user about the number of changes undone.
-  
+
     Use case ends.
 <br><br><br>
 
@@ -719,25 +719,25 @@ contains duplicated contacts with an existing contact in append mode.
 * 1a. The user specifies a non-positive `N`
 
   * 1a1. CraftConnect shows an error message and instructs the user to specify a positive `N`.
-  
+
     Use case resumes from step 1.
 
 * 1b. `N` is greater than 100000
 
   * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 100000.
-  
+
     Use case resumes from step 1.
 
 * 1c. There are no changes to restore
 
   * 1c1. CraftConnect shows an error message and informs the user that there are no changes to restore.
-  
+
     Use case ends.
 
 * 1d. N is greater than the number of changes available to restore
 
   * 1d1. CraftConnect restores all changes and informs the user about the number of changes restored.
-  
+
     Use case ends.
 <br><br><br>
 
