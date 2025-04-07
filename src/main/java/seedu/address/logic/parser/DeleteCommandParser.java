@@ -50,14 +50,14 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         }
 
         try {
-            Integer.parseInt(args.trim());
-        } catch (NumberFormatException nfe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE), nfe);
+            Index index = ParserUtil.parseIndex(args);
+            return new DeleteCommand(index);
+        } catch (ParseException e) {
+            throw new ParseException(String.format(
+                    MESSAGE_INVALID_COMMAND_FORMAT,
+                    DeleteCommand.MESSAGE_USAGE
+            ));
         }
-
-        Index index = ParserUtil.parseIndex(args);
-        return new DeleteCommand(index);
     }
 
 }
