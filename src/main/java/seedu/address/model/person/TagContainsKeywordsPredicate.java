@@ -30,8 +30,8 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
                     return false;
                 }
             }
-           return StringUtil.computeCloseness(tagName, tagKeywords) < 3;
-        } );
+            return StringUtil.computeCloseness(tagName, tagKeywords) < 3;
+        });
     }
 
     @Override
