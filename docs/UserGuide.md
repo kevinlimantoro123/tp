@@ -18,7 +18,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).<br>
    To check for Java installation, open a command terminal and type `java -version`. You should see a message indicating the version of Java installed. If you do not see this message, please install Java from [here](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html).
 
-2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [here](https://github.com/AY2425S2-CS2103T-W13-4/tp/releases).
 
 3. Copy the file to the folder you want to use as the _home folder_ for the CraftConnect app.
 
@@ -231,7 +231,7 @@ Examples:
 * `list` followed by `note 2 nt/Sample note` will overwrite the note of the 2nd contact in the address book to be "Sample note"
 * filter `n/john` followed by `note 3 nt/Sample note` will overwrite the note of the 3rd contact in the filtered contacts list to be "Sample note"
 
-### Export data : `export`
+### Exporting data : `export`
 
 Exports the current contacts from CraftConnect into a JSON file named `craftconnect.json`,
 and puts the file into a folder whose absolute path is specified.
@@ -275,7 +275,7 @@ folder exists, and returns an error otherwise.
 - `export C:\Users\John\My Data –-create-dir` will create a new folder located at `C:\Users\John\My Data` if the folder
 has not existed, and export all data into a file located at `C:\Users\John\Data\craftconnect.json`.
 
-### Import data : `import`
+### Importing data : `import`
 
 Imports new data from a JSON file in the specified path into CraftConnect.
 
