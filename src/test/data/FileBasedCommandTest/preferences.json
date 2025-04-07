@@ -7,5 +7,5 @@
       "y" : 171
     }
   },
-  "addressBookFilePath" : "C:\\Users\\Jun Sen\\tp\\src\\test\\data\\FileBasedCommandTest\\addressbook.json"
+  "addressBookFilePath" : ".\\addressbook.json"
 }

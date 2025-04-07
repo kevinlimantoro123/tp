@@ -50,7 +50,7 @@ public class EditMod extends ModificationWithTarget {
         }
 
         EditMod otherEditMod = (EditMod) other;
-        return ((Modification) this).equals((Modification) otherEditMod)
+        return ((ModificationWithTarget) this).equals((ModificationWithTarget) otherEditMod)
                 && this.newPerson.equals(otherEditMod.newPerson);
     }
 }

@@ -6,7 +6,7 @@
 
 # CraftConnect User Guide
 
-CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. Our target audience is small business owners, especially in the arts and crafts sector. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
+CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. Our target audience is small business owners, especially in the arts and crafts sector, but you can try it out even if you are not a business owner in this sector. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -20,7 +20,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
 2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the file to the folder you want to use as the _home folder_ for the CraftConnect app.
 
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar craftconnect.jar` command to run the application.<br>
    For example, if you put your `craftconnect.jar` file in a folder with path
@@ -32,7 +32,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
    cd "C:/Users/DummyUser/Documents"
    java -jar craftconnect.jar
    ```
-   
+
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -74,7 +74,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  e.g. `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
@@ -87,6 +87,23 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
+
+### Contact attributes
+* **`UNIQUE_IDENTIFIER`** - At any point in time, no two contacts should have the same of this attribute. Some features only work for unique identifiers.
+* **`COMMON_ATTRIBUTE`** - More than one contact can have the same value for this attribute. Some features only work for common attributes.
+* **`OPTIONAL`** - A contact does not necessarily contain this attribute.
+* **`COMPULSORY`** - At any point in time, a contact must contain this attribute.
+
+| Attribute | Prefix | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|-----------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| NAME      | `n/`   | A contact's name. Can only contain alphanumeric characters and spaces, and have between 1 and 100 characters.<br>>> **`COMMON_ATTRIBUTE`**<br>>> **`COMPULSORY`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| EMAIL     | `e/`   | A contact's email address. Must be a valid email address format (local-part@domain-part, maximum 253 characters). CraftConnect will not check if the email exists.<br>>> **`UNIQUE_IDENTIFIER`**<br>>> **`COMPULSORY`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| PHONE     | `p/`   | A contact's phone number. This is a unique attribute, meaning that no two contacts should share the same phone number. Must contain between 3 and 15 digits, with no spaces or other characters. CraftConnect will not check if the phone number exists.<br>>> **`UNIQUE_IDENTIFIER`**<br>>> **`COMPULSORY`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ADDRESS   | `a/`   | A contact's physical address, must be between 1 and 255 characters. CraftConnect will not check if the physical address exists.<br>>> **`COMMON_ATTRIBUTE`**<br>>> **`COMPULSORY`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| TAG       | `t/`   | A contact's tag. A contact may have more than one tag, where each tag can only contain alphanumeric characters and spaces, and have between 1 and 50 characters.<br>>> **`COMMON_ATTRIBUTE`**<br>>> **`OPTIONAL`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| NOTE      | `nt/`  | A piece of note corresponding to this contact, must be between 1 and 255 characters.<br>>> **`COMMON_ATTRIBUTE`**<br>>> **`OPTIONAL`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| INDEX     | NA     | A number uniquely assigned to a contact every time the contact list is shown, starting from 1, increasing by 1 for each contact.<br><br>For every operation (`add`, `delete`, `filter`, `find`) that causes a change to the displayed list, each contact in this new list will be assigned to a new index, such that the index still starts at 1 and increases by 1 for each contact.<br><br>For operations that involve indexes, the index must range between 1 and the maximum number of contacts.<br><br>For example, CraftConnect contains 10 contacts, where contacts 1, 3, 5, 7, 9 have names containing the letter 'e'. After filtering all contacts whose names contain the letter 'e', the indexes are reset to 1 to 5 and reassigned to the filtered contacts, instead of displaying 1, 3, 5, 7, 9.<br><br> |
+
 
 ### Viewing help : `help`
 
@@ -101,13 +118,6 @@ Format: `help`
 Adds a contact to the address book.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/CATEGORY]…​`
-
-* Can only add a contact with a unique phone number and email address.
-
-<box type="tip" seamless>
-
-**Tip:** A contact can have any number of categories (including 0)
-</box>
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
@@ -131,10 +141,8 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 </box>
 
 * At least one of the optional fields must be provided. Edit command must contain at least 1 attribute that is changed to be successful.
-* Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, …​
 * Existing values will be updated to the input values.
-* Can only edit the phone number and email if they are unique (No duplicates in the address book).
-* When editing tags, the existing tags of the contact will be removed i.e adding of tags is not cumulative.
+* When editing tags, the existing tags of the contact will be removed i.e. adding of tags is not cumulative.
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
@@ -147,10 +155,7 @@ Finds contacts by searching for a unique attribute
 Format: `find UNIQUE_IDENTIFIER`
 
 * Only 1 unique identifier can be inputted at a time.
-* There are 2 unique identifiers that can be used to search for a contact:
-  * `p/PHONE_NUMBER`
-  * `e/EMAIL`
-* This search will always return at most 1 perso when a valid attribute is provided.
+* This search will always return at most 1 person when a valid attribute is provided.
 * The inputs are case-insensitive e.g. `JOHN` will match `john`.
 * Only full words or numbers will be matched e.g. `123` will not match `1234`.
 
@@ -161,15 +166,12 @@ Examples:
 
 ### Filtering contacts by common identifier: `filter`
 
-Filters contacts by searching for a common identifier.
+Filters contacts by searching for a common attribute.
 
-Format: `filter COMMON_IDENTIFIER`
+Format: `filter COMMON_ATTRIBUTE`
 
 * Only 1 common identifier and 1 common identifier TYPE can be inputted at a time.
-* There are 3 common identifiers that can be used to filter for a contact:
-    * `n/NAME`
-    * `a/ADDRESS`
-    * `t/TAG`
+* Filter by notes are not supported, please stick to names, addresses and tags for now.
 * This search will return all contacts within the user's entire contact list that exactly or approximately match the common attribute provided.
 * The inputs are case-insensitive e.g. `JOHN` will match `john`.
 
@@ -207,16 +209,10 @@ Examples:
 
 Deletes the specified contact from the address book.
 
-Format: `delete UNIQUE_IDENTIFIER`
+Format: `delete UNIQUE_IDENTIFIER` or `delete INDEX`
 
 * Only 1 unique identifier can be inputted at a time.
-* There are 3 unique identifiers that can be used to delete a contact:
-    * `INDEX`
-    * `p/PHONE_NUMBER`
-    * `e/EMAIL`
-* When using filter or find, the current list will be updated to a filtered list. When deletion by index is used, `INDEX` refers to the index number shown in the filtered contacts list.
 * A valid email or phone number will delete the corresponding contact regardless of any applied filters.
-* The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd contact in the address book.
@@ -236,7 +232,6 @@ Format: `note INDEX nt/NOTE`
 </box>
 
 * Adding a new contact will create a contact with an empty note.
-* When using filter or find, the current list will be updated to a filtered list. The `INDEX` now refers to the index number shown in the filtered contacts list.
 * Note that the note command is not cumulative and will overwrite the existing note.
 
 Examples:
@@ -245,8 +240,14 @@ Examples:
 
 ### Export data : `export`
 
-Exports the current contacts from CraftConnect into a JSON file named `craftconnect.json`, 
+Exports the current contacts from CraftConnect into a JSON file named `craftconnect.json`,
 and puts the file into a folder whose absolute path is specified.
+
+**NOTE**: Before you attempt to alter the data file after export, please refer to [Editing the data file](#editing-the-data-file) section.
+
+**NOTE**: We do not enforce any restriction on the maximum number of characters for paths because this is OS-dependent.
+However, know that OSes will silently truncate long path names (Windows is about 260, Linux is 4096). Please limit
+the path length accordingly.
 
 Format: `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]`
 
@@ -254,36 +255,42 @@ Format: `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]`
   - `C:\Users\JohnDoe\Documents\Data` (Windows)
   - `/home/johndoe/Documents/Data` (Linux)
 - When the path to the folder contains spaces, do not include quotation marks. Leave the path as it is.
-- When there is no folder at the specified path, the `-–create-dir` flag will tell CraftConnect to create that folder 
+- When there is no folder at the specified path, the `-–create-dir` flag will tell CraftConnect to create that folder
 before inserting the JSON file into it. If the flag is not specified, there **must be** an existing folder at that path.
-- The –create-dir flag can be put anywhere after the export command, so
+- The -–create-dir flag can be put anywhere after the export command, so
   - `export -–create-dir C:\Users\John\Data`
   - `export C:\Users\John\Data -–create-dir`
 
   are all valid commands.
-- It is highly recommended to use an absolute path to ensure that the correct file is imported. 
-Using a relative path (e.g. `Documents/Data/`) may cause unexpected behaviour because the system would not 
+- It is highly recommended to use an absolute path to ensure that the correct file is imported.
+Using a relative path (e.g. `Documents/Data/`) may cause unexpected behaviour because the system would not
 know your current location.
 - If the following conditions are met:
   - There is an existing folder, for example `C:\Users\John\Data`
   - There does not exist a specific file within that folder, for example `C:\Users\John\Data\data.json`
   - An accidental call to import with the path to that file
   - The `-–create-dir` flag is enabled, for example, `export C:\Users\John\Data\data.json –-create-dir`.
-  
-  Then, CraftConnect will create the new folder, for example with name `data.json`, and put the exported data file 
-  into this folder, resulting in the data file being located in `C:\Users\John\Data\data.json\craftconnect.json`. 
+
+  Then, CraftConnect will create the new folder, for example with name `data.json`, and put the exported data file
+  into this folder, resulting in the data file being located in `C:\Users\John\Data\data.json\craftconnect.json`.
   This is to allow for folder names that contain the ‘.’ character.
-- Accidentally calling import with a path to an existing file will return an error.
+- Accidentally calling export with a path to an existing file will return an error.
 
 Examples
-- `export C:\Users\John\Data` will export all data into a file located at `C:\Users\John\Data\craftconnect.json` if the 
+- `export C:\Users\John\Data` will export all data into a file located at `C:\Users\John\Data\craftconnect.json` if the
 folder exists, and returns an error otherwise.
-- `export C:\Users\John\My Data –create-dir` will create a new folder located at `C:\Users\John\My Data` if the folder 
+- `export C:\Users\John\My Data –-create-dir` will create a new folder located at `C:\Users\John\My Data` if the folder
 has not existed, and export all data into a file located at `C:\Users\John\Data\craftconnect.json`.
 
 ### Import data : `import`
 
 Imports new data from a JSON file in the specified path into CraftConnect.
+
+**NOTE**: Before you attempt to alter the data file before import, please refer to [Editing the data file](#editing-the-data-file) section.
+
+**NOTE**: We do not enforce any restriction on the maximum number of characters for paths because this is OS-dependent.
+However, know that OSes will silently truncate long path names (Windows is about 260, Linux is 4096). Please limit
+the path length accordingly.
 
 Format: `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]`
 
@@ -293,15 +300,15 @@ number, or two contacts with the same email address.
   - `C:\Users\JohnDoe\Documents\Data\addressbook.json` (Windows)
   - `/home/johndoe/Documents/Data/addressbook.json` (Linux)
 - When the path to the file contains spaces, do not include quotation marks. Leave the path as it is.
-- It is highly recommended to use an absolute path to ensure that the correct file is imported. 
-Using a relative path (e.g. `Documents/Data/addressbook.json`) may cause unexpected behaviour because the system would 
+- It is highly recommended to use an absolute path to ensure that the correct file is imported.
+Using a relative path (e.g. `Documents/Data/addressbook.json`) may cause unexpected behaviour because the system would
 not know your current location.
-- The optional `--overwrite` flag tells CraftConnect to overwrite existing contacts with new data from the JSON file. 
+- The optional `--overwrite` flag tells CraftConnect to overwrite existing contacts with new data from the JSON file.
 By default, CraftConnect will add new contacts on top of the existing contacts.
-- The optional `--ignore-duplicate` flag tells CraftConnect to ignore duplicated contacts when adding new contacts. 
-By default, if there are duplicated contacts within the JSON file, or a contact in the JSON file is a duplicate of an 
+- The optional `--ignore-duplicate` flag tells CraftConnect to ignore duplicated contacts when adding new contacts.
+By default, if there are duplicated contacts within the JSON file, or a contact in the JSON file is a duplicate of an
 existing contact, CraftConnect will display an error message related to duplicated contacts. For example, there are two
-contacts with the same phone number or email address. The first contact will be added to CraftConnect. If 
+contacts with the same phone number or email address. The first contact will be added to CraftConnect. If
 `--ignore-duplicates` are specified, the second contact is not added to CraftConnect, otherwise, there will be an error
 message about duplicated contacts.
 - Flags can be put anywhere after the `import` command, that is:
@@ -315,13 +322,19 @@ message about duplicated contacts.
   - `import C:/Users/Dummy/data.json --overwrite`
   - `import --ignore-duplicates C:/Users/Dummy/data.json`
   - `import C:/Users/Dummy/data.json --ignore-duplicates`
-  
-  are all valid commands.
-- The file to be imported must exist, have the `.json` extension, and follow the data schema of CraftConnect. 
-It is best for non-technical users to pair the `import` functionality with `export`, to carry data from one 
-CraftConnect address book to another CraftConnect address book.
 
-Examples:
+  are all valid commands.
+- The file to be imported must exist, have the `.json` extension, and follow the data schema of CraftConnect.
+It is best for non-technical users to pair the `import` functionality with `export`, to carry data from one
+CraftConnect address book to another CraftConnect address book.
+- In the current version, if the `--overwrite` flag is specified, and there is any problem with the data file such as
+  - the file is empty
+  - the file content does not conform to the JSON schema of CraftConnect
+  - contains duplicated contacts
+
+  a generic error message that lumps all of these problems into one will be displayed. We will make errors more specific for this case in future versions.
+
+Examples
 
 **Disclaimer**: This is not how data is represented in CraftConnect, but it works as an illustration.
 
@@ -339,9 +352,9 @@ And the `C:\Users\JohnDoe\Documents\My Data\addressbook.json` file contains
 
 See that Ben and Daniel have the same contacts, so they are considered duplicated contacts.
 
-- `import C:\Users\JohnDoe\Documents\My Data\addressbook.json` will add new contacts on top of the current contacts in 
+- `import C:\Users\JohnDoe\Documents\My Data\addressbook.json` will add new contacts on top of the current contacts in
 CraftConnect with new data from the given JSON file.\
-=> **Result**: 
+=> **Result**:
 ```
 Error: Duplicated entries
 ```
@@ -352,8 +365,8 @@ CraftConnect with new data from the given JSON file.
 1. Cheryl, with phone number 97867564
 2. Daniel, with phone number 12345678
 ```
-- `import --ignore-duplicates C:\Users\JohnDoe\Documents\My Data\addressbook.json` will add new contacts on top of the 
-current contacts in CraftConnect with new data from the given JSON file, and will ignore duplicated contacts 
+- `import --ignore-duplicates C:\Users\JohnDoe\Documents\My Data\addressbook.json` will add new contacts on top of the
+current contacts in CraftConnect with new data from the given JSON file, and will ignore duplicated contacts
 (except the first one added).
   => **Result**: CraftConnect will now contain
 ```
@@ -362,14 +375,14 @@ current contacts in CraftConnect with new data from the given JSON file, and wil
 3. Cheryl, with phone number 97867564
 ```
 - `import --overwrite --ignore-duplicates C:\Users\JohnDoe\Documents\My Data\addressbook.json` will replace
-current contacts in CraftConnect with new data from the given JSON file, and will ignore duplicated contacts 
+current contacts in CraftConnect with new data from the given JSON file, and will ignore duplicated contacts
 (except the first one added).
   => **Result**: CraftConnect will now contain
 ```
 1. Cheryl, with phone number 97867564
 2. Daniel, with phone number 12345678
 ```
-=======
+
 ### Reverting changes to the address book : `undo`
 
 Reverts the latest one or more changes to the address book.
@@ -378,11 +391,17 @@ Format: `undo [NUMBER_OF_CHANGES]`
 
 Parameter:
 
-- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer.
+- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer not exceeding 100000.
 If not supplied, defaults to `1`.
+If there are less changes that can be reverted than `NUMBER_OF_CHANGES`, CraftConnect reverts all changes.
 
 Example: `undo`, `undo 3`
 
+<box type="warning" seamless>
+
+**Note:**
+Due to performance limitations, CraftConnect currently can only support reverting up to 100000 changes at once.
+</box>
 
 ### Restoring changes to the address book : `redo`
 
@@ -392,11 +411,25 @@ Format: `redo [NUMBER_OF_CHANGES]`
 
 Parameter:
 
-- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer.
+- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer not exceeding 100000.
 If not supplied, defaults to `1`.
+If there are less changes that can be restored than `NUMBER_OF_CHANGES`, CraftConnect restores all changes.
 
 Example: `redo`, `redo 3`
->>>>>>> master
+
+<box type="warning" seamless>
+
+**Note:**
+Due to performance limitations, CraftConnect currently can only support restoring up to 100000 changes at once.
+</box>
+
+<box type="warning" seamless>
+
+**Caution:**
+Due to implementation limitations, the history of changes will be lost upon exiting the CraftConnect app.
+In addition, any undone changes will be lost, and cannot be restored using `redo`, should the user perform a command that
+changes the address book.
+</box>
 
 ### Clearing all entries : `clear`
 
@@ -416,20 +449,12 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 ### Editing the data file
 
-AddressBook data is saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
-
+AddressBook data is saved automatically as a JSON file `[home folder]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 <box type="warning" seamless>
 
-**Caution:**
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
+
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
-
-In fact, it is safest to not edit the data file. Facilitate any data modification and transfer using commands.
-</box>
-
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -440,7 +465,7 @@ _Details coming soon ..._
 1. Use the `export` command to export the contacts in *Computer A* to a JSON file.
 2. Install CraftConnect in *Computer B*.
 3. Copy the JSON file from *Computer A* to *Computer B*.
-4. In *Computer B*, use the `import` command to transfer the data from the JSON file to the CraftConnect address book 
+4. In *Computer B*, use the `import` command to transfer the data from the JSON file to the CraftConnect address book
 in this computer.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -453,18 +478,18 @@ in this computer.
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command summary
-| Action      | Format, Examples                                                                                                                                                      |
-|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**     | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague` |
-| **Clear**   | `clear`                                                                                                                                                               |
-| **Delete**  | `delete UNIQUE_IDENTIFIER`<br> e.g., `delete 3` / `delete p/98765432`                                                                                                 |                                                                                                  
-| **Edit**    | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                           |                                          
-| **Export**  | `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]` <br> e.g., `export C:\Users\John\Data --create-dir`                                                                   |                                      
-| **Find**    | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`                                                                                                                  |                                     
-| **Filter**  | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`                                                                                                                |                                    
-| **Import**  | `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]` <br> e.g., `import --overwrite C:\Users\John\Data\data.json`                                  |                                   
-| **Note**    | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`                                                                                                                |
-| **List**    | `list`                                                                                                                                                                |
-| **Undo**    | `undo [NUMBER_OF_CHANGES]`<br> e.g., `undo 3`| 
-| **Redo**    | `redo [NUMBER_OF_CHANGES]`<br> e.g., `redo 3`|  
-| **Help**    | `help`                                                                                                                                                                |                                 
+| Action     | Format, Examples                                                                                                                                                      |
+|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague` |
+| **Clear**  | `clear`                                                                                                                                                               |
+| **Delete** | `delete INDEX` or `delete UNIQUE_IDENTIFIER`<br> e.g., `delete 3` / `delete p/98765432`                                                                               |
+| **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                           |
+| **Export** | `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]` <br> e.g., `export C:\Users\John\Data --create-dir`                                                                   |
+| **Find**   | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`                                                                                                                  |
+| **Filter** | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`                                                                                                                |
+| **Import** | `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]` <br> e.g., `import --overwrite C:\Users\John\Data\data.json`                                  |
+| **Note**   | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`                                                                                                                |
+| **List**   | `list`                                                                                                                                                                |
+| **Undo**   | `undo [NUMBER_OF_CHANGES]`<br> e.g., `undo 3`                                                                                                                         |
+| **Redo**   | `redo [NUMBER_OF_CHANGES]`<br> e.g., `redo 3`                                                                                                                         |
+| **Help**   | `help`                                                                                                                                                                |
