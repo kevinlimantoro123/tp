@@ -174,27 +174,34 @@ Format: `filter COMMON_IDENTIFIER`
 * The inputs are case-insensitive e.g. `JOHN` will match `john`.
 
 
-Searching by `NAME` allows for one misspelled or missing letter in each part of the name i.e. surname, last name.
+Searching by `NAME` allows for one misspelled or missing letter in each part of the inputted `NAME` i.e. surname, last name 
+EXCEPT for parts that are one letter long (must be exact).
 If the `NAME` inputted is more than 1 word, contacts that only match part of the `NAME` and are not similar enough will not be listed. 
 
 Examples:
 * `filter n/Alex` can return contacts with names `Alec` and `Alex Yeoh` but not `David`
 * `filter n/Alex Yeoh` can return contacts with names `Alec Yeoh` and `Alex Marvin Yeoh`, but not `Alex Tan` and `Marvin Yeoh`
+* `filter n/A` can return contacts with names `Sam A Tan` and `Sam An` but not `Sam R Tan` and `Alan Tan`
 
 
-Searching by `ADDRESS` allows for two misspelled or missing letters in each part of the address, except for numeric parts (e.g. block number), which must be exact. Unit number is exempted from this exception.
-Contacts that only match part of the `ADDRESS` inputted will not be listed and are not similar enough.
+Searching by `ADDRESS` allows for two misspelled or missing letters in each part of the `ADDRESS`, 
+EXCEPT for non-numeric parts that are one or two letters long (0 and 1 misspelled or missing letters allowed respectively) 
+and numeric parts (e.g. block number, must be exact), though unit number is exempted from this exception.
+Contacts that only match part of the `ADDRESS` inputted and are not similar enough will not be listed .
 
 Examples:
 * `filter a/Blk 123 Geylang St 31` can return contacts with address `Blk 123 Geylang St 31, #06-30` and `Blk 123 Geylang St 31, #06-41` but not `Blk 123 Geylang St 30, #06-31`
 * `filter a/Blk 123 Geylang St 31 #06-40` can return contacts with address `Blk 123 Geylang St 31, #06-30` but not `Blk 123 Geylang St 31` and `Blk 123 Lorong St 31,`
+* `filter a/Mo` can return contacts with address `Blk 123 Ang Mo Kio Street 31` and `Blk 123 Ang Ho Kio Street 31` but not `Blk 123 Li Street 31`
 
-Searching by `TAG` allows for two misspelled or missing letters in each part of the tag. 
+Searching by `TAG` allows for two misspelled or missing letters in each part of the `TAG` 
+EXCEPT for parts that are one or two letters long (0 and 1 misspelled or missing letters allowed respectively). 
 If the `TAG` inputted is more than 1 word, contacts that only match part of the `TAG` and are not similar enough will not be listed.
 
 Examples:
 * `filter t/supplier` can return contacts with the tag `supplier` and `paint supplier`
 * `filter t/paint supplier` can return contacts with the tag `acrylic paint supplier` but not those with the tag `paper supplier`
+* `filter t/e` can return contacts with the tag `e waste disposal` but not `A3 paper supplier`
 
 ### Deleting a contact : `delete`
 
@@ -316,7 +323,6 @@ CraftConnect address book to another CraftConnect address book.
 
 Examples:
 
-<<<<<<< HEAD
 **Disclaimer**: This is not how data is represented in CraftConnect, but it works as an illustration.
 
 Consider a CraftConnect address book with two people:
