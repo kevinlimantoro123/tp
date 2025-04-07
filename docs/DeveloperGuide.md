@@ -11,10 +11,6 @@
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Acknowledgements**
-
---------------------------------------------------------------------------------------------------------------------
-
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
@@ -313,7 +309,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user                                       | restore the most recently undone changes to the contact list |  restore accidentally undone changes |
 
 ### Use cases
-
 (For all use cases below, the **System** is `CraftConnect` and the **Actor** is the `user`, unless specified otherwise)
 <br><br><br>
 **Use case: See the usage instruction**
@@ -639,8 +634,8 @@ contains duplicated contacts with an existing contact in append mode.
     * 2e1. CraftConnect shows an error message about duplicated contacts.
 
       Use case resumes at step 1.
+      <br><br><br>
 
-<br><br><br>
 
 **Use case: Add a note to a contact**
 
