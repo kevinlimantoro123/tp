@@ -25,6 +25,9 @@ public class AddressContainsKeywordsPredicate implements Predicate<Person> {
                         && !StringUtil.containsWordIgnoreCase(address, addressKeywordPart + ",")) {
                 return false;
             }
+            if (addressKeywordPart.length() < 3 && !StringUtil.containsWordIgnoreCase(address, addressKeywordPart)) {
+                return false;
+            }
         }
         return StringUtil.computeCloseness(address, addressKeyword) < 3;
     }

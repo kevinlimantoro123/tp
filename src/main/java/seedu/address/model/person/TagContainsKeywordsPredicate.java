@@ -20,7 +20,16 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         Set<Tag> tags = person.getTags();
-        return tags.stream().anyMatch(tag -> StringUtil.computeCloseness(tag.tagName, tagKeywords) < 3);
+        return tags.stream().anyMatch(tag -> {
+            String tagName = tag.tagName;
+            String[] tagKeywordParts = tagKeywords.split("\\s+");
+            for (String tagKeywordPart : tagKeywordParts) {
+                if (tagKeywordPart.length() < 3 && !StringUtil.containsWordIgnoreCase(tagName, tagKeywordPart)) {
+                    return false;
+                }
+            }
+           return StringUtil.computeCloseness(tagName, tagKeywords) < 3;
+        } );
     }
 
     @Override
