@@ -372,6 +372,7 @@ Parameter:
 
 - `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer not exceeding 100000.
 If not supplied, defaults to `1`.
+If there are less changes that can be reverted than `NUMBER_OF_CHANGES`, CraftConnect reverts all changes.
 
 Example: `undo`, `undo 3`
 
@@ -391,6 +392,7 @@ Parameter:
 
 - `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer not exceeding 100000.
 If not supplied, defaults to `1`.
+If there are less changes that can be restored than `NUMBER_OF_CHANGES`, CraftConnect restores all changes.
 
 Example: `redo`, `redo 3`
 
