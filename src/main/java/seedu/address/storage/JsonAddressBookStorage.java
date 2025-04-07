@@ -59,6 +59,32 @@ public class JsonAddressBookStorage implements AddressBookStorage {
         }
     }
 
+    /**
+     * Mostly similar to {@link #readAddressBook()}, with the only difference that
+     * this will not throw an exception for duplicated contacts (two
+     * contacts share the same unique identifier, which currently includes phone number and email address).
+     *
+     * @param filePath location of the data. Cannot be null.
+     * @throws DataLoadingException if loading the data from storage failed.
+     */
+    @Override
+    public Optional<ReadOnlyAddressBook> readAddressBookIgnoreDuplicates(Path filePath) throws DataLoadingException {
+        requireNonNull(filePath);
+
+        Optional<JsonSerializableAddressBook> jsonAddressBook = JsonUtil.readJsonFile(
+                filePath, JsonSerializableAddressBook.class);
+        if (!jsonAddressBook.isPresent()) {
+            return Optional.empty();
+        }
+
+        try {
+            return Optional.of(jsonAddressBook.get().toModelTypeIgnoreDuplicates());
+        } catch (IllegalValueException ive) {
+            logger.info("Illegal values found in " + filePath + ": " + ive.getMessage());
+            throw new DataLoadingException(ive);
+        }
+    }
+
     @Override
     public void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
         saveAddressBook(addressBook, filePath);

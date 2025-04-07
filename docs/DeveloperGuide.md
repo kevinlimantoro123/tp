@@ -4,44 +4,11 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# CraftConnect Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
 
---------------------------------------------------------------------------------------------------------------------
-## Contents
-[Acknowledgements](#acknowledgements)
-
-[Setting up, getting started](#setting-up-getting-started)
-
-[Design](#design)
-- [Architecture](#architecture)
-- [UI components](#ui-component)
-- [Logic component](#logic-component)
-- [Model component](#model-component)
-- [Storage component](#storage-component)
-- [Common classes](#common-classes)
-
-[Implementation](#implementation)
-- [\[Proposed\] Undo/redo feature](#proposed-undoredo-feature)
-    - [Proposed implementation](#proposed-implementation)
-    - [Design considerations](#design-considerations)
-- [\[Proposed\] Data archiving](#proposed-data-archiving)
-
-[Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
-
-[Appendix: Requirements](#appendix-requirements)
-- [Product scope](#product-scope)
-- [User stories](#user-stories)
-- [Use cases](#use-cases)
-- [Non-Functional Requirements](#non-functional-requirements)
-- [Glossary](#glossary)
-
-[Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
-- [Launch and shutdown](#launch-and-shutdown)
-- [Deleting a contact](#deleting-a-contact)
-- [Saving data](#saving-data)
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Acknowledgements**
@@ -591,7 +558,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to export data by specifying the folder to store the data file, and the flag whether to create
+1. User requests to export data by specifying the folder to store the data file, and whether to create
 a new folder if their specified folder does not exist.
 2. CraftConnect exports the data into a JSON file, stores it in the user's folder and informs the successful export.
 
@@ -610,7 +577,7 @@ a new folder if their specified folder does not exist.
     * 2b1. CraftConnect shows an error message and asks the user to check for spelling.
 
       Use case resumes at step 1.
-    *
+
 * 2c. The folder does not exist, and the option of creating folder if not exists is not specified
 
     * 2c1. CraftConnect shows an error message and tells the user to check for spelling or specify 
@@ -629,7 +596,9 @@ create-folder-if-not-exist.
 
 **MSS**
 
-1. User requests to import data by specifying the path to the file.
+1. User requests to import data by specifying the path to the file, whether to overwrite existing contacts with the
+new contacts from the JSON file or to append new contacts into the existing contacts, and whether to ignore duplicated
+contacts.
 2. CraftConnect replaces the address book contacts with the data from the file and informs the user of the successful 
 import.
 
@@ -648,7 +617,7 @@ import.
   * 2b1. CraftConnect shows an error message and asks the user to check for spelling or choose an existent path.
 
     Use case resumes at step 1.
-  * 
+
 * 2c. The file is not a JSON file
 
     * 2c1. CraftConnect shows an error message and asks the user to specify the path to a JSON file.
@@ -660,6 +629,14 @@ import.
     * 2d1. CraftConnect shows an error message and tells the user the schema it uses to store contacts' data.
 
       Use case resumes at step 1.
+
+* 2e. (Exclusive to when duplicates are not ignored) The JSON file contains duplicated contacts within itself, or it 
+contains duplicated contacts with an existing contact in append mode.
+
+    * 2e1. CraftConnect shows an error message about duplicated contacts.
+
+      Use case resumes at step 1.
+
 <br><br><br>
 
 **Use case: Add a note to a contact**
@@ -729,16 +706,11 @@ import.
     - CraftConnect should be able to hold up to 1000 contacts while keeping all operations under 100ms.
     - CraftConnect should not exceed 200MB RAM during peak operations.
 
-2. **Reliability and Security**
-    - In case of crashing, no data should be lost beyond the last data-modifying operation.
-    - CraftConnect should save backup files every 24 hours.
-    - CraftConnect should check for corrupted or missing data files and restore automatically.
-
-3. **Usability and Accessibility**
+2. **Usability and Accessibility**
     - All errors should be clear and actionable (e.g. if the wrong email format is used, tell the user how a correct email should look like).
     - A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 
-4. **Portability**
+3. **Portability**
     - CraftConnect should work on any _mainstream OS_ as long as it has Java `17` or above installed.
     - Any user should be able to run CraftConnect without needing to install any other applications/dependencies (except Java 17)
 

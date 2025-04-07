@@ -6,32 +6,42 @@
 
 # CraftConnect User Guide
 
-CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
+CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. Our target audience is small business owners, especially in the arts and crafts sector. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
 
 <!-- * Table of Contents -->
 <page-nav-print />
 
 --------------------------------------------------------------------------------------------------------------------
-
 ## Quick start
 
 1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).<br>
+   To check for Java installation, open a command terminal and type `java -version`. You should see a message indicating the version of Java installed. If you do not see this message, please install Java from [here](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar craftconnect.jar` command to run the application.<br>
+   For example, if you put your `craftconnect.jar` file in a folder with path
+   ```shell
+    C:/Users/DummyUser/Documents
+   ```
+   Then, you open the command terminal and do:
+   ```shell
+   cd "C:/Users/DummyUser/Documents"
+   java -jar craftconnect.jar
+   ```
+   
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the address book.
 
    * `filter n/John Doe` : Filters all contacts with the name `John Doe`.
 
@@ -41,9 +51,11 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
    * `clear` : Deletes all contacts.
 
+   * `undo` : Revert a change you accidentally did to the address book.
+
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -52,6 +64,11 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 <box type="info" seamless>
 
 **Notes about the command format:**<br>
+
+* Our commands do not support `/` for any of the parameters. For example, if your name is `John s/o Doe`, you should enter it as `John so Doe` instead of `John s/o Doe`. This is because `/` breaks the command format and causes the command to fail.
+
+* Command words are case-sensitive. Make sure to follow exactly as given in this guide,<br>
+  e.g. `add` is correct but `Add` or `ADD` will not work.
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
@@ -73,7 +90,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
 ### Viewing help : `help`
 
-Shows a message explaning how to access the help page.
+Shows a summary of all available messages, as well as a link to access this User Guide.
 
 Format: `help`
 
@@ -134,7 +151,7 @@ Format: `find UNIQUE_IDENTIFIER`
   * `p/PHONE_NUMBER`
   * `e/EMAIL`
 * This search will always return at most 1 perso when a valid attribute is provided.
-* The inputs are case-sensitive e.g. `JOHN` will not match `john`.
+* The inputs are case-insensitive e.g. `JOHN` will match `john`.
 * Only full words or numbers will be matched e.g. `123` will not match `1234`.
 
 Examples:
@@ -148,19 +165,36 @@ Filters contacts by searching for a common identifier.
 
 Format: `filter COMMON_IDENTIFIER`
 
-* Only 1 common identifier TYPE can be inputted at a time. Note that for tags, multiple tags can be specified for filtering eg. `filter t/friend colleague`.
+* Only 1 common identifier and 1 common identifier TYPE can be inputted at a time.
 * There are 3 common identifiers that can be used to filter for a contact:
     * `n/NAME`
     * `a/ADDRESS`
     * `t/TAG`
-* This search will return all contacts that match the common attribute provided.
+* This search will return all contacts within the user's entire contact list that exactly or approximately match the common attribute provided.
 * The inputs are case-insensitive e.g. `JOHN` will match `john`.
-* Only full words will be matched e.g. `han` will not match `hans`.
+
+
+Searching by `NAME` allows for one misspelled or missing letter in each part of the name i.e. surname, last name.
+If the `NAME` inputted is more than 1 word, contacts that only match part of the `NAME` and are not similar enough will not be listed. 
 
 Examples:
-* `filter n/alex` returns all contacts with the name `alex`
-* `filter a/123 street` returns all contacts with the address `123 street`
-* `filter t/friend` returns all contacts with the tag `friend`
+* `filter n/Alex` can return contacts with names `Alec` and `Alex Yeoh` but not `David`
+* `filter n/Alex Yeoh` can return contacts with names `Alec Yeoh` and `Alex Marvin Yeoh`, but not `Alex Tan` and `Marvin Yeoh`
+
+
+Searching by `ADDRESS` allows for two misspelled or missing letters in each part of the address, except for numeric parts (e.g. block number), which must be exact. Unit number is exempted from this exception.
+Contacts that only match part of the `ADDRESS` inputted will not be listed and are not similar enough.
+
+Examples:
+* `filter a/Blk 123 Geylang St 31` can return contacts with address `Blk 123 Geylang St 31, #06-30` and `Blk 123 Geylang St 31, #06-41` but not `Blk 123 Geylang St 30, #06-31`
+* `filter a/Blk 123 Geylang St 31 #06-40` can return contacts with address `Blk 123 Geylang St 31, #06-30` but not `Blk 123 Geylang St 31` and `Blk 123 Lorong St 31,`
+
+Searching by `TAG` allows for two misspelled or missing letters in each part of the tag. 
+If the `TAG` inputted is more than 1 word, contacts that only match part of the `TAG` and are not similar enough will not be listed.
+
+Examples:
+* `filter t/supplier` can return contacts with the tag `supplier` and `paint supplier`
+* `filter t/paint supplier` can return contacts with the tag `acrylic paint supplier` but not those with the tag `paper supplier`
 
 ### Deleting a contact : `delete`
 
@@ -242,10 +276,12 @@ has not existed, and export all data into a file located at `C:\Users\John\Data\
 
 ### Import data : `import`
 
-Overwrites the current contacts in CraftConnect by new data from a JSON file in the specified path.
+Imports new data from a JSON file in the specified path into CraftConnect.
 
-Format: `import ABSOLUTE_PATH_TO_JSON_FILE`
+Format: `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]`
 
+- Duplicated contacts are contacts with at least 1 identical unique identifier, such as two contacts with the same phone
+number, or two contacts with the same email address.
 - The absolute path refers to the full location of the file starting from the root of the system, for example,
   - `C:\Users\JohnDoe\Documents\Data\addressbook.json` (Windows)
   - `/home/johndoe/Documents/Data/addressbook.json` (Linux)
@@ -253,14 +289,108 @@ Format: `import ABSOLUTE_PATH_TO_JSON_FILE`
 - It is highly recommended to use an absolute path to ensure that the correct file is imported. 
 Using a relative path (e.g. `Documents/Data/addressbook.json`) may cause unexpected behaviour because the system would 
 not know your current location.
+- The optional `--overwrite` flag tells CraftConnect to overwrite existing contacts with new data from the JSON file. 
+By default, CraftConnect will add new contacts on top of the existing contacts.
+- The optional `--ignore-duplicate` flag tells CraftConnect to ignore duplicated contacts when adding new contacts. 
+By default, if there are duplicated contacts within the JSON file, or a contact in the JSON file is a duplicate of an 
+existing contact, CraftConnect will display an error message related to duplicated contacts. For example, there are two
+contacts with the same phone number or email address. The first contact will be added to CraftConnect. If 
+`--ignore-duplicates` are specified, the second contact is not added to CraftConnect, otherwise, there will be an error
+message about duplicated contacts.
+- Flags can be put anywhere after the `import` command, that is:
+  - `import --overwrite --ignore-duplicates C:/Users/Dummy/data.json`
+  - `import --overwrite C:/Users/Dummy/data.json --ignore-duplicates`
+  - `import C:/Users/Dummy/data.json --overwrite --ignore-duplicates`
+  - `import --ignore-duplicates --overwrite C:/Users/Dummy/data.json`
+  - `import --ignore-duplicates C:/Users/Dummy/data.json --overwrite`
+  - `import C:/Users/Dummy/data.json --ignore-duplicates --overwrite`
+  - `import --overwrite C:/Users/Dummy/data.json`
+  - `import C:/Users/Dummy/data.json --overwrite`
+  - `import --ignore-duplicates C:/Users/Dummy/data.json`
+  - `import C:/Users/Dummy/data.json --ignore-duplicates`
+  
+  are all valid commands.
 - The file to be imported must exist, have the `.json` extension, and follow the data schema of CraftConnect. 
 It is best for non-technical users to pair the `import` functionality with `export`, to carry data from one 
 CraftConnect address book to another CraftConnect address book.
 
 Examples:
-- `import C:\Users\JohnDoe\Documents\My Data\addressbook.json` will overwrite the current contacts in CraftConnect 
-with new data from a JSON file located at `C:\Users\JohnDoe\Documents\My Data\addressbook.json`.
 
+<<<<<<< HEAD
+**Disclaimer**: This is not how data is represented in CraftConnect, but it works as an illustration.
+
+Consider a CraftConnect address book with two people:
+```
+1. Alice, with phone number 98765432
+2. Ben, with phone number 12345678
+```
+
+And the `C:\Users\JohnDoe\Documents\My Data\addressbook.json` file contains
+```
+1. Cheryl, with phone number 97867564
+2. Daniel, with phone number 12345678
+```
+
+See that Ben and Daniel have the same contacts, so they are considered duplicated contacts.
+
+- `import C:\Users\JohnDoe\Documents\My Data\addressbook.json` will add new contacts on top of the current contacts in 
+CraftConnect with new data from the given JSON file.\
+=> **Result**: 
+```
+Error: Duplicated entries
+```
+- `import --overwrite C:\Users\JohnDoe\Documents\My Data\addressbook.json` will replace the current contacts in
+CraftConnect with new data from the given JSON file.
+  => **Result**: CraftConnect will now contain
+```
+1. Cheryl, with phone number 97867564
+2. Daniel, with phone number 12345678
+```
+- `import --ignore-duplicates C:\Users\JohnDoe\Documents\My Data\addressbook.json` will add new contacts on top of the 
+current contacts in CraftConnect with new data from the given JSON file, and will ignore duplicated contacts 
+(except the first one added).
+  => **Result**: CraftConnect will now contain
+```
+1. Alice, with phone number 98765432
+2. Ben, with phone number 12345678
+3. Cheryl, with phone number 97867564
+```
+- `import --overwrite --ignore-duplicates C:\Users\JohnDoe\Documents\My Data\addressbook.json` will replace
+current contacts in CraftConnect with new data from the given JSON file, and will ignore duplicated contacts 
+(except the first one added).
+  => **Result**: CraftConnect will now contain
+```
+1. Cheryl, with phone number 97867564
+2. Daniel, with phone number 12345678
+```
+=======
+### Reverting changes to the address book : `undo`
+
+Reverts the latest one or more changes to the address book.
+
+Format: `undo [NUMBER_OF_CHANGES]`
+
+Parameter:
+
+- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer.
+If not supplied, defaults to `1`.
+
+Example: `undo`, `undo 3`
+
+
+### Restoring changes to the address book : `redo`
+
+Restores the latest one or more changes to the address book that were reverted by `undo`.
+
+Format: `redo [NUMBER_OF_CHANGES]`
+
+Parameter:
+
+- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer.
+If not supplied, defaults to `1`.
+
+Example: `redo`, `redo 3`
+>>>>>>> master
 
 ### Clearing all entries : `clear`
 
@@ -287,6 +417,8 @@ AddressBook data is saved automatically as a JSON file `[JAR file location]/data
 **Caution:**
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+
+In fact, it is safest to not edit the data file. Facilitate any data modification and transfer using commands.
 </box>
 
 ### Archiving data files `[coming in v2.0]`
@@ -298,7 +430,12 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Assume you transfer data from *Computer A* to *Computer B*,
+1. Use the `export` command to export the contacts in *Computer A* to a JSON file.
+2. Install CraftConnect in *Computer B*.
+3. Copy the JSON file from *Computer A* to *Computer B*.
+4. In *Computer B*, use the `import` command to transfer the data from the JSON file to the CraftConnect address book 
+in this computer.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -319,7 +456,9 @@ _Details coming soon ..._
 | **Export**  | `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]` <br> e.g., `export C:\Users\John\Data --create-dir`                                                                   |                                      
 | **Find**    | `find UNIQUE_IDENTIFIER`<br> e.g., `find p/86253723`                                                                                                                  |                                     
 | **Filter**  | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`                                                                                                                |                                    
-| **Import**  | `import ABSOLUTE_PATH_TO_JSON_FILE` <br> e.g., `export C:\Users\John\Data\data.json`                                                                                  |                                   
+| **Import**  | `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]` <br> e.g., `import --overwrite C:\Users\John\Data\data.json`                                  |                                   
 | **Note**    | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`                                                                                                                |
-| **List**    | `list`                                                                                                                                                                |                                  
+| **List**    | `list`                                                                                                                                                                |
+| **Undo**    | `undo [NUMBER_OF_CHANGES]`<br> e.g., `undo 3`| 
+| **Redo**    | `redo [NUMBER_OF_CHANGES]`<br> e.g., `redo 3`|  
 | **Help**    | `help`                                                                                                                                                                |                                 

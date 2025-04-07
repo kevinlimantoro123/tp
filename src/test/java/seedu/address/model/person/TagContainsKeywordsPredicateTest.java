@@ -10,44 +10,56 @@ import seedu.address.testutil.PersonBuilder;
 
 
 public class TagContainsKeywordsPredicateTest {
-    private String oneTag = "friends";
-    private String multipleTags = "friends family colleagues";
-    private TagContainsKeywordsPredicate oneTagPredicate = new TagContainsKeywordsPredicate(oneTag);
-    private TagContainsKeywordsPredicate multipleTagsPredicate = new TagContainsKeywordsPredicate(multipleTags);
+    private String oneWordTag = "friends";
+    private String multiWordTag = "friends and neighbours";
+    private TagContainsKeywordsPredicate oneWordTagPredicate = new TagContainsKeywordsPredicate(oneWordTag);
+    private TagContainsKeywordsPredicate otherTagPredicate = new TagContainsKeywordsPredicate("dummy");
 
     @Test
     public void equals() {
         // same object -> returns true
-        assertTrue(oneTagPredicate.equals(oneTagPredicate));
+        assertTrue(oneWordTagPredicate.equals(oneWordTagPredicate));
 
         // same values -> returns true
-        TagContainsKeywordsPredicate oneTagPredicateCopy = new TagContainsKeywordsPredicate(oneTag);
-        assertTrue(oneTagPredicate.equals(oneTagPredicateCopy));
+        TagContainsKeywordsPredicate oneWordTagPredicateCopy = new TagContainsKeywordsPredicate(oneWordTag);
+        assertTrue(oneWordTagPredicate.equals(oneWordTagPredicateCopy));
 
         // different types -> returns false
-        assertFalse(oneTagPredicate.equals(1));
+        assertFalse(oneWordTagPredicate.equals(1));
 
         // null -> returns false
-        assertFalse(oneTagPredicate.equals(null));
+        assertFalse(oneWordTagPredicate.equals(null));
 
         // different person -> returns false
-        assertFalse(oneTagPredicate.equals(multipleTagsPredicate));
+        assertFalse(oneWordTagPredicate.equals(otherTagPredicate));
     }
 
     @Test
     public void test_tagContainsKeyword_returnsTrue() {
-        assertTrue(oneTagPredicate.test(new PersonBuilder().withTags(oneTag).build()));
-        assertTrue(oneTagPredicate.test(new PersonBuilder().withTags("friends").build()));
-        // Tests not working because of new tag implementation
-        //assertTrue(multipleTagsPredicate.test(new PersonBuilder().withTags("friends").build()));
-        //assertTrue(multipleTagsPredicate.test(new PersonBuilder()
-        //      .withTags("friends").withTags("family").withTags("colleagues").build()));
+        // Exact keyword
+        assertTrue(oneWordTagPredicate.test(new PersonBuilder().withTags(oneWordTag).build()));
+
+        // Keyword matches part of tag
+        assertTrue(oneWordTagPredicate.test(new PersonBuilder().withTags(multiWordTag).build()));
+
+        // Less than 3 typos
+        assertTrue(oneWordTagPredicate.test(new PersonBuilder().withTags("frinds").build()));
+
+        // Matches for person with multiple tags
+        assertTrue(oneWordTagPredicate.test(new PersonBuilder().withTags(multiWordTag).withTags(multiWordTag).build()));
     }
 
     @Test
     public void test_tagDoesNotContainsKeyword_returnsFalse() {
-        assertFalse(oneTagPredicate.test(new PersonBuilder().withTags("family").build()));
-        assertFalse(multipleTagsPredicate.test(new PersonBuilder().withTags("employees").build()));
+        // Non-matching keyword
+        assertFalse(oneWordTagPredicate.test(new PersonBuilder().withTags("family").build()));
+
+        // 3 or more typos
+        assertFalse(oneWordTagPredicate.test(new PersonBuilder().withTags("freid").build()));
+
+        // Keyword has more than what is available
+        assertFalse(new AddressContainsKeywordsPredicate(multiWordTag)
+                .test(new PersonBuilder().withTags("friends").build()));
     }
 
 

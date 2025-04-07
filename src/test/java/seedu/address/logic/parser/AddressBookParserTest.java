@@ -108,7 +108,7 @@ public class AddressBookParserTest {
         String filepath = "???";
         assertTrue(parser.parseCommand(ImportCommand.COMMAND_WORD + " " + filepath) instanceof ImportCommand);
         assertEquals(
-                new ImportCommand(filepath),
+                new ImportCommand(filepath, false, false),
                 parser.parseCommand(ImportCommand.COMMAND_WORD + " " + filepath)
         );
     }

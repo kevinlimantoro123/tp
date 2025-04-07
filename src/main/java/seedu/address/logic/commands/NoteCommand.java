@@ -10,6 +10,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.modifications.NoteMod;
 import seedu.address.model.person.Note;
 import seedu.address.model.person.Person;
 
@@ -60,6 +61,8 @@ public class NoteCommand extends Command {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        model.commitAddressBook(new NoteMod(personToEdit, note));
 
         return new CommandResult(String.format(MESSAGE_ADD_NOTE_SUCCESS, Messages.format(editedPerson)));
     }

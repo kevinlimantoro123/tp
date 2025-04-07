@@ -30,7 +30,7 @@ public class ExportCommand extends FileBasedCommand {
             + "Note that if you accidentally specify the folder path to look like a file, such as: \n"
             + ">> export C:/Users/DummyUser/Documents/CraftConnect/data.json\n"
             + "and your desired intention is to put a 'data.json' file in the folder\n"
-            + "C:/Users/DummyUser/Documents/CraftConnect\n,and the " + ExportCommandParser.CREATES_DIRECTORY_FLAG
+            + "C:/Users/DummyUser/Documents/CraftConnect\n, and the " + ExportCommandParser.CREATES_DIRECTORY_FLAG
             + " flag is enabled, "
             + "CraftConnect will create a data.json folder on top of your desired folder and put the "
             + "data export file in that folder.\n"
@@ -39,7 +39,7 @@ public class ExportCommand extends FileBasedCommand {
             + "However, if there is an existing file at that path, an error message will be displayed.\n\n"
             + "We also recommend using the absolute folder path so that you know where the file will be.\n";
 
-    public static final String MESSAGE_SUCCESS = "Data successfully exported at \n%s\n!";
+    public static final String MESSAGE_SUCCESS = "Export successful! Your exported data is located at:\n%s\n";
     public static final String MESSAGE_ERROR = "Command aborted due to failure to export data.\n%s";
     public static final String MESSAGE_USER_PATH = "Your file path: %s\n";
     public static final String MESSAGE_FOLDER_DOES_NOT_EXIST = "The specified folder does not exist. "
@@ -52,7 +52,7 @@ public class ExportCommand extends FileBasedCommand {
     public static final String MESSAGE_ERROR_COPYING_DATA = "Cannot copy CraftConnect data to export file. "
             + "Please check if you have enough space, or choose another path.";
     public static final String MESSAGE_TOO_MANY_ARGUMENTS = "Too many arguments specified!\n"
-            + "Please make sure that you only supply the folder path "
+            + "Please make sure that you only supply ONE folder path "
             + "(and optionally, " + ExportCommandParser.CREATES_DIRECTORY_FLAG + ")\n";
 
     private final boolean createsDirectory;

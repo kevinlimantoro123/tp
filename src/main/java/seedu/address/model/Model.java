@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -119,4 +120,18 @@ public interface Model {
      * @throws CannotRedoException If no more redos are possible.
      */
     Modification redoAddressBook() throws CannotRedoException;
+
+    /**
+     * Undoes the last n (or all, if there are less than n) modifications to the address book.
+     * @param numberOfTimes The value of n.
+     * @returns The list of Modifications that were undone.
+     */
+    List<Modification> undoAddressBookMultiple(int numberOfTimes);
+
+    /**
+     * Restores the last n (or all, if there are less than n) undone modifications to the address book.
+     * @param numberOfTimes The value of n.
+     * @returns The list of Modifications that were undone.
+     */
+    List<Modification> redoAddressBookMultiple(int numberOfTimes);
 }

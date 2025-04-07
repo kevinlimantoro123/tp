@@ -8,7 +8,6 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +25,7 @@ import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
 import seedu.address.storage.StorageManager;
+import seedu.address.testutil.FileUtil;
 
 public class ExportCommandTest {
     private static Model model;
@@ -42,6 +42,8 @@ public class ExportCommandTest {
 
     /**
      * Create a temporary directory and its stub files.
+     * This involves creating folders, so a temporary directory is set up instead of using
+     * the available data files for testing.
      *
      * @throws Exception any exception from reading, loading files... A correct setup would not throw Exceptions.
      */
@@ -64,75 +66,8 @@ public class ExportCommandTest {
         defaultUserPrefsFile = new File(tempDir.toFile(), "preferences.json");
 
         // set up stub files for address book data and user preferences data
-        String defaultJsonContent = """
-                {
-                  "persons" : [ {
-                    "name" : "Alex Yeoh",
-                    "phone" : "87438807",
-                    "email" : "alexyeoh@example.com",
-                    "address" : "Blk 30 Geylang Street 29, #06-40",
-                    "tags" : [ "customer" ],
-                    "note" : "Note 1"
-                  }, {
-                    "name" : "Bernice Yu",
-                    "phone" : "99272758",
-                    "email" : "berniceyu@example.com",
-                    "address" : "Blk 30 Lorong 3 Serangoon Gardens, #07-18",
-                    "tags" : [ "bulkbuyer", "customer" ],
-                    "note" : ""
-                  }, {
-                    "name" : "Charlotte Oliveiro",
-                    "phone" : "93210283",
-                    "email" : "charlotte@example.com",
-                    "address" : "Blk 11 Ang Mo Kio Street 74, #11-04",
-                    "tags" : [ "boothRentalCraftFes" ],
-                    "note" : ""
-                  }, {
-                    "name" : "David Li",
-                    "phone" : "91031282",
-                    "email" : "lidavid@example.com",
-                    "address" : "Blk 436 Serangoon Gardens Street 26, #16-43",
-                    "tags" : [ "keychainManufacturer" ],
-                    "note" : ""
-                  }, {
-                    "name" : "Irfan Ibrahim",
-                    "phone" : "92492021",
-                    "email" : "irfan@example.com",
-                    "address" : "Blk 47 Tampines Street 20, #17-35",
-                    "tags" : [ "stickerMaterialSupplier" ],
-                    "note" : "Frequent buyer who always comes every week"
-                  }, {
-                    "name" : "Roy Balakrishnan",
-                    "phone" : "92624417",
-                    "email" : "royb@example.com",
-                    "address" : "Blk 45 Aljunied Street 85, #11-31",
-                    "tags" : [ "boothRentalConnectiCon" ],
-                    "note" : "Consistent supplier with good quality materials"
-                  } ]
-                }
-                                """;
-
-        try (FileWriter fileWriter = new FileWriter(defaultJsonFile)) {
-            fileWriter.write(defaultJsonContent);
-        }
-
-        String defaultUserPrefsContent = String.format("""
-                {
-                  "guiSettings" : {
-                    "windowWidth" : 719.3333129882812,
-                    "windowHeight" : 668.6666870117188,
-                    "windowCoordinates" : {
-                      "x" : 424,
-                      "y" : 171
-                    }
-                  },
-                  "addressBookFilePath" : "%s"
-                }
-                                """, defaultJsonFile.getAbsolutePath().replace("\\", "\\\\"));
-
-        try (FileWriter fileWriter = new FileWriter(defaultUserPrefsFile)) {
-            fileWriter.write(defaultUserPrefsContent);
-        }
+        FileUtil.populateDefaultJsonFile(defaultJsonFile);
+        FileUtil.populateDefaultUserPrefsFile(defaultUserPrefsFile, defaultJsonFile);
 
         storage = new StorageManager(
                 new JsonAddressBookStorage(defaultJsonFile.toPath()),

@@ -1,0 +1,11 @@
+{
+  "guiSettings" : {
+    "windowWidth" : 719.3333129882812,
+    "windowHeight" : 668.6666870117188,
+    "windowCoordinates" : {
+      "x" : 424,
+      "y" : 171
+    }
+  },
+  "addressBookFilePath" : "/Users/kevinlimantoro/IdeaProjects/tp/src/test/data/FileBasedCommandTest/addressbook.json"
+}
