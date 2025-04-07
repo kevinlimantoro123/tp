@@ -39,6 +39,10 @@ public class TagContainsKeywordsPredicateTest {
         // Exact keyword
         assertTrue(oneWordTagPredicate.test(new PersonBuilder().withTags(oneWordTag).build()));
 
+        // Two letters or fewer keyword
+        TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate("e");
+        assertTrue(predicate.test(new PersonBuilder().withTags("e waste disposal").build()));
+
         // Keyword matches part of tag
         assertTrue(oneWordTagPredicate.test(new PersonBuilder().withTags(multiWordTag).build()));
 
@@ -53,6 +57,10 @@ public class TagContainsKeywordsPredicateTest {
     public void test_tagDoesNotContainsKeyword_returnsFalse() {
         // Non-matching keyword
         assertFalse(oneWordTagPredicate.test(new PersonBuilder().withTags("family").build()));
+
+        // Two letters or fewer keyword
+        TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate("o");
+        assertFalse(predicate.test(new PersonBuilder().withTags("e waste disposal").build()));
 
         // 3 or more typos
         assertFalse(oneWordTagPredicate.test(new PersonBuilder().withTags("freid").build()));
