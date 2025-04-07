@@ -152,6 +152,117 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 --------------------------------------------------------------------------------------------------------------------
 
+## **Implementation**
+
+This sections describes the details on how certain features are implemented for CraftConnect.
+
+### Undo / Redo Feature
+
+#### Implementation
+
+The undo/redo mechanism is facilitated by `AddressBookStateManager`. It wraps around an `AddressBook` and adds an undo/redo history, stored internally as a `List` of `AddressBookStateNode`s named `addressBookStates`, and a `currentStatePointer`. Additionally, it implements the following operations:
+
+* `AddressBookStateManager#commit(Modification)` — Saves the current address book state in its history. This takes in a `Modification` argument describing the change done.
+* `AddressBookStateManager#undo()` — Restores the previous address book state from its history. Also returns the `Modification` undone.
+* `AddressBookStateManager#redo()` — Restores a previously undone address book state from its history. Also returns the `Modification` restored.
+
+<puml src="diagrams/AddressBookStateManagerClassDiagram.puml" alt="AddressBookStateManagerClassDiagram" />
+
+These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+
+Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The `AddressBookStateManager` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+
+<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
+
+Step 2. The user executes `delete 5` command to delete the 5th contact in the address book. The `delete` command calls `Model#commitAddressBook(DeleteMod)`, causing the modified state of the address book after the `delete 5` command executes to be stored along with the `DeleteMod` in a new `AddressBookStateNode`, and the `currentStatePointer` is shifted to the newly inserted address book state node.
+
+<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
+
+Step 3. The user executes `add n/David …​` to add a new contact. The `add` command calls `Model#commitAddressBook(AddMod)`, causing another modified address book state to be stored along with the `DeleteMod` in a new `AddressBookStateNode`.
+
+<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
+
+<box type="info" seamless>
+
+**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+
+</box>
+
+Step 4. The user now decides that adding the contact was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state node, and restores the address book to that state. It also returns the `AddMod` which is used to inform the user of the change that is undone.
+
+<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
+
+
+<box type="info" seamless>
+
+**Note:** If the `currentStatePointer` is at index 0, pointing to the initial address book state node, then there are no previous states to restore. When this happens, the `AddressBookStateManager#undo` method will throw a `CannotUndoException`, informing the model that there are no more changes to undo.
+
+</box>
+
+The following sequence diagram shows how an undo operation goes through the `Logic` component:
+
+<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+
+</box>
+
+Similarly, how an undo operation goes through the `Model` component is shown below:
+
+<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
+
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+
+<box type="info" seamless>
+
+**Note:** If the `currentStatePointer` is at index `addressBookStates.size() - 1`, pointing to the latest address book state node, then there are no undone address book states to restore. When this happens, the `AddressBookStateManager#redo` method will throw a `CannotRedoException`, informing the model that there are no more changes to undo.
+
+</box>
+
+Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStates` remains unchanged.
+
+<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
+
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStates`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command, and continuing to store this state will result in a tree structure, which is both hard to implement and hard to navigate. This is the behavior that most modern desktop applications follow.
+
+<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
+
+The following activity diagram summarizes what happens when a user executes a new command:
+
+<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
+
+#### Design considerations:
+
+**Aspect: How undo & redo executes:**
+
+* **Alternative 1 (current choice):** Saves the entire address book.
+    * Pros: Easy to implement.
+    * Cons: May have performance issues in terms of memory usage.
+
+* **Alternative 2:** Individual command knows how to undo/redo by
+  itself.
+    * Pros: Will use less memory (e.g. for `delete`, just save the contact being deleted).
+    * Cons: We must ensure that the implementation of each individual command are correct.
+
+### Note Feature
+This feature allows the user to add a note to an existing contact. When a user is first created, it has an empty string as the value of its note field. Users
+can use this to keep track of any additional information they want to remember about a contact.
+
+#### Design Considerations
+* **Current implementation:** Uses the index of the contact in the current list
+    * Pros: Easy to implement, and easy to understand
+    * Cons: The index of the contact may change if the user filters the list, and the user may not remember the index of the contact they want to edit.
+
+* **Alternative 1:** Uses a contact's attributes
+    * Pros: The user can use any attribute of the contact to identify it (name, phone, email, etc.)
+    * Cons: The attribute chosen may not be unique and can cause confusion
+
+--------------------------------------------------------------------------------------------------------------------
+
 ## **Documentation, logging, testing, configuration, dev-ops**
 
 * [Documentation guide](Documentation.md)
@@ -198,8 +309,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user                                       | export my contacts to a file         | back up my contacts or share them with others                                          |
 | `* *`    | user                                       | import new data from a file          | restore my address book or merge contacts from another source                          |
 | `* *`    | user                                       | add a note to a contact by index      | add specific information about certain contacts                                       |
-| `* *`    | user                                       | undo the most recent change to the contact list    | restore an incorrect edit or delete |
-| `* *`    | user                                       | restore the most recently undone change to the contact list |  restore an accidentally undone change |
+| `* *`    | user                                       | undo the most recent changes to the contact list    | revert incorrect changes |
+| `* *`    | user                                       | restore the most recently undone changes to the contact list |  restore accidentally undone changes |
 
 ### Use cases
 
@@ -557,43 +668,79 @@ contains duplicated contacts with an existing contact in append mode.
       Use case resumes at step 3.
 <br><br><br>
 
-**Use case: Undo the most recent change to the contact list**
+**Use case: Undo the most recent changes to the contact list**
 
 **MSS**
 
-1. User requests to undo the most recent change to the contact list
-2. CraftConnect restores the state of the contact list to before the most recent change
+1. User requests to undo the most `N` recent changes to the contact list
+2. CraftConnect restores the state of the contact list to before the `N-th` most recent change
 
     Use case ends.
 
 **Extensions**
 
-* 1a. There are no changes to undo
+* 1a. The user specifies a non-positive `N`
 
-  * 1a1. CraftConnect shows an error message and informs the user that there are no changes to undo.
+  * 1a1. CraftConnect shows an error message and instructs the user to specify a positive `N`.
+  
+    Use case resumes from step 1.
+
+* 1b. `N` is greater than 100000
+
+  * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 100000.
+  
+    Use case resumes from step 1.
+
+* 1c. There are no changes to undo
+
+  * 1c1. CraftConnect shows an error message and informs the user that there are no changes to undo.
+  
+    Use case ends.
+
+* 1d. N is greater than the number of changes available to undo
+
+  * 1d1. CraftConnect undoes all changes and informs the user about the number of changes undone.
   
     Use case ends.
 <br><br><br>
 
-**Use case: Restore the most recent undone change to the contact list**
+**Use case: Restore the most recently undone changes to the contact list**
 
 **MSS**
 
-1. User requests to restore the most recent undone change to the contact list
-2. CraftConnect restores the state of the contact list to after the undone change
+1. User requests to restore the N most recent undone changes to the contact list
+2. CraftConnect restores the state of the contact list to after the N-th most recently undone change
 
     Use case ends.
 
 **Extensions**
 
-* 1a. There are no changes to restore
 
-  * 1a1. CraftConnect shows an error message and informs the user that there are no changes to restore.
+* 1a. The user specifies a non-positive `N`
+
+  * 1a1. CraftConnect shows an error message and instructs the user to specify a positive `N`.
+  
+    Use case resumes from step 1.
+
+* 1b. `N` is greater than 100000
+
+  * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 100000.
+  
+    Use case resumes from step 1.
+
+* 1c. There are no changes to restore
+
+  * 1c1. CraftConnect shows an error message and informs the user that there are no changes to restore.
+  
+    Use case ends.
+
+* 1d. N is greater than the number of changes available to restore
+
+  * 1d1. CraftConnect restores all changes and informs the user about the number of changes restored.
   
     Use case ends.
 <br><br><br>
 
-*{More to be added}*
 
 ### Non-Functional Requirements
 
@@ -651,43 +798,15 @@ testers are expected to do more *exploratory* testing.
 
 ### Deleting a contact
 
-1. Prerequisites: List all contacts using the `list` command. Multiple contacts in the list.
-2. If there is not a contact with phone number 123, add a contact with such a phone number.
-    `add n/dummy e/dummy@example.com p/123 a/dummydummy`
-   If there is not a contact with phone number 456, add a contact with such a phone number.
-    `add n/dummy2 e/dummy2@example.com p/456 a/dummydummy2`
-   If there is not a contact with email address dummy3@example.com, add a contact with such an email address.
-    `add n/dummy3 e/dummy3@example.com p/789 a/dummydummy3`
-   If there is not a contact with email address dummy4@example.com, add a contact with such an email address.
-    `add n/dummy4 e/dummy4@example.com p/012 a/dummydummy4`
+1. Deleting a contact while all contacts are being shown
 
-3. Test case: `delete 1`<br>
-   Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    1. Prerequisites: List all contacts using the `list` command. Multiple contacts in the list.
 
-4. Test case: `delete 0`<br>
-   Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
+    2. Test case: `delete 1`<br>
+       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-5. Test case: `delete p/123`<br>
-   Expected: the contact with phone number 123 is deleted. 
-   Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    3. Test case: `delete 0`<br>
+       Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
 
-6. Test case: `filter a/5`, `delete p/456`
-   Expected: even though the contact with phone number 456 is filtered out, deletion by phone number still succeeds.
-   Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-
-7. Test case: `delete e/dummy3@example.com`<br>
-  Expected: the contact with the email address dummy3@example.com is deleted.
-  Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-
-8. Test case: `filter a/5`, `delete e/dummy4@example.com`
-  Expected: even though the contact with email address dummy4@example.com is filtered out, deletion by email address still succeeds.
-  Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-
-9. Other incorrect delete commands to try: 
-   - `delete` 
-   - `delete x` (where x is larger than the list size)
-   - `delete e\NON_EXISTENT_EMAIL`
-   - `delete p\NON_EXISTENT_PHONE`
-   - `...`
-         Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
-
+    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+       Expected: Similar to previous.
