@@ -17,6 +17,7 @@ import seedu.address.model.modifications.AddMod;
 import seedu.address.model.modifications.ClearMod;
 import seedu.address.model.modifications.DeleteMod;
 import seedu.address.model.modifications.EditMod;
+import seedu.address.model.modifications.ImportMod;
 import seedu.address.model.modifications.Modification;
 import seedu.address.model.modifications.NoteMod;
 import seedu.address.model.person.Note;
@@ -33,7 +34,7 @@ public class UndoCommandTest {
     @BeforeEach
     public void setUp() {
         samplePersons = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             samplePersons.add(new PersonBuilder()
                 .withName(Integer.toString((i + 1)))
                 .withEmail(Integer.toString((i + 1)) + "@gmail.com")
@@ -46,10 +47,11 @@ public class UndoCommandTest {
         sampleModifications.add(new DeleteMod(samplePersons.get(1)));
         sampleModifications.add(new EditMod(samplePersons.get(1), samplePersons.get(2)));
         sampleModifications.add(new NoteMod(samplePersons.get(3), new Note("sample note")));
+        sampleModifications.add(new ImportMod("asdasdasd", false));
         sampleModifications.add(new ClearMod());
 
         sampleModels = new ArrayList<>();
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= samplePersons.size(); i++) {
             Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
             for (int j = 0; j < i; j++) {
                 model.addPerson(samplePersons.get(j));
@@ -58,7 +60,7 @@ public class UndoCommandTest {
             sampleModels.add(model);
         }
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        for (int j = 0; j < 5; j++) {
+        for (int j = 0; j < samplePersons.size(); j++) {
             model.addPerson(samplePersons.get(j));
             model.commitAddressBook(sampleModifications.get(j));
         }
@@ -67,28 +69,14 @@ public class UndoCommandTest {
 
     @Test
     public void undoOnce_changesMade_success() {
-        Model model = sampleModels.get(5);
+        Model model = sampleModels.get(samplePersons.size());
         UndoCommand undoCommand = new UndoCommand(1);
-        assertCommandSuccess(undoCommand, model,
-                String.format(UndoCommand.MESSAGE_SUCCESS,
-                sampleModifications.get(4).getUserDescription()),
-                sampleModels.get(4));
-        assertCommandSuccess(undoCommand, model,
-                String.format(UndoCommand.MESSAGE_SUCCESS,
-                sampleModifications.get(3).getUserDescription()),
-                sampleModels.get(3));
-        assertCommandSuccess(undoCommand, model,
-                String.format(UndoCommand.MESSAGE_SUCCESS,
-                sampleModifications.get(2).getUserDescription()),
-                sampleModels.get(2));
-        assertCommandSuccess(undoCommand, model,
-                String.format(UndoCommand.MESSAGE_SUCCESS,
-                sampleModifications.get(1).getUserDescription()),
-                sampleModels.get(1));
-        assertCommandSuccess(undoCommand, model,
-                String.format(UndoCommand.MESSAGE_SUCCESS,
-                sampleModifications.get(0).getUserDescription()),
-                sampleModels.get(0));
+        for (int i = samplePersons.size() - 1; i >= 0; i--) {
+            assertCommandSuccess(undoCommand, model,
+                    String.format(UndoCommand.MESSAGE_SUCCESS,
+                    sampleModifications.get(i).getUserDescription()),
+                    sampleModels.get(i));
+        }
     }
 
     @Test
@@ -100,8 +88,8 @@ public class UndoCommandTest {
 
     @Test
     public void undoMultiple_changesMade_success() {
-        Model model = sampleModels.get(5);
-        Model expectedModel = sampleModels.get(2);
+        Model model = sampleModels.get(samplePersons.size());
+        Model expectedModel = sampleModels.get(samplePersons.size() - 3);
 
         UndoCommand undoCommand = new UndoCommand(3);
         assertCommandSuccess(undoCommand, model,
@@ -110,11 +98,11 @@ public class UndoCommandTest {
 
     @Test
     public void undoMoreThanAvailable_changesMade_success() {
-        Model model = sampleModels.get(5);
+        Model model = sampleModels.get(samplePersons.size());
         Model expectedModel = sampleModels.get(0);
 
         UndoCommand undoCommand = new UndoCommand(100);
         assertCommandSuccess(undoCommand, model,
-                String.format(UndoCommand.MESSAGE_SUCCESS_MULTIPLE, 5, 100), expectedModel);
+                String.format(UndoCommand.MESSAGE_SUCCESS_MULTIPLE, samplePersons.size(), 100), expectedModel);
     }
 }
