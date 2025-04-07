@@ -30,7 +30,11 @@ public class RedoCommandParser implements Parser<RedoCommand> {
         }
 
         if (numberOfTimes <= 0) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RedoCommand.MESSAGE_USAGE));
+            throw new ParseException(RedoCommand.MESSAGE_NOT_POSITIVE);
+        }
+
+        if (numberOfTimes > 100000) {
+            throw new ParseException(RedoCommand.MESSAGE_LIMIT_EXCEEDED);
         }
 
         return new RedoCommand(numberOfTimes);
