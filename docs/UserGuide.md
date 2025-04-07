@@ -238,6 +238,10 @@ and puts the file into a folder whose absolute path is specified.
 
 **NOTE**: Before you attempt to alter the data file after export, please refer to [Editing the data file](#editing-the-data-file) section.
 
+**NOTE**: We do not enforce any restriction on the maximum number of characters for paths because this is OS-dependent. 
+However, know that OSes will silently truncate long path names (Windows is about 260, Linux is 4096). Please limit 
+the path length accordingly.
+
 Format: `export ABSOLUTE_PATH_TO_FOLDER [--create-dir]`
 
 - The absolute path refers to the full location of the file starting from the root of the system, for example,
@@ -276,6 +280,10 @@ has not existed, and export all data into a file located at `C:\Users\John\Data\
 Imports new data from a JSON file in the specified path into CraftConnect.
 
 **NOTE**: Before you attempt to alter the data file before import, please refer to [Editing the data file](#editing-the-data-file) section.
+
+**NOTE**: We do not enforce any restriction on the maximum number of characters for paths because this is OS-dependent.
+However, know that OSes will silently truncate long path names (Windows is about 260, Linux is 4096). Please limit
+the path length accordingly.
 
 Format: `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]`
 
