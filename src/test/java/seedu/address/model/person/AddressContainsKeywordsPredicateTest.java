@@ -37,7 +37,7 @@ public class AddressContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void test_nameContainsKeywords_returnsTrue() {
+    public void test_addressContainsKeywords_returnsTrue() {
         // Exact keyword
         AddressContainsKeywordsPredicate predicate =
                 new AddressContainsKeywordsPredicate("Blk 123 dummy St 31");
@@ -47,16 +47,25 @@ public class AddressContainsKeywordsPredicateTest {
         predicate = new AddressContainsKeywordsPredicate("Blk 123 dummi St 31, #06-41");
         assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31, #06-42").build()));
 
+        // 2 letter or less non-numeric keyword
+        predicate = new AddressContainsKeywordsPredicate("Mo");
+        assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123 Ang Ho Kim St 31, #06-42").build()));
+        assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123 Ang Mo Kio St 31, #06-41").build()));
+
         // Keyword matches some part of address
         predicate = new AddressContainsKeywordsPredicate("Blk 123");
         assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31").build()));
     }
 
     @Test
-    public void test_nameDoesNotContainKeywords_returnsFalse() {
+    public void test_addressDoesNotContainKeywords_returnsFalse() {
         // Non-matching keyword
         AddressContainsKeywordsPredicate predicate =
                 new AddressContainsKeywordsPredicate("Blk 321 dummy St 31");
+        assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123 example St 31").build()));
+
+        // 2 letter or less non-numeric keyword
+        predicate = new AddressContainsKeywordsPredicate("Mo");
         assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123 example St 31").build()));
 
         // More than two typos (non-numeric part)

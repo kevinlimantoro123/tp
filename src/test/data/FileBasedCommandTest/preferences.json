@@ -7,5 +7,5 @@
       "y" : 171
     }
   },
-  "addressBookFilePath" : "/Users/kevinlimantoro/IdeaProjects/tp/src/test/data/FileBasedCommandTest/addressbook.json"
+  "addressBookFilePath" : ".\\addressbook.json"
 }

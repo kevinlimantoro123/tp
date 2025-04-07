@@ -261,7 +261,6 @@ can use this to keep track of any additional information they want to remember a
     * Pros: The user can use any attribute of the contact to identify it (name, phone, email, etc.)
     * Cons: The attribute chosen may not be unique and can cause confusion
 
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -297,6 +296,7 @@ mouse/GUI driven app.
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
+
 | Priority | As a …​                                    | I want to …​                         | So that I can…​                                                                        |
 |----------|--------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------|
 | `* * *`  | new user                                   | see usage instructions               | refer to instructions when I forget how to use the App                                 |
@@ -322,6 +322,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. User requests to see the usage instructions.
 2. CraftConnect displays the usage instructions.
+
+   Use case ends.
    <br><br><br>
 
 **Use case: Add a new contact**
@@ -387,6 +389,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3a. The input is invalid.
 
     * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
+      
+      **NOTE**: : a non-positive index or an index outside the range of a Java integer results in an invalid command format
+          exception, because these can be detected during the parsing phase. A positive index that is outside the range
+          of the contact list can only be detected at command execution phase, so another message will be returned.
 
       Use case resumes at step 3.
 
@@ -423,6 +429,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
 
     * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
+
+      **NOTE**: : a non-positive index or an index outside the range of a Java integer results in an invalid command format
+      exception, because these can be detected during the parsing phase. A positive index that is outside the range
+      of the contact list can only be detected at command execution phase, so another message will be returned.
 
       Use case resumes at step 3.
 
@@ -650,6 +660,10 @@ contains duplicated contacts with an existing contact in append mode.
 * 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
 
     * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
+      
+      **NOTE**: a non-positive index or an index outside the range of a Java integer results in an invalid command format
+        exception, because these can be detected during the parsing phase. A positive index that is outside the range
+        of the contact list can only be detected at command execution phase, so another message will be returned.
 
       Use case resumes at step 3.
 <br><br><br>
@@ -752,7 +766,7 @@ contains duplicated contacts with an existing contact in append mode.
     * Storage (HDD/SDD): 100MB of free disk space
     * Graphics: Integrated GPU (Intel HD Graphics 300 or equivalent)
     * Disk Speed: HDD (5400 RPM) or SSD if available.
-* **Contacts**: Contacts are considered to be unique if and only if they have a unique email and phone number. Thus, two contacts can still have the same names
+* **Contacts**: Contacts are considered to be unique if and only if they have a unique email and phone number. Thus, two contacts can still have the same names.
 
 --------------------------------------------------------------------------------------------------------------------
 
