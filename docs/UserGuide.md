@@ -22,7 +22,16 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
 3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
-4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar craftconnect.jar` command to run the application.<br>
+   For example, if you put your `craftconnect.jar` file in a folder with path
+   ```shell
+    C:/Users/DummyUser/Documents
+   ```
+   Then, you open the command terminal and do:
+   ```shell
+   cd "C:/Users/DummyUser/Documents"
+   java -jar craftconnect.jar
+   ```
    
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
