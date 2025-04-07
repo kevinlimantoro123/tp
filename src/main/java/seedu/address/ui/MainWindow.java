@@ -56,6 +56,7 @@ public class MainWindow extends UiPart<Stage> {
     public MainWindow(Stage primaryStage, Logic logic) {
         super(FXML, primaryStage);
 
+        primaryStage.setTitle("CraftConnect");
         // Set dependencies
         this.primaryStage = primaryStage;
         this.logic = logic;

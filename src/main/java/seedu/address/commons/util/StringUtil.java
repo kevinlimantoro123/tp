@@ -59,6 +59,7 @@ public class StringUtil {
         requireNonNull(s);
 
         try {
+            s = s.split(",")[0];
             int value = Integer.parseInt(s);
             return value > 0 && !s.startsWith("+"); // "+1" is successfully parsed by Integer#parseInt(String)
         } catch (NumberFormatException nfe) {
@@ -76,11 +77,11 @@ public class StringUtil {
         int[][] dp = new int[w1.length() + 1][w2.length() + 1];
 
         // Base cases, if one string is empty, return the length of the other string
-        for (int i = 0; i < w1.length(); i++) {
+        for (int i = 0; i <= w1.length(); i++) {
             dp[i][0] = i;
         }
 
-        for (int j = 0; j < w2.length(); j++) {
+        for (int j = 0; j <= w2.length(); j++) {
             dp[0][j] = j;
         }
 
@@ -98,7 +99,6 @@ public class StringUtil {
                 }
             }
         }
-
         return dp;
     }
 
@@ -149,16 +149,10 @@ public class StringUtil {
             double minDistanceToKw = Double.MAX_VALUE;
 
             for (String dw : descriptionWords) {
-                if (dw.contains(kw)) {
-                    minDistanceToKw = 0;
-                    break;
-                }
-
                 minDistanceToKw = Math.min(minDistanceToKw, getEditDistance(dw, kw));
             }
 
-            // sum the smallest edit distances for each keyword word up
-            distance += minDistanceToKw;
+            distance = Math.max(distance, minDistanceToKw);
         }
 
         return distance;

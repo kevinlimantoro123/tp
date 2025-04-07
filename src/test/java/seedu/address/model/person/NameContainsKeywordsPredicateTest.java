@@ -37,14 +37,21 @@ public class NameContainsKeywordsPredicateTest {
 
     @Test
     public void test_nameContainsKeywords_returnsTrue() {
-        // One keyword
+        // Exact match
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate("Alice");
         assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
 
+        // One typo
+        predicate = new NameContainsKeywordsPredicate("Alixe");
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
 
         // Non-capitalised name
         predicate = new NameContainsKeywordsPredicate("alice");
         assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
+
+        // Keyword matches part of a name
+        predicate = new NameContainsKeywordsPredicate("alice");
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Yeo").build()));
     }
 
     @Test
@@ -52,6 +59,18 @@ public class NameContainsKeywordsPredicateTest {
         // Non-matching keyword
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate("Carol");
         assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
+
+        // More than one typo
+        predicate = new NameContainsKeywordsPredicate("Alese");
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
+
+        // Part of keyword matches but not the other part
+        predicate = new NameContainsKeywordsPredicate("Alice Tan");
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Yeo").build()));
+
+        // Keyword has more than what is available
+        predicate = new NameContainsKeywordsPredicate("Alice Pauline Tan");
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Tan").build()));
     }
 
     @Test

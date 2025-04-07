@@ -6,23 +6,24 @@
 
 # CraftConnect User Guide
 
-CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
+CraftConnect is a simple desktop app that makes managing your contacts **faster and easier**. Our target audience is small business owners, especially in the arts and crafts sector. It combines the quick typing of a command-line tool with the familiar look of a regular app. Whether you’re keeping track of suppliers or customers, CraftConnect helps you stay organized and get things done in less time.
 
 <!-- * Table of Contents -->
 <page-nav-print />
 
 --------------------------------------------------------------------------------------------------------------------
-
 ## Quick start
 
 1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).<br>
+   To check for Java installation, open a command terminal and type `java -version`. You should see a message indicating the version of Java installed. If you do not see this message, please install Java from [here](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html).
 
 2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
 3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+   
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -31,7 +32,7 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the address book.
 
    * `filter n/John Doe` : Filters all contacts with the name `John Doe`.
 
@@ -40,6 +41,8 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
    * `clear` : Deletes all contacts.
+
+   * `undo` : Revert a change you accidentally did to the address book.
 
    * `exit` : Exits the app.
 
@@ -52,6 +55,11 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 <box type="info" seamless>
 
 **Notes about the command format:**<br>
+
+* Our commands do not support `/` for any of the parameters. For example, if your name is `John s/o Doe`, you should enter it as `John so Doe` instead of `John s/o Doe`. This is because `/` breaks the command format and causes the command to fail.
+
+* Command words are case-sensitive. Make sure to follow exactly as given in this guide,<br>
+  e.g. `add` is correct but `Add` or `ADD` will not work.
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
@@ -73,12 +81,11 @@ CraftConnect is a simple desktop app that makes managing your contacts **faster 
 
 ### Viewing help : `help`
 
-Shows a message explaning how to access the help page.
-
-![help message](images/helpMessage.png)
+Shows a summary of all available messages, as well as a link to access this User Guide.
 
 Format: `help`
 
+![help message](images/helpMessage.png)
 
 ### Adding a contact: `add`
 
@@ -114,8 +121,8 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 **Tip:** You can remove all the contact’s tags by typing `t/` without specifying any tags after it.
 </box>
 
+* At least one of the optional fields must be provided. Edit command must contain at least 1 attribute that is changed to be successful.
 * Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * Can only edit the phone number and email if they are unique (No duplicates in the address book).
 * When editing tags, the existing tags of the contact will be removed i.e adding of tags is not cumulative.
@@ -135,7 +142,7 @@ Format: `find UNIQUE_IDENTIFIER`
   * `p/PHONE_NUMBER`
   * `e/EMAIL`
 * This search will always return at most 1 perso when a valid attribute is provided.
-* The inputs are case-sensitive e.g. `JOHN` will not match `john`.
+* The inputs are case-insensitive e.g. `JOHN` will match `john`.
 * Only full words or numbers will be matched e.g. `123` will not match `1234`.
 
 Examples:
@@ -149,19 +156,36 @@ Filters contacts by searching for a common identifier.
 
 Format: `filter COMMON_IDENTIFIER`
 
-* Only 1 common identifier TYPE can be inputted at a time. Note that for tags, multiple tags can be specified for filtering eg. `filter t/friend colleague`.
+* Only 1 common identifier and 1 common identifier TYPE can be inputted at a time.
 * There are 3 common identifiers that can be used to filter for a contact:
     * `n/NAME`
     * `a/ADDRESS`
     * `t/TAG`
-* This search will return all contacts that match the common attribute provided.
+* This search will return all contacts within the user's entire contact list that exactly or approximately match the common attribute provided.
 * The inputs are case-insensitive e.g. `JOHN` will match `john`.
-* Only full words will be matched e.g. `han` will not match `hans`.
+
+
+Searching by `NAME` allows for one misspelled or missing letter in each part of the name i.e. surname, last name.
+If the `NAME` inputted is more than 1 word, contacts that only match part of the `NAME` and are not similar enough will not be listed. 
 
 Examples:
-* `filter n/alex` returns all contacts with the name `alex`
-* `filter a/123 street` returns all contacts with the address `123 street`
-* `filter t/friend` returns all contacts with the tag `friend`
+* `filter n/Alex` can return contacts with names `Alec` and `Alex Yeoh` but not `David`
+* `filter n/Alex Yeoh` can return contacts with names `Alec Yeoh` and `Alex Marvin Yeoh`, but not `Alex Tan` and `Marvin Yeoh`
+
+
+Searching by `ADDRESS` allows for two misspelled or missing letters in each part of the address, except for numeric parts (e.g. block number), which must be exact. Unit number is exempted from this exception.
+Contacts that only match part of the `ADDRESS` inputted will not be listed and are not similar enough.
+
+Examples:
+* `filter a/Blk 123 Geylang St 31` can return contacts with address `Blk 123 Geylang St 31, #06-30` and `Blk 123 Geylang St 31, #06-41` but not `Blk 123 Geylang St 30, #06-31`
+* `filter a/Blk 123 Geylang St 31 #06-40` can return contacts with address `Blk 123 Geylang St 31, #06-30` but not `Blk 123 Geylang St 31` and `Blk 123 Lorong St 31,`
+
+Searching by `TAG` allows for two misspelled or missing letters in each part of the tag. 
+If the `TAG` inputted is more than 1 word, contacts that only match part of the `TAG` and are not similar enough will not be listed.
+
+Examples:
+* `filter t/supplier` can return contacts with the tag `supplier` and `paint supplier`
+* `filter t/paint supplier` can return contacts with the tag `acrylic paint supplier` but not those with the tag `paper supplier`
 
 ### Deleting a contact : `delete`
 
@@ -195,7 +219,7 @@ Format: `note INDEX nt/NOTE`
 **Tip:** To clear the current note of a contact, just use `note INDEX nt/`
 </box>
 
-* Adding a new contact will create a contact with an empty note
+* Adding a new contact will create a contact with an empty note.
 * When using filter or find, the current list will be updated to a filtered list. The `INDEX` now refers to the index number shown in the filtered contacts list.
 * Note that the note command is not cumulative and will overwrite the existing note.
 
@@ -283,6 +307,7 @@ CraftConnect address book to another CraftConnect address book.
 
 Examples:
 
+<<<<<<< HEAD
 **Disclaimer**: This is not how data is represented in CraftConnect, but it works as an illustration.
 
 Consider a CraftConnect address book with two people:
@@ -329,6 +354,34 @@ current contacts in CraftConnect with new data from the given JSON file, and wil
 1. Cheryl, with phone number 97867564
 2. Daniel, with phone number 12345678
 ```
+=======
+### Reverting changes to the address book : `undo`
+
+Reverts the latest one or more changes to the address book.
+
+Format: `undo [NUMBER_OF_CHANGES]`
+
+Parameter:
+
+- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer.
+If not supplied, defaults to `1`.
+
+Example: `undo`, `undo 3`
+
+
+### Restoring changes to the address book : `redo`
+
+Restores the latest one or more changes to the address book that were reverted by `undo`.
+
+Format: `redo [NUMBER_OF_CHANGES]`
+
+Parameter:
+
+- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer.
+If not supplied, defaults to `1`.
+
+Example: `redo`, `redo 3`
+>>>>>>> master
 
 ### Clearing all entries : `clear`
 
@@ -396,5 +449,7 @@ in this computer.
 | **Filter**  | `filter COMMON_IDENTIFIER`<br> e.g., `filter t/friend`                                                                                                                |                                    
 | **Import**  | `import ABSOLUTE_PATH_TO_JSON_FILE [--overwrite] [--ignore-duplicates]` <br> e.g., `import --overwrite C:\Users\John\Data\data.json`                                  |                                   
 | **Note**    | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Sample note`                                                                                                                |
-| **List**    | `list`                                                                                                                                                                |                                  
+| **List**    | `list`                                                                                                                                                                |
+| **Undo**    | `undo [NUMBER_OF_CHANGES]`<br> e.g., `undo 3`| 
+| **Redo**    | `redo [NUMBER_OF_CHANGES]`<br> e.g., `redo 3`|  
 | **Help**    | `help`                                                                                                                                                                |                                 

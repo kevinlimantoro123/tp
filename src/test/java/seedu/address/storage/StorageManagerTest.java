@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -61,8 +63,31 @@ public class StorageManagerTest {
     }
 
     @Test
+    public void addressBookReadIgnoreDuplicatesSave() throws Exception {
+        /*
+         * Note: This is an integration test that verifies the StorageManager is properly wired to the
+         * {@link JsonAddressBookStorage} class.
+         * More extensive testing of UserPref saving/reading is done in {@link JsonAddressBookStorageTest} class.
+         */
+        Path tempDir = Files.createTempDirectory("storageManagerTest");
+        File testFile = new File(tempDir.toFile(), "test.json");
+
+        AddressBook original = getTypicalAddressBook();
+        storageManager.saveAddressBook(original, testFile.toPath());
+        ReadOnlyAddressBook retrieved = storageManager.readAddressBookIgnoreDuplicates(testFile.toPath()).get();
+        assertEquals(original, new AddressBook(retrieved));
+
+        Files.deleteIfExists(testFile.toPath());
+        Files.delete(tempDir);
+    }
+
+    @Test
     public void getAddressBookFilePath() {
         assertNotNull(storageManager.getAddressBookFilePath());
     }
 
+    @Test
+    public void getUserPrefsFilePath() {
+        assertNotNull(storageManager.getUserPrefsFilePath());
+    }
 }

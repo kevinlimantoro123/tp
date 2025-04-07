@@ -38,9 +38,17 @@ public class AddressContainsKeywordsPredicateTest {
 
     @Test
     public void test_nameContainsKeywords_returnsTrue() {
-        // One keyword
+        // Exact keyword
         AddressContainsKeywordsPredicate predicate =
                 new AddressContainsKeywordsPredicate("Blk 123 dummy St 31");
+        assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31").build()));
+
+        // Less than 3 typos (non-numeric part)
+        predicate = new AddressContainsKeywordsPredicate("Blk 123 dummi St 31, #06-41");
+        assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31, #06-42").build()));
+
+        // Keyword matches some part of address
+        predicate = new AddressContainsKeywordsPredicate("Blk 123");
         assertTrue(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31").build()));
     }
 
@@ -51,6 +59,17 @@ public class AddressContainsKeywordsPredicateTest {
                 new AddressContainsKeywordsPredicate("Blk 321 dummy St 31");
         assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123 example St 31").build()));
 
+        // More than two typos (non-numeric part)
+        predicate = new AddressContainsKeywordsPredicate("Blk 123 dunni St 31");
+        assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31").build()));
+
+        // One typo (numeric part)
+        predicate = new AddressContainsKeywordsPredicate("Blk 124 dummy St 31");
+        assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31").build()));
+
+        // Keyword has more than what is available
+        predicate = new AddressContainsKeywordsPredicate("Blk 123 dummy St 31, #06-40");
+        assertFalse(predicate.test(new PersonBuilder().withAddress("Blk 123 dummy St 31").build()));
     }
 
     @Test
