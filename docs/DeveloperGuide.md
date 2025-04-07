@@ -13,8 +13,6 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -316,8 +314,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user                                       | export my contacts to a file         | back up my contacts or share them with others                                          |
 | `* *`    | user                                       | import new data from a file          | restore my address book or merge contacts from another source                          |
 | `* *`    | user                                       | add a note to a contact by index      | add specific information about certain contacts                                       |
-| `* *`    | user                                       | undo the most recent change to the contact list    | restore an incorrect edit or delete |
-| `* *`    | user                                       | restore the most recently undone change to the contact list |  restore an accidentally undone change |
+| `* *`    | user                                       | undo the most recent changes to the contact list    | revert incorrect changes |
+| `* *`    | user                                       | restore the most recently undone changes to the contact list |  restore accidentally undone changes |
 
 ### Use cases
 
@@ -661,43 +659,79 @@ contains duplicated contacts with an existing contact in append mode.
       Use case resumes at step 3.
 <br><br><br>
 
-**Use case: Undo the most recent change to the contact list**
+**Use case: Undo the most recent changes to the contact list**
 
 **MSS**
 
-1. User requests to undo the most recent change to the contact list
-2. CraftConnect restores the state of the contact list to before the most recent change
+1. User requests to undo the most `N` recent changes to the contact list
+2. CraftConnect restores the state of the contact list to before the `N-th` most recent change
 
     Use case ends.
 
 **Extensions**
 
-* 1a. There are no changes to undo
+* 1a. The user specifies a non-positive `N`
 
-  * 1a1. CraftConnect shows an error message and informs the user that there are no changes to undo.
+  * 1a1. CraftConnect shows an error message and instructs the user to specify a positive `N`.
+  
+    Use case resumes from step 1.
+
+* 1b. `N` is greater than 100000
+
+  * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 100000.
+  
+    Use case resumes from step 1.
+
+* 1c. There are no changes to undo
+
+  * 1c1. CraftConnect shows an error message and informs the user that there are no changes to undo.
+  
+    Use case ends.
+
+* 1d. N is greater than the number of changes available to undo
+
+  * 1d1. CraftConnect undoes all changes and informs the user about the number of changes undone.
   
     Use case ends.
 <br><br><br>
 
-**Use case: Restore the most recent undone change to the contact list**
+**Use case: Restore the most recently undone changes to the contact list**
 
 **MSS**
 
-1. User requests to restore the most recent undone change to the contact list
-2. CraftConnect restores the state of the contact list to after the undone change
+1. User requests to restore the N most recent undone changes to the contact list
+2. CraftConnect restores the state of the contact list to after the N-th most recently undone change
 
     Use case ends.
 
 **Extensions**
 
-* 1a. There are no changes to restore
 
-  * 1a1. CraftConnect shows an error message and informs the user that there are no changes to restore.
+* 1a. The user specifies a non-positive `N`
+
+  * 1a1. CraftConnect shows an error message and instructs the user to specify a positive `N`.
+  
+    Use case resumes from step 1.
+
+* 1b. `N` is greater than 100000
+
+  * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 100000.
+  
+    Use case resumes from step 1.
+
+* 1c. There are no changes to restore
+
+  * 1c1. CraftConnect shows an error message and informs the user that there are no changes to restore.
+  
+    Use case ends.
+
+* 1d. N is greater than the number of changes available to restore
+
+  * 1d1. CraftConnect restores all changes and informs the user about the number of changes restored.
   
     Use case ends.
 <br><br><br>
 
-*{More to be added}*
 
 ### Non-Functional Requirements
 
@@ -753,8 +787,6 @@ testers are expected to do more *exploratory* testing.
     2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-3. _{ more test cases …​ }_
-
 ### Deleting a contact
 
 1. Deleting a contact while all contacts are being shown
@@ -769,13 +801,3 @@ testers are expected to do more *exploratory* testing.
 
     4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
        Expected: Similar to previous.
-
-2. _{ more test cases …​ }_
-
-### Saving data
-
-1. Dealing with missing/corrupted data files
-
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-2. _{ more test cases …​ }_
