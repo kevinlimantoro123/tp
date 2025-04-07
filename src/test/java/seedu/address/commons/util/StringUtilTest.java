@@ -251,4 +251,40 @@ public class StringUtilTest {
         assertTrue(extraOneCharCloseness < alsoNotRelatedCloseness);
         assertTrue(wrongOneCharCloseness < alsoNotRelatedCloseness);
     }
+
+    @Test
+    public void wrapText() {
+        String lessThan100 = "hello world";
+        String oneBlockMoreThan100 = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
+        String moreThanOneBlockMoreThan100 = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
+
+        String expectedLessThan100 = lessThan100 + "\n";
+        String expectedOneBlockMoreThan100 = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n"
+                + "-iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n"
+                + "-iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n";
+        String expectedMoreThanOneBlockMoreThan100 =
+                "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n"
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n"
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n";
+
+        assertEquals(expectedLessThan100, StringUtil.wrapText(lessThan100));
+        assertEquals(
+                expectedOneBlockMoreThan100,
+                StringUtil.wrapText(oneBlockMoreThan100)
+        );
+        assertEquals(
+                expectedMoreThanOneBlockMoreThan100,
+                StringUtil.wrapText(moreThanOneBlockMoreThan100)
+        );
+    }
 }

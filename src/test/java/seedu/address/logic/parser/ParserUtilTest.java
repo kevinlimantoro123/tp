@@ -11,12 +11,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Note;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 
@@ -192,5 +194,35 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseNote_validNote_returnsNote() throws ParseException {
+        String validNote1 = "hello world";
+        String validNote2 = "alsoHelloWorld";
+        String validNote3 = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii ";
+
+        Note actualNote1 = ParserUtil.parseNote(validNote1);
+        Note actualNote2 = ParserUtil.parseNote(validNote2);
+        Note actualNote3 = ParserUtil.parseNote(validNote3);
+
+        assertEquals(new Note(validNote1), actualNote1);
+        assertEquals(new Note(validNote2), actualNote2);
+        assertEquals(new Note(validNote3), actualNote3);
+    }
+
+    @Test
+    public void parseNote_invalidNote_throwsParseException() {
+        String invalidNote = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii "
+                + "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii i";
+
+        Assertions.assertThrows(ParseException.class, () -> ParserUtil.parseNote(invalidNote));
     }
 }
