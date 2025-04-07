@@ -160,7 +160,7 @@ This sections describes the details on how certain features are implemented for 
 
 #### Implementation
 
-The undo/redo mechanism is facilitated by `AddressBookStateManager`. It wraps around an `AddressBook` and adds an undo/redo history, stored internally as a `List` of `AddressBookStateNode`s named `addressBookStates`, and a `currentStatePointer`. Additionally, it implements the following operations:
+The undo/redo mechanism is facilitated by `AddressBookStateManager`. It wraps around an `AddressBook` and adds an undo/redo history, stored internally as a `List` of `AddressBookStateNode`s named `addressBookStateHistory`, and a `currentStatePointer`. Additionally, it implements the following operations:
 
 * `AddressBookStateManager#commit(Modification)` — Saves the current address book state in its history. This takes in a `Modification` argument describing the change done.
 * `AddressBookStateManager#undo()` — Restores the previous address book state from its history. Also returns the `Modification` undone.
