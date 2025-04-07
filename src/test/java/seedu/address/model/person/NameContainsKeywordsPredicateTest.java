@@ -41,6 +41,11 @@ public class NameContainsKeywordsPredicateTest {
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate("Alice");
         assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
 
+        // One letter keyword
+        predicate = new NameContainsKeywordsPredicate("A");
+        assertTrue(predicate.test(new PersonBuilder().withName("Sam A Tan").build()));
+        assertTrue(predicate.test(new PersonBuilder().withName("Sam An").build()));
+
         // One typo
         predicate = new NameContainsKeywordsPredicate("Alixe");
         assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
@@ -59,6 +64,10 @@ public class NameContainsKeywordsPredicateTest {
         // Non-matching keyword
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate("Carol");
         assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
+
+        // One letter keyword
+        predicate = new NameContainsKeywordsPredicate("A");
+        assertFalse(predicate.test(new PersonBuilder().withName("Sam R Tan").build()));
 
         // More than one typo
         predicate = new NameContainsKeywordsPredicate("Alese");

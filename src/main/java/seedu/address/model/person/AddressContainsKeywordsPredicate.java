@@ -21,10 +21,11 @@ public class AddressContainsKeywordsPredicate implements Predicate<Person> {
         String[] addressKeywordParts = addressKeyword.split("\\s+");
         for (String addressKeywordPart: addressKeywordParts) {
             if ((StringUtil.isNonZeroUnsignedInteger(addressKeywordPart)
-                        && !StringUtil.containsWordIgnoreCase(address, addressKeywordPart, false)
-                        && !StringUtil.containsWordIgnoreCase(address, addressKeywordPart + ",", false))
+                        && !StringUtil.containsWordIgnoreCase(address, addressKeywordPart, false, null)
+                        && !StringUtil.containsWordIgnoreCase(address, addressKeywordPart + ",", false, null))
                     || (addressKeywordPart.length() < 3
-                        && !StringUtil.containsWordIgnoreCase(address, addressKeywordPart, true))) {
+                        && !StringUtil.containsWordIgnoreCase(address, addressKeywordPart, true,
+                    addressKeywordPart.length()))) {
                 return false;
             }
         }

@@ -21,7 +21,7 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
         String[] nameKeywordParts = nameKeyword.split("\\s+");
         for (String nameKeywordPart : nameKeywordParts) {
             if (nameKeywordPart.length() < 2
-                    && !StringUtil.containsWordIgnoreCase(name, nameKeywordPart, true)) {
+                    && !StringUtil.containsWordIgnoreCase(name, nameKeywordPart, true, 2)) {
                 return false;
             }
         }
