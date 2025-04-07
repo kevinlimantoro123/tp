@@ -13,8 +13,6 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -753,8 +751,6 @@ testers are expected to do more *exploratory* testing.
     2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-3. _{ more test cases …​ }_
-
 ### Deleting a contact
 
 1. Deleting a contact while all contacts are being shown
@@ -767,15 +763,9 @@ testers are expected to do more *exploratory* testing.
     3. Test case: `delete 0`<br>
        Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
 
-    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-       Expected: Similar to previous.
+    4.
+       
 
-2. _{ more test cases …​ }_
+           4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+              Expected: Similar to previous.
 
-### Saving data
-
-1. Dealing with missing/corrupted data files
-
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-2. _{ more test cases …​ }_
