@@ -12,7 +12,7 @@ import seedu.address.model.person.exceptions.CannotUndoException;
  */
 public class AddressBookStateManager {
     private AddressBook addressBook;
-    private final List<AddressBookStateNode> addressBookStateHistory;
+    private final List<AddressBookStateNode> addressBookStates;
     private int currentStatePointer;
 
     /**
@@ -21,8 +21,8 @@ public class AddressBookStateManager {
      */
     public AddressBookStateManager(AddressBook addressBook) {
         this.addressBook = addressBook;
-        this.addressBookStateHistory = new ArrayList<AddressBookStateNode>();
-        this.addressBookStateHistory.add(new AddressBookStateNode(new AddressBook(this.addressBook), null));
+        this.addressBookStates = new ArrayList<AddressBookStateNode>();
+        this.addressBookStates.add(new AddressBookStateNode(new AddressBook(this.addressBook), null));
         this.currentStatePointer = 0;
     }
 
@@ -33,11 +33,11 @@ public class AddressBookStateManager {
      */
     public void commit(Modification modification) {
         assert(modification != null);
-        assert(currentStatePointer >= 0 && currentStatePointer < addressBookStateHistory.size());
-        if (addressBookStateHistory.size() - 1 > currentStatePointer) {
-            addressBookStateHistory.subList(currentStatePointer + 1, addressBookStateHistory.size()).clear();
+        assert(currentStatePointer >= 0 && currentStatePointer < addressBookStates.size());
+        if (addressBookStates.size() - 1 > currentStatePointer) {
+            addressBookStates.subList(currentStatePointer + 1, addressBookStates.size()).clear();
         }
-        addressBookStateHistory.add(new AddressBookStateNode(new AddressBook(this.addressBook), modification));
+        addressBookStates.add(new AddressBookStateNode(new AddressBook(this.addressBook), modification));
         currentStatePointer++;
     }
 
@@ -46,15 +46,15 @@ public class AddressBookStateManager {
      * @returns The Modification that was undone.
      */
     public Modification undo() throws CannotUndoException {
-        assert(currentStatePointer >= 0 && currentStatePointer < addressBookStateHistory.size());
+        assert(currentStatePointer >= 0 && currentStatePointer < addressBookStates.size());
         if (currentStatePointer == 0) {
             throw new CannotUndoException();
         }
 
-        Modification undoneMod = addressBookStateHistory.get(currentStatePointer).getModification();
+        Modification undoneMod = addressBookStates.get(currentStatePointer).getModification();
 
         currentStatePointer--;
-        AddressBookStateNode node = addressBookStateHistory.get(currentStatePointer);
+        AddressBookStateNode node = addressBookStates.get(currentStatePointer);
         this.addressBook.resetData(node.getState());
 
         assert(node != null);
@@ -67,13 +67,13 @@ public class AddressBookStateManager {
      * @returns The Modification that was undone.
      */
     public Modification redo() throws CannotRedoException {
-        assert(currentStatePointer >= 0 && currentStatePointer < addressBookStateHistory.size());
-        if (currentStatePointer == addressBookStateHistory.size() - 1) {
+        assert(currentStatePointer >= 0 && currentStatePointer < addressBookStates.size());
+        if (currentStatePointer == addressBookStates.size() - 1) {
             throw new CannotRedoException();
         }
 
         currentStatePointer++;
-        AddressBookStateNode node = addressBookStateHistory.get(currentStatePointer);
+        AddressBookStateNode node = addressBookStates.get(currentStatePointer);
         this.addressBook.resetData(node.getState());
 
         assert(node != null);
