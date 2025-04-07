@@ -24,7 +24,8 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
             String tagName = tag.tagName;
             String[] tagKeywordParts = tagKeywords.split("\\s+");
             for (String tagKeywordPart : tagKeywordParts) {
-                if (tagKeywordPart.length() < 3 && !StringUtil.containsWordIgnoreCase(tagName, tagKeywordPart)) {
+                if (tagKeywordPart.length() < 3
+                        && !StringUtil.containsWordIgnoreCase(tagName, tagKeywordPart, true)) {
                     return false;
                 }
             }

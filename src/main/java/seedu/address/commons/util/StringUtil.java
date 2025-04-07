@@ -23,7 +23,7 @@ public class StringUtil {
      * @param sentence cannot be null
      * @param word cannot be null, cannot be empty, must be a single word
      */
-    public static boolean containsWordIgnoreCase(String sentence, String word) {
+    public static boolean containsWordIgnoreCase(String sentence, String word, boolean isLetter) {
         requireNonNull(sentence);
         requireNonNull(word);
 
@@ -34,8 +34,10 @@ public class StringUtil {
         String preppedSentence = sentence;
         String[] wordsInPreppedSentence = preppedSentence.split("\\s+");
 
-        return Arrays.stream(wordsInPreppedSentence)
-                .anyMatch(preppedWord::equalsIgnoreCase);
+        return isLetter ? Arrays.stream(wordsInPreppedSentence).anyMatch(wordInPreppedSentence ->
+                wordInPreppedSentence.length() == 1 ? wordInPreppedSentence.equalsIgnoreCase(preppedWord)
+                        : computeCloseness(wordInPreppedSentence, preppedWord) < 2)
+                        : Arrays.stream(wordsInPreppedSentence).anyMatch(preppedWord::equalsIgnoreCase);
     }
 
     /**
