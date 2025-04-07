@@ -17,7 +17,15 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        return StringUtil.computeCloseness(person.getName().fullName, nameKeyword) < 2;
+        String name = person.getName().fullName;
+        String[] nameKeywordParts = nameKeyword.split("\\s+");
+        for (String nameKeywordPart : nameKeywordParts) {
+            if (nameKeywordPart.length() < 2
+                    && !StringUtil.containsWordIgnoreCase(name, nameKeywordPart, true, 2)) {
+                return false;
+            }
+        }
+        return StringUtil.computeCloseness(name, nameKeyword) < 2;
     }
 
     @Override

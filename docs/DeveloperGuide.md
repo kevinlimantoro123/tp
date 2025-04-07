@@ -13,8 +13,6 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -154,123 +152,6 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Implementation**
-
-This sections describes the details on how certain features are implemented for CraftConnect.
-
-### \[Proposed\] Undo/redo feature
-
-#### Proposed Implementation
-
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
-
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
-
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
-
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
-
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
-
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
-
-Step 2. The user executes `delete 5` command to delete the 5th contact in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
-
-Step 3. The user executes `add n/David …​` to add a new contact. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
-
-<box type="info" seamless>
-
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</box>
-
-Step 4. The user now decides that adding the contact was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
-
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
-
-</box>
-
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
-
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
-
-<box type="info" seamless>
-
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</box>
-
-Similarly, how an undo operation goes through the `Model` component is shown below:
-
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</box>
-
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
-
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
-
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
-
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-    * Pros: Easy to implement.
-    * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-    * Pros: Will use less memory (e.g. for `delete`, just save the contact being deleted).
-    * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### Note Feature
-This feature allows the user to add a note to an existing contact. When a user is first created, it has an empty string as the value of its note field. Users
-can use this to keep track of any additional information they want to remember about a contact.
-
-#### Design Considerations
-* **Current implementation:** Uses the index of the contact in the current list
-    * Pros: Easy to implement, and easy to understand
-    * Cons: The index of the contact may change if the user filters the list, and the user may not remember the index of the contact they want to edit.
-
-* **Alternative 1:** Uses a contact's attributes
-    * Pros: The user can use any attribute of the contact to identify it (name, phone, email, etc.)
-    * Cons: The attribute chosen may not be unique and can cause confusion
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
-
---------------------------------------------------------------------------------------------------------------------
-
 ## **Documentation, logging, testing, configuration, dev-ops**
 
 * [Documentation guide](Documentation.md)
@@ -304,6 +185,7 @@ mouse/GUI driven app.
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
+
 | Priority | As a …​                                    | I want to …​                         | So that I can…​                                                                        |
 |----------|--------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------|
 | `* * *`  | new user                                   | see usage instructions               | refer to instructions when I forget how to use the App                                 |
@@ -329,6 +211,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. User requests to see the usage instructions.
 2. CraftConnect displays the usage instructions.
+
+   Use case ends.
    <br><br><br>
 
 **Use case: Add a new contact**
@@ -394,6 +278,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3a. The input is invalid.
 
     * 3a1. CraftConnect shows an error message and informs the user on the correct input syntax.
+      
+      **NOTE**: : a non-positive index or an index outside the range of a Java integer results in an invalid command format
+          exception, because these can be detected during the parsing phase. A positive index that is outside the range
+          of the contact list can only be detected at command execution phase, so another message will be returned.
 
       Use case resumes at step 3.
 
@@ -430,6 +318,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
 
     * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
+
+      **NOTE**: : a non-positive index or an index outside the range of a Java integer results in an invalid command format
+      exception, because these can be detected during the parsing phase. A positive index that is outside the range
+      of the contact list can only be detected at command execution phase, so another message will be returned.
 
       Use case resumes at step 3.
 
@@ -657,6 +549,10 @@ contains duplicated contacts with an existing contact in append mode.
 * 3a. The inputted index is invalid as it does not correspond to a valid index within CraftConnect.
 
     * 3a1. CraftConnect shows an error message and informs the user that the inputted index is invalid.
+      
+      **NOTE**: a non-positive index or an index outside the range of a Java integer results in an invalid command format
+        exception, because these can be detected during the parsing phase. A positive index that is outside the range
+        of the contact list can only be detected at command execution phase, so another message will be returned.
 
       Use case resumes at step 3.
 <br><br><br>
@@ -723,7 +619,7 @@ contains duplicated contacts with an existing contact in append mode.
     * Storage (HDD/SDD): 100MB of free disk space
     * Graphics: Integrated GPU (Intel HD Graphics 300 or equivalent)
     * Disk Speed: HDD (5400 RPM) or SSD if available.
-* **Contacts**: Contacts are considered to be unique if and only if they have a unique email and phone number. Thus, two contacts can still have the same names
+* **Contacts**: Contacts are considered to be unique if and only if they have a unique email and phone number. Thus, two contacts can still have the same names.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -753,29 +649,45 @@ testers are expected to do more *exploratory* testing.
     2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-3. _{ more test cases …​ }_
-
 ### Deleting a contact
 
-1. Deleting a contact while all contacts are being shown
+1. Prerequisites: List all contacts using the `list` command. Multiple contacts in the list.
+2. If there is not a contact with phone number 123, add a contact with such a phone number.
+    `add n/dummy e/dummy@example.com p/123 a/dummydummy`
+   If there is not a contact with phone number 456, add a contact with such a phone number.
+    `add n/dummy2 e/dummy2@example.com p/456 a/dummydummy2`
+   If there is not a contact with email address dummy3@example.com, add a contact with such an email address.
+    `add n/dummy3 e/dummy3@example.com p/789 a/dummydummy3`
+   If there is not a contact with email address dummy4@example.com, add a contact with such an email address.
+    `add n/dummy4 e/dummy4@example.com p/012 a/dummydummy4`
 
-    1. Prerequisites: List all contacts using the `list` command. Multiple contacts in the list.
+3. Test case: `delete 1`<br>
+   Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-    2. Test case: `delete 1`<br>
-       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+4. Test case: `delete 0`<br>
+   Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
 
-    3. Test case: `delete 0`<br>
-       Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
+5. Test case: `delete p/123`<br>
+   Expected: the contact with phone number 123 is deleted. 
+   Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-       Expected: Similar to previous.
+6. Test case: `filter a/5`, `delete p/456`
+   Expected: even though the contact with phone number 456 is filtered out, deletion by phone number still succeeds.
+   Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-2. _{ more test cases …​ }_
+7. Test case: `delete e/dummy3@example.com`<br>
+  Expected: the contact with the email address dummy3@example.com is deleted.
+  Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-### Saving data
+8. Test case: `filter a/5`, `delete e/dummy4@example.com`
+  Expected: even though the contact with email address dummy4@example.com is filtered out, deletion by email address still succeeds.
+  Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-1. Dealing with missing/corrupted data files
+9. Other incorrect delete commands to try: 
+   - `delete` 
+   - `delete x` (where x is larger than the list size)
+   - `delete e\NON_EXISTENT_EMAIL`
+   - `delete p\NON_EXISTENT_PHONE`
+   - `...`
+         Expected: No contact is deleted. Error details shown in the status message. Status bar remains the same.
 
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-2. _{ more test cases …​ }_

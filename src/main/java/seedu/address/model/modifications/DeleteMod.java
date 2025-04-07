@@ -38,6 +38,6 @@ public class DeleteMod extends ModificationWithTarget {
         }
 
         DeleteMod otherDeleteMod = (DeleteMod) other;
-        return ((Modification) this).equals((Modification) otherDeleteMod);
+        return ((ModificationWithTarget) this).equals((ModificationWithTarget) otherDeleteMod);
     }
 }

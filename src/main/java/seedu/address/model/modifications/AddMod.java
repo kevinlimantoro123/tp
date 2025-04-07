@@ -39,6 +39,6 @@ public class AddMod extends ModificationWithTarget {
         }
 
         AddMod otherAddMod = (AddMod) other;
-        return ((Modification) this).equals((Modification) otherAddMod);
+        return ((ModificationWithTarget) this).equals((ModificationWithTarget) otherAddMod);
     }
 }

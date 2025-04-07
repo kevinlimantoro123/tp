@@ -12,6 +12,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.ImportCommandParser;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.modifications.ImportMod;
 import seedu.address.model.person.Person;
 
 /**
@@ -199,6 +200,7 @@ public class ImportCommand extends FileBasedCommand {
                 this.appendContacts(model, addressBook.get());
             }
 
+            model.commitAddressBook(new ImportMod(this.path, this.isOverwrite));
             return new CommandResult(MESSAGE_SUCCESS);
         } catch (DataLoadingException e) {
             throw new CommandException(generateErrorMessage(this.path, MESSAGE_INCOMPATIBLE_SCHEMA));
