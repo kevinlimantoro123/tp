@@ -53,7 +53,7 @@ public class RedoCommandParserTest {
         // Boundary value
         String expectedMessage = RedoCommand.MESSAGE_LIMIT_EXCEEDED;
 
-        String userInput = "100001";
+        String userInput = "1001";
         assertParseFailure(parser, userInput, expectedMessage);
     }
 

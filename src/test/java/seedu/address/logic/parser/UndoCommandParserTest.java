@@ -52,7 +52,7 @@ public class UndoCommandParserTest {
         // Boundary value
         String expectedMessage = UndoCommand.MESSAGE_LIMIT_EXCEEDED;
 
-        String userInput = "100001";
+        String userInput = "1001";
         assertParseFailure(parser, userInput, expectedMessage);
     }
 
