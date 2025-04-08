@@ -1,10 +1,7 @@
 @startuml
 
-object "<u>:AddressBook" as AddressBook
-object "<u>:ModelManager" as ModelManager
-object "<u>:UserPrefs" as UserPrefs
 
-object "<u>:UniquePersonList" as UniquePersonList
+
 object "<u>:Person" as Person
 object "<u>:Address" as Address
 
@@ -15,12 +12,6 @@ object "<u>:Tag" as FirstTag
 object "<u>:Tag" as SecondTag
 object "<u>:Note" as Note
 
-
-
-ModelManager -left-> AddressBook
-ModelManager -right-> UserPrefs
-AddressBook --> UniquePersonList
-UniquePersonList -->  Person
 Person --> Name
 Person --> Phone
 Person --> Email
@@ -29,11 +20,12 @@ Person --> FirstTag
 Person --> SecondTag
 Person --> Note
 
+hide Person members
+
 Name -[hidden]right-> Phone
 Phone -[hidden]right-> Address
 Address -[hidden]right-> Email
 
-ModelManager --> Person
 
 Phone : value = "91299990"
 Name : value = "John Doe"
