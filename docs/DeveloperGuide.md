@@ -686,9 +686,9 @@ contains duplicated contacts with an existing contact in append mode.
 
     Use case resumes from step 1.
 
-* 1b. `N` is greater than 100000
+* 1b. `N` is greater than 1000
 
-  * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 100000.
+  * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 1000.
 
     Use case resumes from step 1.
 
@@ -723,9 +723,9 @@ contains duplicated contacts with an existing contact in append mode.
 
     Use case resumes from step 1.
 
-* 1b. `N` is greater than 100000
+* 1b. `N` is greater than 1000
 
-  * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 100000.
+  * 1b1. CraftConnect shows an error message and informs the user to specify an `N` of at most 1000.
 
     Use case resumes from step 1.
 

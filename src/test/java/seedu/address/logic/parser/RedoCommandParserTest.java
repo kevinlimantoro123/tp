@@ -18,8 +18,8 @@ public class RedoCommandParserTest {
         assertParseSuccess(parser, userInput, expectedCommand);
 
         // Boundary value
-        String userInput2 = "100000";
-        RedoCommand expectedCommand2 = new RedoCommand(100000);
+        String userInput2 = "1000";
+        RedoCommand expectedCommand2 = new RedoCommand(1000);
         assertParseSuccess(parser, userInput2, expectedCommand2);
     }
 
