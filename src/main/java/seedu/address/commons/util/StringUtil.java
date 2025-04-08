@@ -23,7 +23,7 @@ public class StringUtil {
      * @param sentence cannot be null
      * @param word cannot be null, cannot be empty, must be a single word
      */
-    public static boolean containsWordIgnoreCase(String sentence, String word) {
+    public static boolean containsWordIgnoreCase(String sentence, String word, boolean isEdgeCase, Integer threshold) {
         requireNonNull(sentence);
         requireNonNull(word);
 
@@ -34,8 +34,10 @@ public class StringUtil {
         String preppedSentence = sentence;
         String[] wordsInPreppedSentence = preppedSentence.split("\\s+");
 
-        return Arrays.stream(wordsInPreppedSentence)
-                .anyMatch(preppedWord::equalsIgnoreCase);
+        return isEdgeCase ? Arrays.stream(wordsInPreppedSentence).anyMatch(wordInPreppedSentence ->
+                wordInPreppedSentence.length() == 1 ? wordInPreppedSentence.equalsIgnoreCase(preppedWord)
+                        : computeCloseness(wordInPreppedSentence, preppedWord) < threshold)
+                : Arrays.stream(wordsInPreppedSentence).anyMatch(preppedWord::equalsIgnoreCase);
     }
 
     /**
@@ -156,5 +158,42 @@ public class StringUtil {
         }
 
         return distance;
+    }
+
+    /**
+     * Wraps a given text to a certain length to fit within the screen
+     * @param text The text to wrap
+     * @return The wrapped text, where each line is separated by '\n'
+     */
+    public static String wrapText(String text) {
+        int wrapSize = 100;
+        String[] components = text.split("\\s+");
+        StringBuilder result = new StringBuilder();
+        StringBuilder line = new StringBuilder();
+        for (String s : components) {
+            if (line.length() + s.length() <= 100) {
+                line.append(line.isEmpty() ? "" : " ").append(s);
+            } else {
+                if (!line.isEmpty()) {
+                    result.append(line).append("\n");
+                }
+                line.setLength(0);
+
+                if (s.length() > wrapSize) {
+                    for (int i = 0; i < s.length(); i += wrapSize) {
+                        int end = Math.min(i + wrapSize, s.length());
+                        result.append(i == 0 ? "" : "-").append(s, i, end).append("\n");
+                    }
+                } else {
+                    line.append(s);
+                }
+            }
+        }
+
+        if (!line.isEmpty()) {
+            result.append(line).append("\n");
+        }
+
+        return result.toString();
     }
 }

@@ -34,7 +34,7 @@ public class NoteCommandParser implements Parser<NoteCommand> {
         }
 
         String noteContent = argMultimap.getValue(PREFIX_NOTE).get();
-        Note note = new Note(noteContent);
+        Note note = ParserUtil.parseNote(noteContent);
 
         return new NoteCommand(index, note);
 
