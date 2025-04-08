@@ -1,12 +1,17 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's note in the address book.
- * Guaranatees: immutable; is always valid
+ * Guarantees: immutable; is always valid
  */
 public class Note {
+    public static final String MESSAGE_CONSTRAINTS =
+            "Notes can take any values, and it should be 255 characters or less.";
+
+
     public final String value;
 
     /**
@@ -16,7 +21,15 @@ public class Note {
      */
     public Note(String note) {
         requireNonNull(note);
+        checkArgument(isValidNote(note), MESSAGE_CONSTRAINTS);
         this.value = note;
+    }
+
+    /**
+     * Returns true if a given string is a valid email.
+     */
+    public static boolean isValidNote(String test) {
+        return test.length() <= 255;
     }
 
     @Override
