@@ -437,9 +437,9 @@ Clears all entries from the address book.
 
 Format: `clear`
 
-### Exiting the program : `exit`
+### Exiting the app : `exit`
 
-Exits the program.
+Exits the CraftConnect app.
 
 Format: `exit`
 
@@ -493,3 +493,4 @@ in this computer.
 | **Undo**   | `undo [NUMBER_OF_CHANGES]`<br> e.g., `undo 3`                                                                                                                         |
 | **Redo**   | `redo [NUMBER_OF_CHANGES]`<br> e.g., `redo 3`                                                                                                                         |
 | **Help**   | `help`                                                                                                                                                                |
+| **Exit**   | `exit`                                                                                                                                                                |
