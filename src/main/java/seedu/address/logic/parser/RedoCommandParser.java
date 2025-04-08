@@ -33,7 +33,7 @@ public class RedoCommandParser implements Parser<RedoCommand> {
             throw new ParseException(RedoCommand.MESSAGE_NOT_POSITIVE);
         }
 
-        if (numberOfTimes > 100000) {
+        if (numberOfTimes > 1000) {
             throw new ParseException(RedoCommand.MESSAGE_LIMIT_EXCEEDED);
         }
 

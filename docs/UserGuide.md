@@ -391,7 +391,7 @@ Format: `undo [NUMBER_OF_CHANGES]`
 
 Parameter:
 
-- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer not exceeding 100000.
+- `NUMBER_OF_CHANGES`: The number of changes to revert. Must be a positive integer not exceeding 1000.
 If not supplied, defaults to `1`.
 If there are less changes that can be reverted than `NUMBER_OF_CHANGES`, CraftConnect reverts all changes.
 
@@ -400,7 +400,7 @@ Example: `undo`, `undo 3`
 <box type="warning" seamless>
 
 **Note:**
-Due to performance limitations, CraftConnect currently can only support reverting up to 100000 changes at once.
+Due to performance limitations, CraftConnect currently can only support reverting up to 1000 changes at once.
 </box>
 
 ### Restoring changes to the address book : `redo`
@@ -411,7 +411,7 @@ Format: `redo [NUMBER_OF_CHANGES]`
 
 Parameter:
 
-- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer not exceeding 100000.
+- `NUMBER_OF_CHANGES`: The number of changes to restore. Must be a positive integer not exceeding 1000.
 If not supplied, defaults to `1`.
 If there are less changes that can be restored than `NUMBER_OF_CHANGES`, CraftConnect restores all changes.
 
@@ -420,7 +420,7 @@ Example: `redo`, `redo 3`
 <box type="warning" seamless>
 
 **Note:**
-Due to performance limitations, CraftConnect currently can only support restoring up to 100000 changes at once.
+Due to performance limitations, CraftConnect currently can only support restoring up to 1000 changes at once.
 </box>
 
 <box type="warning" seamless>

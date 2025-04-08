@@ -17,8 +17,8 @@ public class UndoCommandParserTest {
         UndoCommand expectedCommand = new UndoCommand(123);
         assertParseSuccess(parser, userInput, expectedCommand);
         // Boundary value
-        String userInput2 = "100000";
-        UndoCommand expectedCommand2 = new UndoCommand(100000);
+        String userInput2 = "1000";
+        UndoCommand expectedCommand2 = new UndoCommand(1000);
         assertParseSuccess(parser, userInput2, expectedCommand2);
     }
 
