@@ -126,7 +126,7 @@ Here is an example `Person` object:
 
 **API** : [`Person.java`](https://github.com/AY2425S2-CS2103T-W13-4/tp/blob/master/src/main/java/seedu/address/model/person/Person.java)
 
-<puml src="diagrams/PersonObjectDiagram.puml" width="450" />
+<puml src="diagrams/PersonObjectDiagram.puml" width="600" />
 
 <box type="info" seamless>
 
