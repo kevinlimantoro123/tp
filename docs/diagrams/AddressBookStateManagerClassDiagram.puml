@@ -12,11 +12,14 @@ class AddressBookStateManager MODEL_COLOR {
 }
 
 class AddressBookStateNode MODEL_COLOR_T2
+class AddressBook MODEL_COLOR_T2
 class Modification MODEL_COLOR_T1
 class ReadOnlyAddressBook MODEL_COLOR_T1
 
 
-AddressBookStateManager "1" *--> "1..*" AddressBookStateNode
+AddressBookStateManager *--> "1..*" AddressBookStateNode
+AddressBookStateManager --> "1" AddressBook
 AddressBookStateNode "1" --> "1" Modification
 AddressBookStateNode "1" --> "1" ReadOnlyAddressBook
+
 @enduml
