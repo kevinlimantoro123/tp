@@ -123,6 +123,7 @@ The `Model` component,
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 Here is an example `Person` object:
+
 **API** : [`Person.java`](https://github.com/AY2425S2-CS2103T-W13-4/tp/blob/master/src/main/java/seedu/address/model/person/Person.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
