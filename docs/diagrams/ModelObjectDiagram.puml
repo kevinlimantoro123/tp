@@ -1,0 +1,37 @@
+@startuml
+
+
+
+object "<u>:Person" as Person
+object "<u>:Address" as Address
+
+object "<u>:Email" as Email
+object "<u>:Name" as Name
+object "<u>:Phone" as Phone
+object "<u>:Tag" as FirstTag
+object "<u>:Tag" as SecondTag
+object "<u>:Note" as Note
+
+Person --> Name
+Person --> Phone
+Person --> Email
+Person --> Address
+Person --> FirstTag
+Person --> SecondTag
+Person --> Note
+
+hide Person members
+
+Name -[hidden]right-> Phone
+Phone -[hidden]right-> Address
+Address -[hidden]right-> Email
+
+
+Phone : value = "91299990"
+Name : value = "John Doe"
+Address : value = "Blk 123 Clementi Street"
+Email : "john@example.com"
+FirstTag : tagName = "paint supplier"
+SecondTag : tagName = "paper supplier"
+Note : value = ""
+@enduml

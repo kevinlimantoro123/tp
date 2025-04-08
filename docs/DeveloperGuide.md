@@ -122,6 +122,11 @@ The `Model` component,
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
+Here is an example `Person` object:
+**API** : [`Person.java`](https://github.com/AY2425S2-CS2103T-W13-4/tp/blob/master/src/main/java/seedu/address/model/person/Person.java)
+
+<puml src="diagrams/ModelClassDiagram.puml" width="450" />
+
 <box type="info" seamless>
 
 **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
