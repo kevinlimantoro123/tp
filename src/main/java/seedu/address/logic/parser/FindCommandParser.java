@@ -10,9 +10,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
-import seedu.address.model.person.EmailIsKeywordPredicate;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.PhoneIsKeywordPredicate;
+import seedu.address.model.predicate.EmailIsKeywordPredicate;
+import seedu.address.model.predicate.PhoneIsKeywordPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object

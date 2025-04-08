@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.predicate.AddressContainsKeywordsPredicate;
+import seedu.address.model.predicate.TagContainsKeywordsPredicate;
 import seedu.address.testutil.PersonBuilder;
 
 

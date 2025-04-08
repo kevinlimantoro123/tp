@@ -10,10 +10,10 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.AddressContainsKeywordsPredicate;
 import seedu.address.model.person.Name;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.TagContainsKeywordsPredicate;
+import seedu.address.model.predicate.AddressContainsKeywordsPredicate;
+import seedu.address.model.predicate.NameContainsKeywordsPredicate;
+import seedu.address.model.predicate.TagContainsKeywordsPredicate;
 import seedu.address.model.tag.Tag;
 
 /**
