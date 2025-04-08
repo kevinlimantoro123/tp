@@ -1,6 +1,6 @@
 @startuml
 
-scale 3.5
+scale 800 height
 
 object "<u>:Person" as Person
 object "<u>:Address" as Address
