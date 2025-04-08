@@ -14,10 +14,10 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.modifications.DeleteMod;
 import seedu.address.model.person.Email;
-import seedu.address.model.person.EmailIsKeywordPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.PhoneIsKeywordPredicate;
+import seedu.address.model.predicate.EmailIsKeywordPredicate;
+import seedu.address.model.predicate.PhoneIsKeywordPredicate;
 
 /**
  * Deletes a person identified using it's displayed index from the address book.

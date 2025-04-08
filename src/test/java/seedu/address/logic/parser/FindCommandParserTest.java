@@ -12,8 +12,8 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.model.person.EmailIsKeywordPredicate;
-import seedu.address.model.person.PhoneIsKeywordPredicate;
+import seedu.address.model.predicate.EmailIsKeywordPredicate;
+import seedu.address.model.predicate.PhoneIsKeywordPredicate;
 
 public class FindCommandParserTest {
 

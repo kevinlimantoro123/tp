@@ -12,9 +12,9 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FilterCommand;
-import seedu.address.model.person.AddressContainsKeywordsPredicate;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.TagContainsKeywordsPredicate;
+import seedu.address.model.predicate.AddressContainsKeywordsPredicate;
+import seedu.address.model.predicate.NameContainsKeywordsPredicate;
+import seedu.address.model.predicate.TagContainsKeywordsPredicate;
 
 public class FilterCommandParserTest {
     private FilterCommandParser parser = new FilterCommandParser();
